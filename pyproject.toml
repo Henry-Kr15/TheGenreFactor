@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "thegenrefactor"
+version = "0.1.0"
+description = "Machine learning project for the ML Seminar in the summer term 2023."
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
