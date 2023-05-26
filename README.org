@@ -1,0 +1,7 @@
+#+title: The Genre Factor
+#+author: Henry Krämerkämper
+
+* The project
+
+
+* Prerequisites
