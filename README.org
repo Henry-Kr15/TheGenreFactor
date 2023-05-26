@@ -3,6 +3,27 @@
 
 ** The project
 
+*** Structure
+
+So far, we have the project has two (very broad) main folders; one for scripts and one for
+tests.
+
+*** Running scripts
+
+To run a script, use
+
+#+begin_src bash
+poetry run python your_script.py
+#+end_src
+
+*** Installing dependencies that another user added to the .toml file
+
+When another user added a dependency to the .toml file and pushed it via git, you can
+sync your own virtualenv by running
+
+#+begin_src bash
+poetry install --sync
+#+end_src
 
 ** Prerequisites
 
