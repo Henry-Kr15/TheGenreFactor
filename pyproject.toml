@@ -2,11 +2,12 @@
 name = "thegenrefactor"
 version = "0.1.0"
 description = "Machine learning project for the ML Seminar in the summer term 2023."
-authors = ["Your Name <you@example.com>"]
-readme = "README.md"
+authors = ["Henry Krämerkämper <henry.kraemerkaemper@tu-dortmund.de>", "Christopher Breitfeld <christopher.breitfeld@tu-dortmund.de>"]
+readme = "README.org"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+numpy = "^1.24.3"
 
 
 [build-system]

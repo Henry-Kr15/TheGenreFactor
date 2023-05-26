@@ -1,7 +1,46 @@
 #+title: The Genre Factor
 #+author: Henry Krämerkämper
 
-* The project
+** The project
 
 
-* Prerequisites
+** Prerequisites
+
+*** Poetry
+
+The dependencies of this project are managed by [[https://python-poetry.org/][poetry]]. From the poetry website:
+
+#+begin_quote
+Poetry - Python packaging and dependency management made easy
+
+Develop - Poetry comes with all the tools you might need to manage your projects in a deterministic way.
+
+Build - Easily build and package your projects with a single command.
+
+Publish - Make your work known by publishing it to PyPI.
+
+Track - Having an insight of your project's dependencies is just one command away.
+
+Dependency resolver - Poetry comes with an exhaustive dependency resolver, which will always find a solution if it exists.
+
+Isolation  - Poetry either uses your configured virtualenvs or creates its own to always be isolated from your system.
+#+end_quote
+
+The last part is probably the most relevant here: poetry allows us to specify all dependencies
+in a text file (the [[./pyproject.toml][pyproject.toml]] file). It then creates a python virtualenv with these
+specifications. This way, we will never have any clashes regarding different versions installed
+on different machines.
+
+Installation of poetry is straight forward:
+
+#+begin_src bash
+curl -sSL https://install.python-poetry.org | python3 -
+#+end_src
+
+The full installation manual is [[https://python-poetry.org/docs/#installing-with-the-official-installer][here]]. However, the command above should be enough.
+
+To activate command completion in the terminal you have to run
+
+#+begin_src bash
+poetry completions bash >> ~/.bash_completion
+#+end_src
