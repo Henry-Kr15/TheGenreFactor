@@ -5,7 +5,7 @@
 Deadline für die Abgabe Berichts ist der 31.07.2023 -> ca. 8 Wochen Zeit.
 Bestenfalls sollten wir daher den Punkt 1. in einer Woche fertig haben.
 
-* Allgemeines zum Projekt [%]
+* Allgemeines zum Projekt [0%]
 ** TODO Tests einrichten
 Mit pytest auseinandersetzen und herausfinden, wie wir am sinnvollsten automatisierte Tests
 schreiben können
