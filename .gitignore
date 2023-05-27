@@ -7,3 +7,6 @@ tmp/
 *.egg
 build
 htmlcov
+
+scripts/apicache-py3/
+scripts/throttle.ctrl
