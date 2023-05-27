@@ -50,6 +50,8 @@ tests.
 Also, there is a folder for the raw datasets (data) and graphics output should be saved in
 a folder called figures.
 
+There is a small [[./Todo.org][Todo-File]], which can be used for planning/scheduling/assigning tasks.
+
 *** Running scripts
 
 To run a script, use

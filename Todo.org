@@ -1,0 +1,29 @@
+#+title: Todo - Liste
+#+author: Henry Krämerkämper, Christopher Breitfeld
+
+* Zeitplan
+Deadline für die Abgabe Berichts ist der 31.07.2023 -> ca. 8 Wochen Zeit.
+Bestenfalls sollten wir daher den Punkt 1. in einer Woche fertig haben.
+
+* Allgemeines zum Projekt [%]
+** TODO Tests einrichten
+Mit pytest auseinandersetzen und herausfinden, wie wir am sinnvollsten automatisierte Tests
+schreiben können
+** TODO Snakemake Setup
+Sobald wir mehrere Skripte haben, sollten wir ein Snakemake-File schreiben
+
+* 1. Datensatz vervollständigen [0%]
+DEADLINE: <2023-06-03 Sat>
+** TODO Testskript schreiben
+Das Testskript soll für Metallica das Genre aus Wikidata ziehen
+** TODO Skript generalisieren
+Das Testskript so anpassen, dass es auch für andere Künstler als Metallica funktioniert.
+Insbesondere auch für einzelne Künstler, die nicht Teil einer Band sind.
+** TODO Skript erweitern
+Das Skript so erweitern, dass es den kompletten Datensatz um die Spalte "Genre" erweitert
+
+* 2. Neuronales Netz trainieren [%]
+
+* 3. Knn Klassifizierung durchführen [%]
+
+* 4. Bericht schreiben [%]
