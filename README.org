@@ -78,7 +78,7 @@ poetry add numpy
 #+end_src
 
 In this example I used numpy, which is already installed, but you get the point.
-You can always edit the [[./pyproject.toml][pyproject.toml]]-file manually; this might be handy if you
+You can always edit the [[./pyproject.toml][pyproject.toml]] file manually; this might be handy if you
 want to have a specific version.
 
 After adding a package to the project, to install it, you can run
