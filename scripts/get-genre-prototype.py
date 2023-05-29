@@ -12,6 +12,7 @@ def get_band_genre(band_name):
     item = pywikibot.ItemPage.fromPage(page)
 
     # Erster Suchversuch nach dem Tag "P136"
+    # TODO Detaillierterer Fehlerabfang (z.B. mit logging) könnte hier aufschlussreich sein
     try:
        item_dict = item.get() # Holt das item dictionary
        genres = item_dict["claims"]["P136"] # dictionary besitzt tiefe Struktur
@@ -38,6 +39,7 @@ def get_band_genre(band_name):
                    except KeyError:
                        print(f"Für {band_name} ist auch kein Genre-Tag unter P101 vorhanden")
                        # csv für Künstler, bei denen P136 und P101 nicht vorhanden ist
+                       # TODO in der fertigen Version sollte die Datei nicht jedes Mal neu geöffnet und geschlossen werden
                        with open("missing_p136p101.csv", "a", newline="") as f:
                            writer = csv.writer(f)
                            writer.writerow([band_name])
@@ -50,6 +52,7 @@ def get_band_genre(band_name):
     for genre in genres:
         target = genre.getTarget()
         print(target.labels['en'])
+        # TODO hinterher natürlich Rückgabe als String, anstatt es einfach nur zu printen
 
 print("Prince:")
 get_band_genre("Prince")
