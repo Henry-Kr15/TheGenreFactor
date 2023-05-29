@@ -69,3 +69,23 @@ sync your own virtualenv by running
 poetry install --sync
 #+end_src
 
+*** Adding packages to the .toml yourself
+
+If you would like to add another package to the project, you can run
+
+#+begin_src bash
+poetry add numpy
+#+end_src
+
+In this example I used numpy, which is already installed, but you get the point.
+You can always edit the [[./pyproject.toml][pyproject.toml]]-file manually; this might be handy if you
+want to have a specific version.
+
+After adding a package to the project, to install it, you can run
+
+#+begin_src bash
+poetry install
+#+end_src
+
+which should sort out all version conflicts and install the specified packages in
+the virtualenv.
