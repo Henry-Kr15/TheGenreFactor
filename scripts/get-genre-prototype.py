@@ -43,7 +43,8 @@ def get_band_genre(band_name):
                        with open("missing_p136p101.csv", "a", newline="") as f:
                            writer = csv.writer(f)
                            writer.writerow([band_name])
-                           genres = []  # Kein Genre-Tag vorhanden
+
+                       genres = []  # Kein Genre-Tag vorhanden
                        break
                 else:
                     print(f"{page.title()} ist keine Instanz eines Menschen und Künstlers")
