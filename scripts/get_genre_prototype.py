@@ -105,11 +105,3 @@ def get_band_genre(band_name):
         target = genre.getTarget()
         print(target.labels["en"])
         # TODO hinterher natürlich Rückgabe als String, anstatt es einfach nur zu printen
-
-
-print("Prince:")
-get_band_genre("Prince")
-print("Metallica:")
-get_band_genre("Metallica")
-print("Gorillaz:")
-get_band_genre("Gorillaz")
