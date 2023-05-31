@@ -9,23 +9,29 @@ from pandas.plotting import scatter_matrix
 
 def plot_columns(df):
     numeric_df = df.select_dtypes(include=np.number)  # select only numeric columns
-    if 'Unnamed: 0' in numeric_df.columns:
-            numeric_df = numeric_df.drop(columns=['Unnamed: 0'])
+    if "Unnamed: 0" in numeric_df.columns:
+        numeric_df = numeric_df.drop(columns=["Unnamed: 0"])
     for column in numeric_df.columns:
         print(column)
         plt.figure()
-        if column == 'Views' or column == 'Likes' or column == 'Comments' or column == 'Stream' or column == "Duration_ms":
+        if (
+            column == "Views"
+            or column == "Likes"
+            or column == "Comments"
+            or column == "Stream"
+            or column == "Duration_ms"
+        ):
             bins = np.logspace(0, np.log10(numeric_df[column].max()), 20)
             sns.histplot(numeric_df[column], bins=bins, kde=False)
-            plt.xscale('log')
-        elif column == 'Instrumentalness':
+            plt.xscale("log")
+        elif column == "Instrumentalness":
             sns.histplot(numeric_df[column], bins=20, kde=True)
-            plt.yscale('log')
+            plt.yscale("log")
         else:
             sns.histplot(numeric_df[column], bins=20, kde=True)
-        plt.title(f'Distribution of {column}')
+        plt.title(f"Distribution of {column}")
         plt.xlabel(column)
-        plt.ylabel('Count')
+        plt.ylabel("Count")
         plt.savefig(f"../figures/Hist-{column}.pdf")
         plt.close()
 
@@ -40,18 +46,20 @@ print(df.describe())
 
 # Scatterplot
 print("creat scatterplot")
-numeric_df = df.select_dtypes(include=np.number) 
+numeric_df = df.select_dtypes(include=np.number)
 selected_columns = numeric_df.iloc[:, 1:16]
-sampled_data = selected_columns.sample(frac=1.0) 
-scatter_matrix = scatter_matrix(sampled_data, alpha=0.8, figsize=(10, 10), s=10, hist_kwds={'bins':20})
+sampled_data = selected_columns.sample(frac=1.0)
+scatter_matrix = scatter_matrix(
+    sampled_data, alpha=0.8, figsize=(10, 10), s=10, hist_kwds={"bins": 20}
+)
 for ax in scatter_matrix.ravel():
     ax.xaxis.label.set_rotation(90)
     ax.yaxis.label.set_rotation(0)
-    ax.yaxis.label.set_ha('right')
+    ax.yaxis.label.set_ha("right")
 plt.savefig("../figures/scatter.png")
 
 # Correlation
 print("creat correlation plot")
-plt.figure(figsize=(20,20))
-sns.heatmap(selected_columns.corr(), annot=True, square=True, cmap='coolwarm')
+plt.figure(figsize=(20, 20))
+sns.heatmap(selected_columns.corr(), annot=True, square=True, cmap="coolwarm")
 plt.savefig("../figures/correlation.pdf")

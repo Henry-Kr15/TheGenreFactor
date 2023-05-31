@@ -11,6 +11,7 @@ numpy = "^1.24.3"
 pywikibot = "^8.1.2"
 seaborn = "^0.12.2"
 matplotlib = "^3.7.1"
+tqdm = "^4.65.0"
 
 
 [build-system]
