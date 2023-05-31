@@ -16,7 +16,7 @@ def get_band_genre(band_name):
     while genres is None:
         i += 1
         if i == 10:
-            print("Nach {i} Durchläufen nichts gefunden")
+            print(f"Nach {i} Durchläufen nichts gefunden")
             break
 
         # Erster Suchversuch nach dem Tag "P136"
