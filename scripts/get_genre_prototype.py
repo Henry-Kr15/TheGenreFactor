@@ -105,3 +105,8 @@ def get_band_genre(band_name):
         target = genre.getTarget()
         print(target.labels["en"])
         # TODO hinterher natürlich Rückgabe als String, anstatt es einfach nur zu printen
+
+
+def clear_csv(filename):
+    with open(filename, "w") as file:
+        pass
