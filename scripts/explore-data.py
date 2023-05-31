@@ -39,12 +39,19 @@ print("---")
 print(df.describe())
 
 # Scatterplot
+print("creat scatterplot")
 numeric_df = df.select_dtypes(include=np.number) 
-selected_columns = numeric_df.iloc[:, 1:16]  
-scatter_matrix(selected_columns, alpha=0.8, figsize=(40, 40), s=20)
-plt.savefig("../figures/scatter.pdf")
+selected_columns = numeric_df.iloc[:, 1:16]
+sampled_data = selected_columns.sample(frac=1.0) 
+scatter_matrix = scatter_matrix(sampled_data, alpha=0.8, figsize=(10, 10), s=10, hist_kwds={'bins':20})
+for ax in scatter_matrix.ravel():
+    ax.xaxis.label.set_rotation(90)
+    ax.yaxis.label.set_rotation(0)
+    ax.yaxis.label.set_ha('right')
+plt.savefig("../figures/scatter.png")
 
 # Correlation
+print("creat correlation plot")
 plt.figure(figsize=(20,20))
 sns.heatmap(selected_columns.corr(), annot=True, square=True, cmap='coolwarm')
 plt.savefig("../figures/correlation.pdf")
