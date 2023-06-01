@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import array
 import pywikibot
 from pywikibot import pagegenerators
 from pywikibot.exceptions import NoPageError
