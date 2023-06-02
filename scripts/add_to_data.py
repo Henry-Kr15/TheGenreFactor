@@ -1,5 +1,5 @@
 import pandas as pd
-from get_genre_prototype_rewrite import get_genre
+from get_genre import get_genre
 import concurrent.futures #für Parallelisierung
 import time #für Stoppuhr
 from tqdm import tqdm #für Fortschrittbalken
@@ -20,12 +20,11 @@ if(multiprocessing.cpu_count() <= 14):
 else:
     num_processes = 14
 
-# TODO delete 
+# TODO delete?
 # Funktion zum Abfragen des Genres und Aktualisieren des DataFrames
 def query_genre_and_update_df(index, artist, album, album_type):
     genre = get_genre(artist, album, album_type)
-    first_genre = next(iter(genre.values()), "")
-    return (index, first_genre)
+    return (index, genre)
 
 #Funktion zur parallelen Genresuche in einem batch
 def process_data_batch(batch_df, num_processes):
@@ -39,6 +38,7 @@ def process_data_batch(batch_df, num_processes):
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_processes) as executor:
         futures = [executor.submit(query_genre_and_update_df, idx, artist, album, album_type) for idx, artist, album, album_type in zip(indexes, artists, albums, album_types)]
         for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures), desc="Processing"):
+            print(future.result)
             index, genre = future.result()
             results.append((index, genre))
 

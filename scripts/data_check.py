@@ -1,21 +1,19 @@
-import csv
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
 csv_file = "../data/data.csv"
 df = pd.read_csv(csv_file)
 
-df_lim = df.head(500)
+df_lim = df.head(600)
 
 # Gesamtanzahl der Einträge
 total_count = df_lim.shape[0]
 
 # Zähle die Anzahl der Einträge mit Genre "unknown" und "error"
-unknown_count = df_lim[df_lim["Genre"] == "unknown"].shape[0]
-error_count = df_lim[df_lim["Genre"] == "error"].shape[0]
+unknown_count = df_lim[df_lim["Genre"] == "Not Found"].shape[0]
+error_count = df_lim[df_lim["Genre"] == "Error"].shape[0]
 nan_count = df_lim['Genre'].isna().sum()
-other_count = df_lim[~df_lim["Genre"].isin(["unknown", "error"])].shape[0]
+other_count = df_lim[~df_lim["Genre"].isin(["Not Found", "Error"])].shape[0]
 
 # Anzahl der verschiedenen Genres
 genre_counts = df_lim['Genre'].value_counts()

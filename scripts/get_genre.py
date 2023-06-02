@@ -3,7 +3,7 @@
 import pywikibot
 from pywikibot import pagegenerators
 from pywikibot.exceptions import NoPageError
-from typing import Dict
+from typing import Dict, Tuple
 from collections import OrderedDict
 import re
 import functools
@@ -190,7 +190,7 @@ def site_search(search_name) -> Dict:
                 pywikibot.pagegenerators.SearchPageGenerator(search_name, site=site)
             )
 
-    print(page)
+    # print(page)
 
     # Jetzt noch Genres in Dict schreiben
     genre_dict = {}
