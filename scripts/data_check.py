@@ -16,7 +16,7 @@ nan_count = df_lim['Genre'].isna().sum()
 other_count = df_lim[~df_lim["Genre"].isin(["Not Found", "Error"])].shape[0]
 
 # Anzahl der verschiedenen Genres
-genre_counts = df_lim['Genre'].value_counts()
+genre_counts = df_lim['Genre'].nunique()
 
 accuracy = (total_count-unknown_count-error_count-nan_count)/total_count
 
@@ -30,10 +30,10 @@ print(f"Anzahl Einträge mit anderen Genres: {other_count}")
 print(f"Accuracy = {accuracy:.5}")
 
 # Plot
-unknown_counts = df["Genre"].eq("unknown").cumsum()
+unknown_counts = df["Genre"].eq("Not Found").cumsum()
 plt.plot(df.index, unknown_counts)
 plt.xlim(0,400)
 plt.xlabel("Index")
-plt.ylabel("Kumulative Anzahl von 'unknown'")
-plt.title("Kumulative Anzahl von 'unknown' nach Index")
+plt.ylabel("Kumulative Anzahl von 'Not Found'")
+plt.title("Kumulative Anzahl von 'Not Found' nach Index")
 plt.show()

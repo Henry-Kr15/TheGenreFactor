@@ -38,7 +38,6 @@ def process_data_batch(batch_df, num_processes):
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_processes) as executor:
         futures = [executor.submit(query_genre_and_update_df, idx, artist, album, album_type) for idx, artist, album, album_type in zip(indexes, artists, albums, album_types)]
         for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures), desc="Processing"):
-            print(future.result)
             index, genre = future.result()
             results.append((index, genre))
 
@@ -49,7 +48,7 @@ batch_size = 200
 
 # Gesamtzahl der Einträge im DataFrame
 total_entries = len(df)
-total_entries = 600
+# total_entries = 600
 
 # Schleife zur Durchführung der Genreabfrage für jedes Paket
 results = []
