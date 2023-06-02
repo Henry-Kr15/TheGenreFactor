@@ -28,7 +28,7 @@ start = time.perf_counter()
 # Prozesse aus, das ist aber zuviel für den Wikidata Server (Error Code 429).
 # Daher manuelle Angabe:
 # 6:
-with mp.Pool(6) as pool:
+with mp.Pool(14) as pool:
     # Verwende map(), um die Funktion get_genre auf die Liste von Argumenten anzuwenden
     genres = pool.map(apply_get_genre, args_list)
 
@@ -39,6 +39,6 @@ print(f"Wikidata-Abfragen durchgeführt in {end-start} Sekunden.")
 df_genres = pd.DataFrame(genres, columns=["genres"])
 
 # DataFrame in eine CSV-Datei schreiben
-df_genres.to_csv('../data/genres_versuch2.csv', index=False)
+df_genres.to_csv('../data/genres_versuch4.csv', index=False)
 
 print(df_genres.describe())

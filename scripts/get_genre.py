@@ -4,9 +4,35 @@ import pywikibot
 from pywikibot import pagegenerators
 from pywikibot.exceptions import NoPageError
 from typing import Dict
+from collections import OrderedDict
 import re
+import functools
 
 
+genre_cache = {}  # Cache-Dictionary
+def cache(max_size):
+    """
+    Um mehrfache Abfragen von dem gleichen Album zu verhindern: Cache
+    """
+    cache_dict = OrderedDict()
+
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            key = (args, tuple(sorted(kwargs.items())))
+            if key in cache_dict:
+                return cache_dict[key]
+            else:
+                result = func(*args, **kwargs)
+                if len(cache_dict) >= max_size:
+                    cache_dict.popitem(last=False)  # Entferne ältesten Eintrag
+                cache_dict[key] = result
+                return result
+        return wrapper
+    return decorator
+
+
+@cache(max_size=1000)
 def get_genre(band_name: str, album_name: str, album_type: str) -> str:
     """
     Versucht, das Genre auf Wikidata zu finden. Dafür werden verschiedene Kombinationen von
@@ -24,6 +50,11 @@ def get_genre(band_name: str, album_name: str, album_type: str) -> str:
     """
 
     genre_dict = {}
+
+    # Überprüfe den Cache, ob das Genre bereits abgefragt wurde
+    cache_key = (band_name, album_name, album_type)
+    if cache_key in genre_cache:
+        return genre_cache[cache_key]
 
     # Gültigkeit der Eingabeparameter
     if sanity_checks(band_name, album_name, album_type):
@@ -53,7 +84,7 @@ def get_genre(band_name: str, album_name: str, album_type: str) -> str:
                             genre_dict = site_search(search_name)
                         except (KeyError, NoPageError):
                             try:
-                                # 4. Suche nach Single/Album ohne Klammerausdrücke und band_name
+                                # 4.5. Suche nach Single/Album ohne Klammerausdrücke und band_name
                                 search_name = remove_bracketed_text(album_name) + band_name
                                 genre_dict = site_search(search_name)
                             except (KeyError, NoPageError):
@@ -78,16 +109,60 @@ def get_genre(band_name: str, album_name: str, album_type: str) -> str:
                                                 f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; zu den Suchbegriffen gab es keine Ergebnisse"
                                             )
                                             genre_dict = {0: "Not Found"}
+                                        except:
+                                            print(
+                                                f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+                                            )
+                                            genre_dict = {0: "Error"}
+                                    except:
+                                        print(
+                                            f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+                                        )
+                                        genre_dict = {0: "Error"}
+                                except:
+                                    print(
+                                        f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+                                    )
+                                    genre_dict = {0: "Error"}
+                            except:
+                                print(
+                                    f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+                                )
+                                genre_dict = {0: "Error"}
+                        except:
+                            print(
+                            f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+                            )
+                            genre_dict = {0: "Error"}
+                    except:
+                        print(
+                            f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+                        )
+                        genre_dict = {0: "Error"}
+                except:
+                    print(
+                        f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+                    )
+                    genre_dict = {0: "Error"}
+            except:
+                print(
+                    f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+                )
+                genre_dict = {0: "Error"}
         except:
             print(
                 f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
             )
-            genre_dict = {0: "Not Found"}
+            genre_dict = {0: "Error"}
 
     # Erster Schlüssel des Dictionarys
     top_key = next(iter(genre_dict))
     # Wert des Schlüssels holen
     top_genre= genre_dict[top_key]
+
+    # Speichere das Genre im Cache
+    genre_cache[cache_key] = top_genre
+
     return top_genre
 
 
@@ -127,16 +202,10 @@ def site_search(search_name) -> Dict:
 def sanity_checks(band_name: str, album_name: str, album_type: str) -> bool:
     all_test_passed = True
 
-    # Das hier kann gar nicht passieren, Funktion lässt sich ohne Parameter eh nicht aufrufen
-    # Wirft zusätzlich komischen Fehler wenn Dataframe-Spalten eingegeben werden
-    # if not band_name or not album_name:
-    #     print("Fehler: Band- oder Albumname fehlt.")
-    #     all_test_passed = False
-
-    # valid_types = ["single", "album"]
-    # if album_type not in valid_types:
-    #     print(f"Fehler: Ungültiger album_type. Erlaubte Werte sind: {valid_types}")
-    #     all_test_passed = False
+    valid_types = ["single", "album", "compilation"]
+    if album_type not in valid_types:
+        print(f"Fehler: Ungültiger album_type. Erlaubte Werte sind: {valid_types}")
+        all_test_passed = False
 
     # invalid_chars = ["#", "$", "%"]  # Liste der ungültigen Zeichen
     # for char in invalid_chars:
@@ -147,5 +216,11 @@ def sanity_checks(band_name: str, album_name: str, album_type: str) -> bool:
     return all_test_passed
 
 def remove_bracketed_text(s):
-    """Entfernt den Text innerhalb von Klammern aus einem gegebenen String."""
-    return re.sub(r'\(.*?\)', '', s).strip()
+    """
+    Entfernt den Text innerhalb von Klammern aus einem gegebenen String.
+    Zusätzlich werden Strings, die vollständig groß sind, vollständig
+    kleingeschrieben.
+    """
+    if s.isupper():
+        s.lower()
+    return re.sub(r'[\(\[].*?[\)\]]', '', s).strip()
