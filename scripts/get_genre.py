@@ -19,7 +19,7 @@ def get_genre(band_name: str, album_name: str, album_type: str) -> str:
 
     album_type: str, single oder album
 
-    return:
+    return: str, Gibt das zuerst gefundene Genre zurück
     """
 
     genre_dict = {}
@@ -55,12 +55,12 @@ def get_genre(band_name: str, album_name: str, album_type: str) -> str:
                             print(
                                 f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; zu den Suchbegriffen gab es keine Ergebnisse"
                             )
-                            genre_dict = {}
+                            genre_dict = {0: "Not Found"}
         except:
             print(
                 f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
             )
-            genre_dict = {}
+            genre_dict = {0: "Not Found"}
 
     # Erster Schlüssel des Dictionarys
     top_key = next(iter(genre_dict))
