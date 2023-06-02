@@ -12,12 +12,11 @@ df_spotify_youtube = pd.read_csv(file_path)
 # Dataframe reduzieren für einfacheren Funktionsaufruf
 df_spotify_youtube_subset = df_spotify_youtube[["Artist", "Track", "Album_type"]]
 
-# Für Testzwecke reduzieren auf die ersten 20 Zeilen reduzieren
-# df_spotify_youtube_subset = df_spotify_youtube_subset.head(20)
 
-# Hilfsfunktion zum Extrahieren von Argumenten und Aufrufen der Funktion get_genre
 def apply_get_genre(args):
+    """Hilfsfunktion zum Extrahieren von Argumenten und Aufrufen der Funktion get_genre."""
     return get_genre(*args)
+
 
 # Erstellen Sie eine Liste von Tupeln, die als Argumente für die Funktion get_genre verwendet werden können
 args_list = df_spotify_youtube_subset.to_records(index=False).tolist()
@@ -28,7 +27,7 @@ start = time.perf_counter()
 # Die Wahl der Anzahl der Kerne ist ein bisschen schwierig; mp.cpu_count() wählt alle zur Verfügung stehenden
 # Prozesse aus, das ist aber zuviel für den Wikidata Server (Error Code 429).
 # Daher manuelle Angabe:
-# 6: ~581s
+# 6:
 with mp.Pool(6) as pool:
     # Verwende map(), um die Funktion get_genre auf die Liste von Argumenten anzuwenden
     genres = pool.map(apply_get_genre, args_list)
@@ -40,6 +39,6 @@ print(f"Wikidata-Abfragen durchgeführt in {end-start} Sekunden.")
 df_genres = pd.DataFrame(genres, columns=["genres"])
 
 # DataFrame in eine CSV-Datei schreiben
-df_genres.to_csv('../data/genres_versuch1.csv', index=False)
+df_genres.to_csv('../data/genres_versuch2.csv', index=False)
 
 print(df_genres.describe())
