@@ -154,6 +154,9 @@ def get_genre(band_name: str, album_name: str, album_type: str) -> str:
                 f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
             )
             genre_dict = {0: "Error"}
+    else:
+        genre_dict = {0: "Error"}
+        print("Sanity Checks klappen nicht")
 
     # Erster Schlüssel des Dictionarys
     top_key = next(iter(genre_dict))
