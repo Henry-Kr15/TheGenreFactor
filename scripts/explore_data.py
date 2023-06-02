@@ -45,7 +45,7 @@ print("---")
 print(df.describe())
 
 # Scatterplot
-print("creat scatterplot")
+print("create scatterplot")
 numeric_df = df.select_dtypes(include=np.number)
 selected_columns = numeric_df.iloc[:, 1:16]
 sampled_data = selected_columns.sample(frac=1.0)

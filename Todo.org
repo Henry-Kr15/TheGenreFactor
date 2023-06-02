@@ -12,7 +12,7 @@ schreiben können
 ** TODO Snakemake Setup
 Sobald wir mehrere Skripte haben, sollten wir ein Snakemake-File schreiben
 
-* 1. Datensatz vervollständigen [66%]
+* 1. Datensatz vervollständigen [50%]
 DEADLINE: <2023-06-03 Sat>
 ** DONE Testskript schreiben
 Das Testskript soll für Metallica das Genre aus Wikidata ziehen
@@ -21,6 +21,7 @@ Das Testskript so anpassen, dass es auch für andere Künstler als Metallica fun
 Insbesondere auch für einzelne Künstler, die nicht Teil einer Band sind.
 ** TODO Skript erweitern
 Das Skript so erweitern, dass es den kompletten Datensatz um die Spalte "Genre" erweitert
+** TODO Multithreading für schnelles Ergänzen des Datensatzes
 
 * 2. Neuronales Netz trainieren [%]
 

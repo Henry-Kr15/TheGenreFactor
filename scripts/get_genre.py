@@ -6,7 +6,7 @@ from pywikibot.exceptions import NoPageError
 from typing import Dict
 
 
-def get_genre(band_name: str, album_name: str, album_type: str) -> Dict:
+def get_genre(band_name: str, album_name: str, album_type: str) -> str:
     """
     Versucht, das Genre auf Wikidata zu finden. Dafür werden verschiedene Kombinationen von
     Suchbegriffen verwendet.
@@ -18,6 +18,8 @@ def get_genre(band_name: str, album_name: str, album_type: str) -> Dict:
     album_name: str, Name des Albums des Musiktitels
 
     album_type: str, single oder album
+
+    return:
     """
 
     genre_dict = {}
@@ -60,7 +62,11 @@ def get_genre(band_name: str, album_name: str, album_type: str) -> Dict:
             )
             genre_dict = {}
 
-    return genre_dict
+    # Erster Schlüssel des Dictionarys
+    top_key = next(iter(genre_dict))
+    # Wert des Schlüssels holen
+    top_genre= genre_dict[top_key]
+    return top_genre
 
 
 def site_search(search_name) -> Dict:
@@ -99,9 +105,11 @@ def site_search(search_name) -> Dict:
 def sanity_checks(band_name: str, album_name: str, album_type: str) -> bool:
     all_test_passed = True
 
-    if not band_name or not album_name:
-        print("Fehler: Band- oder Albumname fehlt.")
-        all_test_passed = False
+    # Das hier kann gar nicht passieren, Funktion lässt sich ohne Parameter eh nicht aufrufen
+    # Wirft zusätzlich komischen Fehler wenn Dataframe-Spalten eingegeben werden
+    # if not band_name or not album_name:
+    #     print("Fehler: Band- oder Albumname fehlt.")
+    #     all_test_passed = False
 
     valid_types = ["single", "album"]
     if album_type not in valid_types:
