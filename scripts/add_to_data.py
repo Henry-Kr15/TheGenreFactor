@@ -1,3 +1,4 @@
+import sys
 import pandas as pd
 from get_genre import get_genre
 import concurrent.futures #für Parallelisierung
@@ -51,8 +52,8 @@ batch_size = 200
 
 # Gesamtzahl der Einträge im DataFrame
 #end = len(df)
-begin = 0
-end = 5000
+begin = int(sys.argv[1])
+end = int(sys.argv[2])
 
 # Schleife zur Durchführung der Genreabfrage für jedes Paket
 results = []
