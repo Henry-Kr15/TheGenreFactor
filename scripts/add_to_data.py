@@ -43,28 +43,31 @@ def process_data_batch(batch_df, num_processes):
 
     return results
 
+# Kopiere das ursprüngliche DataFrame
+df_updated = df.copy()
+
 # Anzahl der Einträge pro Paket
 batch_size = 200
 
 # Gesamtzahl der Einträge im DataFrame
-total_entries = len(df)
-# total_entries = 600
+#end = len(df)
+begin = 0
+end = 5000
 
 # Schleife zur Durchführung der Genreabfrage für jedes Paket
 results = []
-for i in range(0, total_entries, batch_size):
+for i in range(begin, end, batch_size):
     batch_df = df[i:i+batch_size]
     batch_results = process_data_batch(batch_df, num_processes)
     results.extend(batch_results)
 
+    # Aktualisiere das DataFrame mit den Ergebnissen
+    for index, genre in results:
+        df_updated.loc[index, "Genre"] = genre
 
-# Aktualisiere das DataFrame mit den Ergebnissen
-for index, genre in results:
-    df.loc[index, "Genre"] = genre
-
-# DataFrame als CSV-Datei speichern
-df.to_csv("../data/data.csv", index=False)
-
+   # Speichere den aktualisierten Batch als CSV-Datei
+    batch_df_updated = df_updated[i:i+batch_size]
+    batch_df_updated.to_csv(f"../data/batch_{i}.csv", index=False)
 
 # Berechne die Dauer der Ausführung in Sekunden
 duration = time.time() - start_time
