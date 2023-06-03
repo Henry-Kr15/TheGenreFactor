@@ -105,54 +105,54 @@ def get_genre(band_name: str, album_name: str, album_type: str) -> str:
                                             genre_dict = site_search(search_name)
 
                                         except (KeyError, NoPageError):
-                                            print(
-                                                f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; zu den Suchbegriffen gab es keine Ergebnisse"
-                                            )
+#                                            print(
+#                                                f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; zu den Suchbegriffen gab es keine Ergebnisse"
+#                                            )
                                             genre_dict = {0: "Not Found"}
                                         except:
-                                            print(
-                                                f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
-                                            )
+#                                            print(
+#                                                f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+#                                            )
                                             genre_dict = {0: "Error"}
                                     except:
-                                        print(
-                                            f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
-                                        )
+#                                        print(
+#                                            f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+#                                        )
                                         genre_dict = {0: "Error"}
                                 except:
-                                    print(
-                                        f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
-                                    )
+#                                    print(
+#                                        f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+#                                    )
                                     genre_dict = {0: "Error"}
                             except:
-                                print(
-                                    f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
-                                )
+#                                print(
+#                                    f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+#                                )
                                 genre_dict = {0: "Error"}
                         except:
-                            print(
-                            f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
-                            )
+#                            print(
+#                            f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+#                            )
                             genre_dict = {0: "Error"}
                     except:
-                        print(
-                            f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
-                        )
+#                        print(
+#                            f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+#                        )
                         genre_dict = {0: "Error"}
                 except:
-                    print(
-                        f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
-                    )
+#                    print(
+#                        f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+#                    )
                     genre_dict = {0: "Error"}
             except:
-                print(
-                    f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
-                )
+#                print(
+#                    f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+#                )
                 genre_dict = {0: "Error"}
         except:
-            print(
-                f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
-            )
+#            print(
+#                f"Suche nach {album_name} mit allen Zusätzen fehlgeschlagen; unbekannter Fehler"
+#            )
             genre_dict = {0: "Error"}
     else:
         genre_dict = {0: "Error"}
