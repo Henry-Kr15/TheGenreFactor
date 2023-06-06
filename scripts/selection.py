@@ -6,6 +6,11 @@ df = pd.read_csv("../data/data.csv")
 # Selektion der Zeilen ohne NaN-Werte
 df_selected = df.dropna().loc[~df["Genre"].isin(["Not Found", "Error"])]
 
+# Filtern der Daten und Behalten nur derjenigen mit Häufigkeit > n
+n = 5
+genre_counts = df_selected['Genre'].value_counts()
+df_selected = df_selected[df_selected['Genre'].isin(genre_counts[genre_counts > n].index)]
+
 # Abspeichern des resultierenden DataFrames als CSV
 df_selected.to_csv("../data/data_selected.csv", index=False)
 
