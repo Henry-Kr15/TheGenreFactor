@@ -1,0 +1,37 @@
+#+title: How to install RocM on Fedora 38
+
+** 1. Download the official Amd Software
+On [[https://www.amd.com/en/support/graphics/]], download the .rpm file for RHEL 9.1.
+
+** 2. Setup the Repo
+Inside the file /etc/yum.repos.d/amdgpu.repo, change the line(s):
+
+#+begin_src
+baseurl=https://repo.radeon.com/amdgpu/5.4.5/rhel/$amdgpudistro/main/x86_64
+#+end_src
+
+to
+
+#+begin_src
+baseurl=https://repo.radeon.com/amdgpu/5.4.5/rhel/9.1/main/x86_64
+#+end_src
+
+** 2. Install the RocM Software Stack
+Run:
+
+#+begin_src bash
+sudo dnf install rocm-*
+sudo dnf install llvm
+sudo dnf install libGL
+#+end_src
+
+Testing can be done with running
+
+#+begin_src bash
+rocminfo
+#+end_src
+
+at least for the basic core install. This should show correct
+system information, especially for your gpu.
+
+** 3. Install Tensorflow-rocm
