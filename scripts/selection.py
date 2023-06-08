@@ -2,18 +2,25 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 def group_genres(genre):
+
+#    if 'indie pop' in genre.lower() or 'bedroom pop' in genre.lower():
+#        return 'indie pop'
+#    elif 'K-pop' in genre or 'J-pop' in genre:
+#        return 'asian pop'
+#    elif 'synth-pop' in genre:
+#        return 'synth pop'
     if 'pop' in genre.lower():
         return 'pop'
-    elif 'alternative rock' in genre.lower() or 'grunge' in genre.lower() or 'progressive rock' in genre.lower() or 'neue deutsche härte' in genre.lower():
+    elif 'alternative rock' in genre.lower() or 'punk' in genre.lower() or 'grunge' in genre.lower() or 'progressive rock' in genre.lower() or 'neue deutsche härte' in genre.lower():
         return 'alternative rock'
     elif 'rock' in genre.lower():
         return 'rock'
-    elif 'punk' in genre.lower():
-        return 'punk'
-    elif 'hip hop' in genre.lower() or 'rap' in genre.lower() or 'hop' in genre.lower():
+    elif 'hip hop' in genre.lower() or 'rap' in genre.lower() or 'hop' in genre.lower() or "uk drill" in genre.lower():
         return 'hip hop'
     elif 'reggaeton' in genre.lower():
         return 'reggaeton'
+    elif 'reggae' in genre.lower() or 'ska' in genre.lower():
+        return 'reggae'
     elif 'R&B' in genre:
         return 'R&B'
     elif 'classic' in genre.lower() or 'symphony' in genre.lower():
@@ -30,7 +37,7 @@ def group_genres(genre):
         return 'country'
     elif 'folk' in genre.lower():
         return 'folk'
-    elif 'electro' in genre.lower() or 'hardstyle' in genre.lower() or 'house' in genre.lower() or 'dubstep' in genre.lower() or 'techno' in genre.lower():
+    elif 'electro' in genre.lower() or 'hardstyle' in genre.lower() or 'house' in genre.lower() or 'dubstep' in genre.lower() or 'techno' in genre.lower() or 'drum and bass' in genre.lower():
         return 'electronic'
     elif 'funk' in genre.lower():
         return 'funk'
@@ -42,12 +49,12 @@ def group_genres(genre):
         return 'opera'
     elif 'gospel' in genre.lower():
         return 'gospel'
-    elif 'disco' in genre.lower() or 'dance' in genre.lower():
+    elif 'disco' in genre.lower() or 'dance' in genre.lower() or 'trance' in genre.lower():
         return 'disco'
-    elif 'slasa' in genre.lower():
-        return 'slasa'
-    elif 'latin' in genre.lower():
+    elif 'latin' in genre.lower() or 'salsa' in genre.lower() or 'bachata' in genre.lower() or 'samba' in genre.lower() or 'vallenato' in genre.lower() or 'mariachi' in genre.lower() or 'grupera' in genre.lower():
         return 'latin'
+    elif 'mexican' in genre.lower() or 'ranchera' in genre.lower() or 'norteña' in genre.lower() or 'tejano' in genre.lower():
+        return 'mexican'
     elif 'christian' in genre.lower() or 'worship' in genre.lower():
         return 'christian'
     elif 'literature' in genre.lower():
@@ -68,11 +75,32 @@ def group_genres(genre):
 # Einlesen der CSV-Datei
 df = pd.read_csv("../data/data.csv")
 
+#features droppen
+features_drop = [
+                 'Artist', 
+                 'Url_spotify', 
+                 'Track', 
+                 'Album', 
+                 'Album_type', 
+                 'Uri', 
+                 'Url_youtube', 
+                 'Title', 
+                 'Channel', 
+#                 'Views', 
+#                 'Likes', 
+#                 'Comments', 
+                 'Description', 
+                 'Licensed', 
+                 'official_video', 
+#                 'Stream'
+                ]
+df_selected = df.drop(features_drop, axis=1)
+
 # Selektion der Zeilen ohne NaN-Werte
-df_selected = df.dropna().loc[~df["Genre"].isin(["Not Found", "Error"])]
+df_selected = df_selected.dropna().loc[~df["Genre"].isin(["Not Found", "Error"])]
 
 # Filtern der Daten und Behalten nur derjenigen mit Häufigkeit > n
-n = 10
+n = 20
 genre_counts = df_selected['Genre'].value_counts()
 df_selected = df_selected[df_selected['Genre'].isin(genre_counts[genre_counts > n].index)]
 
@@ -81,6 +109,9 @@ genres = df_selected['Genre'].unique()
 
 # Erstellen der Übergenres und Gruppierung mit group_genres
 df_selected['Genre'] = df_selected['Genre'].apply(group_genres)
+
+# drop bullshit
+df_selected = df_selected.loc[~df_selected["Genre"].isin(["bullshit"])]
 
 # Abspeichern des resultierenden DataFrames als CSV
 df_selected.to_csv("../data/data_selected.csv", index=False)
