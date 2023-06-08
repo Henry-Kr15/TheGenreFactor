@@ -72,7 +72,7 @@ df = pd.read_csv("../data/data.csv")
 df_selected = df.dropna().loc[~df["Genre"].isin(["Not Found", "Error"])]
 
 # Filtern der Daten und Behalten nur derjenigen mit Häufigkeit > n
-n = 0
+n = 10
 genre_counts = df_selected['Genre'].value_counts()
 df_selected = df_selected[df_selected['Genre'].isin(genre_counts[genre_counts > n].index)]
 
