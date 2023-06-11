@@ -35,3 +35,30 @@ at least for the basic core install. This should show correct
 system information, especially for your gpu.
 
 ** 3. Install Tensorflow-rocm
+
+There is a package on PyPI:
+
+#+begin_src bash
+pip install tensorflow-rocm
+#+end_src
+
+** 4. Reboot
+
+Otherwise, strange errors seem to happen.
+
+** Resources
+Mainly my open browser tabs that were helpful in some ways
+
++ [[https://github.com/ROCmSoftwarePlatform/tensorflow-upstream#tensorflow-rocm-port][Official Github Repo]].
++ [[https://github.com/RadeonOpenCompute/ROCm][Official Github Repo for RocM]].
++ [[https://pypi.org/project/tensorflow-rocm/][PyPI]].
++ [[https://www.reddit.com/r/StableDiffusion/comments/12cx5ee/install_guide_automatic1111_fedora_37_amd_rx_6000/][Some Reddit Thread]].
++ [[https://www.reddit.com/r/Fedora/comments/136ze9m/install_rocm_fedora_38/][Another Reddit Thread]].
++ [[https://copr.fedorainfracloud.org/coprs/cosmicfusion/ROCm-GFX8P/][Outdated RPM Package]].
++ [[https://www.reddit.com/r/linuxquestions/comments/126d951/amd_rocmhip_support_on_fedora_37/][Yet another Reddit Thread]].
++ [[https://www.amd.com/en/support/graphics/][Enable amdgpu Repo]].
++ [[https://github.com/ROCmSoftwarePlatform/tensorflow-upstream/issues/1019][Some Github Issues]].
++ [[https://github.com/RadeonOpenCompute/ROCm/issues/1753][Some other Github Issues]].
++ [[https://github.com/srinivamd/rocminstaller][An unofficial RocM Installer]].
++ [[https://github.com/RadeonOpenCompute/rocm_smi_lib][RocM Smi Github Repo]].
++ [[https://repo.radeon.com/amdgpu/5.4.5/rhel/9.1/][Index of amdgpu]].
