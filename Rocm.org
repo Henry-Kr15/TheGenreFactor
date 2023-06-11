@@ -46,6 +46,23 @@ pip install tensorflow-rocm
 
 Otherwise, strange errors seem to happen.
 
+** ROCM_PATH
+
+When encountering problems where tensorflow cant find certain bitcodes, some Github Users sugested to add it opt/rocm to the
+ROCM_PATH variable. To do this, add the following to your .bashrc:
+
+#+begin_src sh
+export ROCM_PATH="opt/rocm:$ROCM_PATH"
+export ROCM_PATH="opt/rocm-5.4.5:$ROCM_PATH"
+#+end_src
+
+*** NOTE
+This currently does not work for me. Tensorflow still cant find
+./opencl.bc anywhere
+
+This is possibly connected to XLA not working properly in the
+Linux version of tensorflow
+
 ** Resources
 Mainly my open browser tabs that were helpful in some ways
 
