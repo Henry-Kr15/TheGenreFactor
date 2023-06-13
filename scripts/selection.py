@@ -112,6 +112,7 @@ df_selected['Genre'] = df_selected['Genre'].apply(group_genres)
 
 # drop bullshit
 df_selected = df_selected.loc[~df_selected["Genre"].isin(["bullshit"])]
+#df_selected = df_selected.loc[~df_selected["Genre"].isin(["pop"])]
 
 # Abspeichern des resultierenden DataFrames als CSV
 df_selected.to_csv("../data/data_selected.csv", index=False)
