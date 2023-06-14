@@ -12,7 +12,7 @@ schreiben können
 ** TODO Snakemake Setup
 Sobald wir mehrere Skripte haben, sollten wir ein Snakemake-File schreiben
 
-* 1. Datensatz vervollständigen [100%]
+* 1. Datensatz vervollständigen [87%]
 DEADLINE: <2023-06-03 Sat>
 ** DONE Testskript schreiben
 Das Testskript soll für Metallica das Genre aus Wikidata ziehen
@@ -32,6 +32,8 @@ Wenn es einen erfolgreichen Suchtreffer für einen Künstler gab und zu einem Li
 nicht, soll einfach der vorherige Wert für Genre verwendet werden
 ** DONE Verbesserung der Suche 2
 Gerade bei Klassik-Titeln mit sehr langen Namen schlägt die Suche immer fehl
+** TODO Sauberere Genre-Tags
+Um die Statistik zu erhöhen, könnten wir probieren manuell sauberere Daten zu erzeugen
 
 * 2. Neuronales Netz trainieren [0%]
 ** TODO ROC statt Accuracy verw.
