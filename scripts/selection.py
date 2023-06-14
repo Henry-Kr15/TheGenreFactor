@@ -158,7 +158,7 @@ print(
 )
 
 # Variante 2: Durchschnitt der vorhandenen Spalten in die fehlenden Eintragen
-# cols_to_consider = ["Views", "Likes", "Comments", "Streams"]
+# cols_to_consider = ["Views", "Likes", "Comments", "Stream"]
 
 # # Berechne den Durchschnitt über die Spalten, ignoriere NaNs
 # df["mean"] = df[cols_to_consider].mean(axis=1)
@@ -172,10 +172,10 @@ print(
 # df = df.drop("mean", axis=1)
 
 # Variante 1: alle NaNs durch 0 ersetzen
-df["Views"] = df["Views"].fillna(0)
-df["Likes"] = df["Likes"].fillna(0)
-df["Comments"] = df["Comments"].fillna(0)
-df["Stream"] = df["Stream"].fillna(0)
+# df["Views"] = df["Views"].fillna(0)
+# df["Likes"] = df["Likes"].fillna(0)
+# df["Comments"] = df["Comments"].fillna(0)
+# df["Stream"] = df["Stream"].fillna(0)
 
 
 df_selected = df.drop(features_drop, axis=1)
