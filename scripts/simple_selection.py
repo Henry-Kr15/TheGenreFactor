@@ -130,7 +130,7 @@ df = pd.read_csv("../data/data.csv")
 
 # features droppen
 features_drop = [
-    # "Artist",
+    "Artist",
     "Url_spotify",
     # "Track",
     # "Album",
