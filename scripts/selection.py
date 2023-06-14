@@ -184,7 +184,7 @@ df_selected = df.drop(features_drop, axis=1)
 df_selected = df_selected.dropna().loc[~df["Genre"].isin(["Not Found", "Error"])]
 
 # Filtern der Daten und Behalten nur derjenigen mit Häufigkeit > n
-n = 20
+n = 100
 genre_counts = df_selected["Genre"].value_counts()
 df_selected = df_selected[
     df_selected["Genre"].isin(genre_counts[genre_counts > n].index)
