@@ -66,6 +66,7 @@ def group_genres(genre):
         or "dubstep" in genre.lower()
         or "techno" in genre.lower()
         or "drum and bass" in genre.lower()
+        or "trance" in genre.lower()
     ):
         return "electronic"
     elif "funk" in genre.lower():
@@ -81,7 +82,6 @@ def group_genres(genre):
     elif (
         "disco" in genre.lower()
         or "dance" in genre.lower()
-        or "trance" in genre.lower()
     ):
         return "disco"
     elif (
@@ -92,6 +92,13 @@ def group_genres(genre):
         or "vallenato" in genre.lower()
         or "mariachi" in genre.lower()
         or "grupera" in genre.lower()
+        or "cuban rumba" in genre.lower()
+        or "rumba flamenca" in genre.lower()
+        or "argentine cumbia" in genre.lower()
+        or "bossa nova" in genre.lower()
+        or "cumbia" in genre.lower()
+        or "cumbia santafesina" in genre.lower()
+        or "nueva trova" in genre.lower()
     ):
         return "latin"
     elif (
