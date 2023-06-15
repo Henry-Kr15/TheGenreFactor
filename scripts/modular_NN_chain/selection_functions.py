@@ -129,6 +129,7 @@ def group_genres(genre):
     else:
         return genre
 
+
 def grouping(df: pd.DataFrame):
     """
     Dummy für etwas netteren Aufruf
@@ -231,7 +232,9 @@ def clean_data(df: pd.DataFrame, n: int, k: int):
     # ...und das Ergebnis in das ursprüngliche Dataframe den ursprünglichen Spalten zuweisen
     df_clean[num_cols] = df_clean_copy[num_cols]
 
-    df_clean_imputed = df_clean # eigentlich echt unnötig aber ich finde die Benennung hilft beim Verständnis
+    # Jetzt noch zur Sicherheit alle überbleibenden NaNs entfernen
+    df_clean_imputed = df_clean.dropna()
+
 
     return df_clean_imputed
 
