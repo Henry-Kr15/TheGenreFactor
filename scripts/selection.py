@@ -17,6 +17,9 @@ def group_genres(genre):
         or "grunge" in genre.lower()
         or "progressive rock" in genre.lower()
         or "neue deutsche härte" in genre.lower()
+        or "melodic hardcore" in genre.lower()
+        or "ethereal wave" in genre.lower()
+        or "new wave" in genre.lower()
     ):
         return "alternative rock"
     elif "rock" in genre.lower():
@@ -25,20 +28,25 @@ def group_genres(genre):
         "hip hop" in genre.lower()
         or "rap" in genre.lower()
         or "hop" in genre.lower()
-        or "uk drill" in genre.lower()
+        or "drill" in genre.lower()
+        or "crunk" in genre.lower()
+        or "reggaeton" in genre.lower()
     ):
         return "hip hop"
-    elif "reggaeton" in genre.lower():
-        return "reggaeton"
+#    elif "reggaeton" in genre.lower():
+#        return "reggaeton"
     elif "reggae" in genre.lower() or "ska" in genre.lower():
         return "reggae"
     elif "R&B" in genre:
         return "R&B"
-    elif "classic" in genre.lower() or "symphony" in genre.lower():
+    elif (
+        "classic" in genre.lower() 
+        or "symphony" in genre.lower()
+        or "opera" in genre.lower()):
         return "classic"
     elif "jazz" in genre.lower():
         return "jazz"
-    elif "blues" in genre.lower():
+    elif "blues" in genre.lower() or "doo-wop" in genre.lower():
         return "blues"
     elif "soul" in genre.lower():
         return "soul"
@@ -60,6 +68,7 @@ def group_genres(genre):
         or "dubstep" in genre.lower()
         or "techno" in genre.lower()
         or "drum and bass" in genre.lower()
+        or "grime" in genre.lower()
     ):
         return "electronic"
     elif "funk" in genre.lower():
@@ -86,6 +95,8 @@ def group_genres(genre):
         or "vallenato" in genre.lower()
         or "mariachi" in genre.lower()
         or "grupera" in genre.lower()
+        or "merengue" in genre.lower()
+        or "cumbia" in genre.lower()
     ):
         return "latin"
     elif (
@@ -177,6 +188,10 @@ print(
 # df["Comments"] = df["Comments"].fillna(0)
 # df["Stream"] = df["Stream"].fillna(0)
 
+# album_type encoden um es dem NN geben zu könenn
+album_type_encoded = pd.get_dummies(df['Album_type'], prefix='Album_type')
+data_encoded = pd.concat([df.drop(columns=['Album_type']), album_type_encoded], axis=1)
+
 
 df_selected = df.drop(features_drop, axis=1)
 
@@ -184,7 +199,7 @@ df_selected = df.drop(features_drop, axis=1)
 df_selected = df_selected.dropna().loc[~df["Genre"].isin(["Not Found", "Error"])]
 
 # Filtern der Daten und Behalten nur derjenigen mit Häufigkeit > n
-n = 100
+n = 50
 genre_counts = df_selected["Genre"].value_counts()
 df_selected = df_selected[
     df_selected["Genre"].isin(genre_counts[genre_counts > n].index)
@@ -198,7 +213,14 @@ df_selected["Genre"] = df_selected["Genre"].apply(group_genres)
 
 # drop bullshit
 df_selected = df_selected.loc[~df_selected["Genre"].isin(["bullshit"])]
-# df_selected = df_selected.loc[~df_selected["Genre"].isin(["pop"])]
+df_selected = df_selected.loc[~df_selected["Genre"].isin(["film score"])]
+#df_selected = df_selected.loc[~df_selected["Genre"].isin(["country"])]
+#df_selected = df_selected.loc[~df_selected["Genre"].isin(["raggae"])]
+#df_selected = df_selected.loc[~df_selected["Genre"].isin(["rock"])]
+#df_selected = df_selected.loc[~df_selected["Genre"].isin(["soul"])]
+#df_selected = df_selected.loc[~df_selected["Genre"].isin(["folk"])]
+#df_selected = df_selected.loc[~df_selected["Genre"].isin(["pop"])]
+
 
 # Abspeichern des resultierenden DataFrames als CSV
 df_selected.to_csv("../data/data_selected.csv", index=False)
