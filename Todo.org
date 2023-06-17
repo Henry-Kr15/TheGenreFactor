@@ -36,7 +36,6 @@ Gerade bei Klassik-Titeln mit sehr langen Namen schlägt die Suche immer fehl
 Um die Statistik zu erhöhen, könnten wir probieren manuell sauberere Daten zu erzeugen
 
 * 2. Neuronales Netz trainieren [0%]
-** TODO ROC statt Accuracy verw.
 ** TODO StratifiedKFold verw.
 ** TODO Ensemble von Modellen?
 
