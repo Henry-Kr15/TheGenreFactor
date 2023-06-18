@@ -66,6 +66,8 @@ def visualize_features(df: pd.DataFrame, Folder_name: str):
     plt.savefig(f"../figures/{Folder_name}/correlation.pdf")
 
 
+# Beispielverwendung:
+# IMMER IN EINEM ANDEREN SKRIPT IN DIESER DATEI NUR FUNKTIONSDEFINITONEN
 # df = pd.read_csv("../data/Spotify_Youtube.csv")
 # df = pd.read_csv("../data/data_selected_v1.csv")
 
