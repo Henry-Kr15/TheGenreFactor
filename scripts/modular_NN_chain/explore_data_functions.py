@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import os
 from pandas.plotting import scatter_matrix
 from sklearn.preprocessing import QuantileTransformer
 
@@ -38,6 +39,10 @@ def plot_columns(df):
 
 
 def visualize_features(df: pd.DataFrame, Folder_name: str):
+
+    if not os.path.exists(f"../figures/{Folder_name}"):
+        os.makedirs(f"../figures/{Folder_name}")
+
 
     plot_columns(df)
 
