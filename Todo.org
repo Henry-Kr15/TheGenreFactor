@@ -38,6 +38,7 @@ Um die Statistik zu erhöhen, könnten wir probieren manuell sauberere Daten zu 
 * 2. Neuronales Netz trainieren [0%]
 ** TODO StratifiedKFold verw.
 ** TODO Ensemble von Modellen?
+** TODO Encoding des Artists praktikabel?
 
 * 3. Knn Klassifizierung durchführen [%]
 
