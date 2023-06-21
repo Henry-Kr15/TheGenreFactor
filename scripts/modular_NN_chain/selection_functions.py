@@ -11,12 +11,10 @@ def group_genres(genre):
     """
     #    if 'indie pop' in genre.lower() or 'bedroom pop' in genre.lower():
     #        return 'indie pop'
-    #    elif 'K-pop' in genre or 'J-pop' in genre:
-    #        return 'asian pop'
-    #    elif 'synth-pop' in genre:
-    #        return 'synth pop'
-    if "pop" in genre.lower():
-        return "pop"
+    if 'K-pop' in genre or 'J-pop' in genre:
+        return 'asian pop'
+    #if "pop" in genre.lower():
+    #    return "pop"
     elif (
         "alternative rock" in genre.lower()
         or "punk" in genre.lower()
@@ -25,6 +23,10 @@ def group_genres(genre):
         or "neue deutsche härte" in genre.lower()
     ):
         return "alternative rock"
+    elif ("indie" in genre.lower()
+    or "dream pop" in genre.lower()
+    or "bedroom" in genre.lower()):
+        return "indie"
     elif "rock" in genre.lower():
         return "rock"
     elif (
@@ -53,11 +55,14 @@ def group_genres(genre):
         or "death" in genre.lower()
         or "post-hardcore" in genre.lower()
         or "grindcore" in genre.lower()
+        or "screamo" in genre.lower()
+        or "melodic hardcore" in genre.lower()
     ):
         return "metal"
     elif "country" in genre.lower():
         return "country"
-    elif "folk" in genre.lower():
+    elif ("folk" in genre.lower()
+        or "baroque pop" in genre.lower()):
         return "folk"
     elif (
         "electro" in genre.lower()
@@ -82,6 +87,7 @@ def group_genres(genre):
     elif (
         "disco" in genre.lower()
         or "dance" in genre.lower()
+        or "synth-pop" in genre.lower()
     ):
         return "disco"
     elif (
@@ -99,6 +105,7 @@ def group_genres(genre):
         or "cumbia" in genre.lower()
         or "cumbia santafesina" in genre.lower()
         or "nueva trova" in genre.lower()
+        or "brasileira" in genre.lower()
     ):
         return "latin"
     elif (
@@ -110,7 +117,8 @@ def group_genres(genre):
         return "mexican"
     elif "christian" in genre.lower() or "worship" in genre.lower():
         return "christian"
-    elif "literature" in genre.lower():
+    elif ("literature" in genre.lower()
+        or "novel" in genre.lower()):
         return "literature"
     elif "podcast" in genre.lower():
         return "podcast"
@@ -120,6 +128,11 @@ def group_genres(genre):
         return "children"
     elif "film score" in genre.lower():
         return "film score"
+    elif ("popular music" in genre.lower()
+        or "pop music" in genre.lower()
+        ):
+        return "pop"
+
     elif (
         "film" in genre.lower()
         or "movie" in genre.lower()
@@ -219,6 +232,22 @@ def clean_data(df: pd.DataFrame, n: int, k: int):
     # 5.
     df_clean["Genre"] = df_clean["Genre"].apply(group_genres)
     df_clean = df_clean.loc[~df_clean["Genre"].isin(["bullshit"])] # manche Genres sinds einfach nicht
+    df_clean = df_clean.loc[~df_clean["Genre"].isin(["christian"])] # manche Genres sinds einfach nicht
+    df_clean = df_clean.loc[~df_clean["Genre"].isin(["blues"])] # manche Genres sinds einfach nicht
+    df_clean = df_clean.loc[~df_clean["Genre"].isin(["R&B"])] # manche Genres sinds einfach nicht
+    df_clean = df_clean.loc[~df_clean["Genre"].isin(["disco"])] # manche Genres sinds einfach nicht
+    df_clean = df_clean.loc[~df_clean["Genre"].isin(["jazz"])] # manche Genres sinds einfach nicht
+    df_clean = df_clean.loc[~df_clean["Genre"].isin(["soul"])] # manche Genres sinds einfach nicht
+    df_clean = df_clean.loc[~df_clean["Genre"].isin(["folk"])] # manche Genres sinds einfach nicht
+    df_clean = df_clean.loc[~df_clean["Genre"].isin(["country"])] # manche Genres sinds einfach nicht
+    df_clean = df_clean.loc[~df_clean["Genre"].isin(["mexican"])] # manche Genres sinds einfach nicht
+    df_clean = df_clean.loc[~df_clean["Genre"].isin(["reggaeton"])] # manche Genres sinds einfach nicht
+    df_clean = df_clean.loc[~df_clean["Genre"].isin(["metal"])] # manche Genres sinds einfach nicht
+    df_clean = df_clean.loc[~df_clean["Genre"].isin(["reggae"])] # manche Genres sinds einfach nicht
+    df_clean = df_clean.loc[~df_clean["Genre"].isin(["indie"])] # manche Genres sinds einfach nicht
+    df_clean = df_clean.loc[~df_clean["Genre"].isin(["pop"])] # manche Genres sinds einfach nicht
+
+
     df_clean = df_clean.loc[~df_clean["Genre"].isin(["Not Found", "Error"])]
 
 
