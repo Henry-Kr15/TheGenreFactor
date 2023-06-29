@@ -245,7 +245,7 @@ def clean_data(df: pd.DataFrame, n: int, k: int):
     df_clean = df_clean.loc[~df_clean["Genre"].isin(["metal"])] # manche Genres sinds einfach nicht
     df_clean = df_clean.loc[~df_clean["Genre"].isin(["reggae"])] # manche Genres sinds einfach nicht
     df_clean = df_clean.loc[~df_clean["Genre"].isin(["indie"])] # manche Genres sinds einfach nicht
-    df_clean = df_clean.loc[~df_clean["Genre"].isin(["pop"])] # manche Genres sinds einfach nicht
+#    df_clean = df_clean.loc[~df_clean["Genre"].isin(["pop"])] # manche Genres sinds einfach nicht
 
 
     df_clean = df_clean.loc[~df_clean["Genre"].isin(["Not Found", "Error"])]
