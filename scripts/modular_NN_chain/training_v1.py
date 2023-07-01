@@ -4,7 +4,7 @@ import pandas as pd
 import tensorflow as tf
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import OneHotEncoder, MinMaxScaler
+from sklearn.preprocessing import OneHotEncoder, MinMaxScaler, StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import QuantileTransformer
 from explore_data_functions import visualize_features
