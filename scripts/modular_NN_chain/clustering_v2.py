@@ -3,15 +3,15 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from collections import Counter
 
-csv_file = "../data/data.csv"
+csv_file = "../../data/data.csv"
 df = pd.read_csv(csv_file)
 genres = df['Genre'].unique()
 
 features = ['Danceability', 'Energy', 'Key', 'Speechiness', 
             'Instrumentalness', 'Liveness', 'Valence', 
-            'Tempo', 'Duration_ms', 'Views', 'Stream']
+            'Tempo', 'Duration_ms']
 
-genre_liste = ['pop', 'rock']
+genre_liste = ['pop', 'rock', 'hip', 'metal', 'classic', 'jazz', 'funk', 'reggae']
 
 for idx in genre_liste:
 
