@@ -135,7 +135,7 @@ for i in val_genres:
         monitor="val_loss", factor=0.1, patience=5, mode="min", min_lr=1e-7
     )
 
-    # Neues y beötigt
+    # Neues y benötigt
     y_train_temp = y_train.copy()
     y_val_temp = y_val.copy()
 
@@ -162,7 +162,7 @@ for i in val_genres:
 
 
 # Nehme die Vorhersage des Modells, dass sich am sichersten ist?
-y_pred = np.array([model.predict(X_test) for model in models]).mean(axis=0)
+y_pred = np.array([model.predict(X_test) for model in models]).mean(axis=0) # TODO ???
 y_pred_classes = np.argmax(y_pred, axis=1)
 y_test_classes = np.argmax(y_test.values, axis=1)
 
