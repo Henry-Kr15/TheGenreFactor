@@ -1,18 +1,10 @@
 #!/usr/bin/env python3
-import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import LabelEncoder, label_binarize
+from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import (
-    accuracy_score,
-    confusion_matrix,
-    precision_recall_curve,
-    average_precision_score,
-    roc_curve,
-    auc,
-)
+from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.neighbors import KNeighborsClassifier
 
 df = pd.read_csv("../../data/data_selected_v1.csv", index_col=0)
@@ -20,16 +12,12 @@ df = pd.read_csv("../../data/data_selected_v1.csv", index_col=0)
 genres_to_keep = ["classic", "metal", "rock", "hip hop", "electronic", "pop"]
 df = df[df["Genre"].isin(genres_to_keep)]
 
-
 # Aufteilen
 X = df.drop("Genre", axis=1)
 y = df["Genre"]
 
-
 # Genre Kodieren
 genre_encoder = LabelEncoder()
-# Muss leider erst in Numpy Array umgewandelt werden
-# genres = y.to_numpy().reshape(-1, 1)
 one_hot_y = genre_encoder.fit_transform(y)
 
 # Datensatz aufteilen, mit shuffle und stratify
@@ -80,7 +68,7 @@ y_pred = kn.predict(X_test)
 
 print(y_pred)
 
-# # Genauigkeit berechnen
+# Genauigkeit berechnen
 accuracy = accuracy_score(y_test, y_pred)
 
 print(f"Model accuracy on test set is {accuracy*100:.2f}%")
