@@ -15,6 +15,8 @@ def group_genres(genre):
         return 'asian pop'
     #if "pop" in genre.lower():
     #    return "pop"
+    elif 'pop-rock' in genre.lower() or "pop rock" in genre.lower():
+        return "pop rock" 
     elif (
         "alternative rock" in genre.lower()
         or "punk" in genre.lower()
@@ -74,6 +76,7 @@ def group_genres(genre):
         or "trance" in genre.lower()
     ):
         return "electronic"
+
     elif "funk" in genre.lower():
         return "funk"
     elif "swing" in genre.lower():
