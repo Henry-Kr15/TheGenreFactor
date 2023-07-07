@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -107,7 +108,25 @@ plt.savefig("../../figures/svm/confusion_matrix.png")
 plt.clf()
 
 # Berechne Precision, Recall und Schwellenwerte
-precision, recall, thresholds = precision_recall_curve(y_test, y_pred)
+
+# Die Funktion braucht leider einen binären Wahrheitswert :/
+# Fake it till you make it
+# weiß nicht ob man das so machen kann oder ob das übel dumm ist
+# Spoiler alert
+# das ist übel dumm
+y_pred_binary = np.zeros_like(y_pred)
+y_test_binary = np.full_like(y_test, 1)
+
+for prediction in y_pred:
+    if y_pred[prediction] == y_test[prediction]:
+        y_pred_binary[prediction] = 1
+    else:
+        y_pred_binary[prediction] = 0
+
+precision, recall, thresholds = precision_recall_curve(y_test_binary, y_pred_binary)
+
+print(y_test_binary)
+print(y_pred_binary)
 
 # Berechne den AUC-PR
 auc_pr = auc(recall, precision)
