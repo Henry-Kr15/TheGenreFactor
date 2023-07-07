@@ -2,7 +2,7 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, QuantileTransformer, MinMaxScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.neighbors import KNeighborsClassifier
@@ -59,6 +59,20 @@ features_to_use = [
 X_train = X_train[features_to_use]
 X_test = X_test[features_to_use]
 X_val = X_val[features_to_use]
+
+# Erstmal Transformieren (TODO Ausprobieren, welche Trafo hier die besten Ergebnisse liefert)
+# Fit NUR auf train...
+transformer = QuantileTransformer(output_distribution="normal")
+transformer.fit(X_train)
+# ... dann transform auf alle
+X_train = transformer.transform(X_train)
+X_val = transformer.transform(X_val)
+X_test = transformer.transform(X_test)
+
+# Werte der Attribute mit MinMax auf [-1,1] skalieren
+scaler = MinMaxScaler(feature_range=(-1, 1))
+# Fit wieder auf train...
+scaler.fit(X_train)
 
 # KNNs klöppeln
 kn = KNeighborsClassifier(n_neighbors=6)

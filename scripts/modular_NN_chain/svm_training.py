@@ -2,9 +2,14 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, QuantileTransformer, MinMaxScaler
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import (
+    accuracy_score,
+    confusion_matrix,
+    precision_recall_curve,
+    auc,
+)
 from sklearn import svm
 
 df = pd.read_csv("../../data/data_selected_v1.csv", index_col=0)
@@ -60,6 +65,20 @@ X_train = X_train[features_to_use]
 X_test = X_test[features_to_use]
 X_val = X_val[features_to_use]
 
+# Erstmal Transformieren (TODO Ausprobieren, welche Trafo hier die besten Ergebnisse liefert)
+# Fit NUR auf train...
+transformer = QuantileTransformer(output_distribution="normal")
+transformer.fit(X_train)
+# ... dann transform auf alle
+X_train = transformer.transform(X_train)
+X_val = transformer.transform(X_val)
+X_test = transformer.transform(X_test)
+
+# Werte der Attribute mit MinMax auf [-1,1] skalieren
+scaler = MinMaxScaler(feature_range=(-1, 1))
+# Fit wieder auf train...
+scaler.fit(X_train)
+
 # SVM
 clf = svm.SVC()
 clf.fit(X_train, y_train)
@@ -86,3 +105,16 @@ plt.xlabel("Vorhergesagtes Genre")
 plt.ylabel("Tatsächliches Genre")
 plt.savefig("../../figures/svm/confusion_matrix.png")
 plt.clf()
+
+# Berechne Precision, Recall und Schwellenwerte
+precision, recall, thresholds = precision_recall_curve(y_test, y_pred)
+
+# Berechne den AUC-PR
+auc_pr = auc(recall, precision)
+
+plt.plot(recall, precision, label=f"AUC-PR = {auc_pr:.3}")
+plt.xlabel("Recall")
+plt.ylabel("Precision")
+plt.legend()
+plt.title("Precision-Recall Curve")
+plt.savefig("../../figures/svm/auc.png")

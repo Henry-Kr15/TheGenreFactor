@@ -69,7 +69,6 @@ X_train = transformer.transform(X_train)
 X_val = transformer.transform(X_val)
 X_test = transformer.transform(X_test)
 
-# TODO Ausprobieren, ob der StandardScaler hier nicht besser ist
 # Werte der Attribute mit MinMax auf [-1,1] skalieren
 scaler = MinMaxScaler(feature_range=(-1, 1))
 # Fit wieder auf train...
