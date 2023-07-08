@@ -70,6 +70,7 @@ X_val = X_val[features_to_use]
 # Fit NUR auf train...
 transformer = QuantileTransformer(output_distribution="normal")
 transformer.fit(X_train)
+
 # ... dann transform auf alle
 X_train = transformer.transform(X_train)
 X_val = transformer.transform(X_val)
@@ -79,6 +80,11 @@ X_test = transformer.transform(X_test)
 scaler = MinMaxScaler(feature_range=(-1, 1))
 # Fit wieder auf train...
 scaler.fit(X_train)
+
+# ... dann wieder transform
+X_train = scaler.transform(X_train)
+X_val = scaler.transform(X_val)
+X_test = scaler.transform(X_test)
 
 # SVM
 clf = svm.SVC()
