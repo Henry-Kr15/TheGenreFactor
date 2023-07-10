@@ -73,11 +73,15 @@
 \usetheme[numbering=fraction]{metropolis}
 
 % Für die Titelseite
-\title{Detektionen von Gammablitzen  im TeV-Bereich }
-\author{Christopher Bretifeld, Henry Krämerkämper}
+%\title{The Influence of Music Genres on Performance Metrics: A Comparative Analysis of Spotify and YouTube}
+\title{The Genre Factor: Unveiling the Influence of Music Genres on Spotify and YouTube Performance}
+\subtitle{Project Presentation - ML Seminar 2023}
+\author{Henry Krämerkämper\\%
+  \and%
+  Christopher Breitfeld}
 \institute{Technische Universität Dortmund}
-\date{\today}
-\logo{\includegraphics[height=0.5cm]{tu_logo_sw_klein.pdf}}
+\date{25.05.2023}
+\logo{\includegraphics[height=0.5cm]{figures/tu_logo_sw_klein.pdf}}
 
 \begin{document}
 
@@ -85,23 +89,118 @@
   \titlepage
 \end{frame}
 
-\begin{frame}{Titel}
-  \begin{columns}
-    \column{0.5\textwidth}
+\begin{frame}{Definition and motivation of the problem/task}
+  \begin{alertblock}{Definition}
+    \begin{itemize}
+      \item Does the genre have an influence on a songs performance?
+      \item Does the influence differ between YouTube and Spotify?
+    \end{itemize}
+  \end{alertblock}
+  \begin{alertblock}{Motivation}
+    \begin{block}{Maximizing song performance:}
       \begin{itemize}
-              \item{Item}
+        \item{Understanding the impact of music genres on streaming platforms can help artists, labels, and producers maximize songs performance.}
       \end{itemize}
-    \column{0.5\textwidth}
-  \end{columns}
+    \end{block}
+    \begin{block}{User behavior and genre analysis:}
+      \begin{itemize}
+       \item{Analyzing the relationship between genres and user behavior can provide valuable insights for music enthusiasts and researchers.}
+      \end{itemize}
+    \end{block}
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Description of the Data Set}
+  \begin{alertblock}{Dataset from \href{https://www.kaggle.com/datasets/salvatorerastelli/spotify-and-youtube}{Kaggle}: Spotify and YouTube}
+	\begin{itemize}
+      \item Contains statistics of songs on Spotify and YouTube 
+      \item including streams on Spotify and number of views on YouTube
+      \item 20.7k entries by 2k artists
+      \item Does \alert{NOT} include the genre
+      \item Licensed under CC0: Public Domain
+    \end{itemize}
+  \end{alertblock}
+  \begin{alertblock}{Wikipedia Query for the Top-Genre of the Artist}
+	\begin{itemize}
+     \item Query artist's Wikipedia page for genre names
+     \item Choose a list of broader genres, so that the genres are not too specific
+     \item Match artist to one of the genres on the list, based on the query
+     \item Usage possible under CC-by-SA-3.0
+    \end{itemize}
+  \end{alertblock}
+  \begin{alertblock}{Target of the resulting Dataset}
+	\begin{itemize}
+     \item Target: genre
+     \item Working hypothesis: train neural network to classify
+     \item No previous work possible with this dataset due to missing genre
+    \end{itemize}
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Strategy for the Comparison with alternative Methods}
+  \begin{alertblock}{Motivation for Machine Learning}
+	\begin{itemize}
+%          \item ML method needed; complex problem without clear definitions for the different classes (genres)
+          \item ML needed for complex problem with unclear genre definitions
+          \item Genre classification challenging even for humans
+    \end{itemize}
+  \end{alertblock}
+  \begin{alertblock}{Alternative Method: kNN}
+    \begin{itemize}
+          \item Comparison with kNN-approach
+          \item Simplest solution for classification tasks
+          \item kNN may be slow for large datasets; expect speed and performance improvements with our method
+    \end{itemize}
+  \end{alertblock}
 \end{frame}
 
 
 % Alle Quellen, die bisher nicht zitiert wurden
-% \nocite{A_very_high_component}
+%\nocite{Theories_of_grbs}
 
 \printbibliography
 
 \appendix
+\begin{frame}{Appendix: The features of our dataset}
+  \begin{alertblock}{Features}
+    \begin{columns}[t]
+      \begin{column}{0.5\textwidth}
+        \begin{itemize}
+          \item Track
+          \item Artist
+          \item Url\_Spotify 
+          \item Album 
+          \item Album\_type 
+          \item Uri 
+          \item Danceability
+          \item Energy 
+          \item Key 
+          \item Loudness 
+          \item Speechiness 
+          \item Acousticness 
+          \item Instrumentalness
+          \item Liveness 
+          \item Tempo 
+        \end{itemize}
+      \end{column}
+      \begin{column}{0.5\textwidth}
+        \begin{itemize}
+          \item Duration\_ms 
+          \item Stream 
+          \item Url\_youtube 
+          \item Title 
+          \item Channel
+          \item Views 
+          \item Likes 
+          \item Comments 
+          \item Description 
+          \item Licensed
+          \item official\_video
+        \end{itemize}
+      \end{column}
+    \end{columns}
+  \end{alertblock}
+\end{frame}
 
 % \begin{frame}{Appendix: Das Synchrotron Burnoff Limit}
 
