@@ -74,13 +74,13 @@
 
 % Für die Titelseite
 %\title{The Influence of Music Genres on Performance Metrics: A Comparative Analysis of Spotify and YouTube}
-\title{The Genre Factor: Unveiling the Influence of Music Genres on Spotify and YouTube Performance}
+\title{The Genre Factor}
 \subtitle{Project Presentation - ML Seminar 2023}
 \author{Henry Krämerkämper\\%
   \and%
   Christopher Breitfeld}
 \institute{Technische Universität Dortmund}
-\date{25.05.2023}
+\date{13.07.2023}
 \logo{\includegraphics[height=0.5cm]{figures/tu_logo_sw_klein.pdf}}
 
 \begin{document}
@@ -89,40 +89,30 @@
   \titlepage
 \end{frame}
 
-\begin{frame}{Definition and motivation of the problem/task}
-  \begin{alertblock}{Definition}
-    \begin{itemize}
-      \item Does the genre have an influence on a songs performance?
-      \item Does the influence differ between YouTube and Spotify?
-    \end{itemize}
-  \end{alertblock}
-  \begin{alertblock}{Motivation}
-    \begin{block}{Maximizing song performance:}
-      \begin{itemize}
-        \item{Understanding the impact of music genres on streaming platforms can help artists, labels, and producers maximize songs performance.}
-      \end{itemize}
-    \end{block}
-    \begin{block}{User behavior and genre analysis:}
-      \begin{itemize}
-       \item{Analyzing the relationship between genres and user behavior can provide valuable insights for music enthusiasts and researchers.}
-      \end{itemize}
-    \end{block}
-  \end{alertblock}
+\begin{frame}
+\frametitle{Introduction to the Problem}
+
+\begin{itemize}
+\item Genre classification of songs based on audio features
+\item Dataset: Thousands of songs with diverse genres
+\item Challenge: Developing an accurate classification model
+\end{itemize}
+
 \end{frame}
 
 \begin{frame}{Description of the Data Set}
   \begin{alertblock}{Dataset from \href{https://www.kaggle.com/datasets/salvatorerastelli/spotify-and-youtube}{Kaggle}: Spotify and YouTube}
 	\begin{itemize}
-      \item Contains statistics of songs on Spotify and YouTube 
+      \item Contains statistics of songs on Spotify and YouTube
       \item including streams on Spotify and number of views on YouTube
       \item 20.7k entries by 2k artists
       \item Does \alert{NOT} include the genre
       \item Licensed under CC0: Public Domain
     \end{itemize}
   \end{alertblock}
-  \begin{alertblock}{Wikipedia Query for the Top-Genre of the Artist}
+  \begin{alertblock}{Wikidata Query for the Top-Genre of the Artist}
 	\begin{itemize}
-     \item Query artist's Wikipedia page for genre names
+     \item Query artist's Wikidata page for genre names
      \item Choose a list of broader genres, so that the genres are not too specific
      \item Match artist to one of the genres on the list, based on the query
      \item Usage possible under CC-by-SA-3.0
@@ -131,29 +121,86 @@
   \begin{alertblock}{Target of the resulting Dataset}
 	\begin{itemize}
      \item Target: genre
-     \item Working hypothesis: train neural network to classify
-     \item No previous work possible with this dataset due to missing genre
     \end{itemize}
   \end{alertblock}
 \end{frame}
 
-\begin{frame}{Strategy for the Comparison with alternative Methods}
-  \begin{alertblock}{Motivation for Machine Learning}
-	\begin{itemize}
-%          \item ML method needed; complex problem without clear definitions for the different classes (genres)
-          \item ML needed for complex problem with unclear genre definitions
-          \item Genre classification challenging even for humans
-    \end{itemize}
-  \end{alertblock}
-  \begin{alertblock}{Alternative Method: kNN}
-    \begin{itemize}
-          \item Comparison with kNN-approach
-          \item Simplest solution for classification tasks
-          \item kNN may be slow for large datasets; expect speed and performance improvements with our method
-    \end{itemize}
-  \end{alertblock}
+
+\begin{frame}
+\frametitle{Network Architecture}
+
+\begin{itemize}
+\item Neural network model for genre classification
+\item Layers, activation functions, and number of parameters
+\item Training process and optimization algorithm
+\end{itemize}
+
 \end{frame}
 
+\begin{frame}
+\frametitle{Hyperparameter Optimization}
+
+\begin{itemize}
+\item Importance of hyperparameter tuning
+\item Methods used (e.g., grid search, random search)
+\item Results of optimization and best hyperparameters
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Overtraining Checks}
+
+\begin{itemize}
+\item Preventing overfitting in the model
+\item Regularization techniques used (e.g., dropout, weight decay)
+\item Validation and test set performance
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Results}
+
+\begin{itemize}
+\item Accuracy and performance metrics on the test set
+\item Comparison with baseline or previous methods
+\item Visualization of classification results (e.g., confusion matrix)
+\end{itemize}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Method} & \textbf{Accuracy (%)} \
+\hline
+Neural Network (NN) & 85.2 \
+\hline
+K-Nearest Neighbors (KNN) & 78.6 \
+\hline
+Support Vector Machine (SVM) & 81.3 \
+\hline
+\end{tabular}
+\end{frame}
+
+\begin{frame}
+\frametitle{Alternative Methods}
+
+\begin{itemize}
+\item K-nearest neighbors (KNN) approach
+\item Support Vector Machines (SVM) approach
+\item Brief description and performance comparison
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Conclusions}
+
+\begin{itemize}
+\item Summary of findings and key takeaways
+\item Comparison of the proposed method with alternative approaches
+\item Limitations and potential areas for improvement
+\end{itemize}
+
+\end{frame}
 
 % Alle Quellen, die bisher nicht zitiert wurden
 %\nocite{Theories_of_grbs}
