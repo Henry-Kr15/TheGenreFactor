@@ -13,3 +13,11 @@ scripts/throttle.ctrl
 
 figures/
 model_fold/
+presentation/*.log
+presentation/*.toc
+presentation/*.snm
+presentation/*.nav
+presentation/*.run.xml
+presentation/*.out
+presentation/*.aux
+presentation/*.bcf
