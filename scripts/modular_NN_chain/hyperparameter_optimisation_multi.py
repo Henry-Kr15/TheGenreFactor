@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+
+#!/usr/bin/env python3
 import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
@@ -141,20 +143,16 @@ value_combis = itertools.product(*[v for v in param_space.values()])
 param_combis = [{key:value for key, value in zip(param_space.keys(), combi)} for combi in value_combis]
 
 print(f"We have a total of {len(param_combis)} combinations")
+print(type(param_combis))
+print(param_combis)
 
-# Hyperparameteroptimierung
+def worker(param_combis):
+    idx, params = next(enumerate(param_combis))
+    print(type(idx))
+    print(idx)
 
-# Start der Zeitmessung
-start_time = time.time()
-
-search_results = []
-
-search_results = []
-
-k_folds = 3
-skf = StratifiedKFold(n_splits=k_folds)
-
-for idx, params in enumerate(param_combis):
+    print(type(params))
+    print(params)
     print(f"Start run {idx+1}/{len(param_combis)}: Parameters: {params}")
 
     val_accuracies = []
@@ -190,6 +188,7 @@ for idx, params in enumerate(param_combis):
         train_accuracies.append(train_acc)
         train_losses.append(train_loss)
 
+
     # Store results
     search_results.append({
         **params,
@@ -202,6 +201,18 @@ for idx, params in enumerate(param_combis):
         'best_train_loss': np.mean(train_losses),
         'train_loss_std': np.std(train_losses)
     })
+
+# Hyperparameteroptimierung
+
+# Start der Zeitmessung
+start_time = time.time()
+search_results = []
+k_folds = 3
+skf = StratifiedKFold(n_splits=k_folds)
+
+with mp.Pool(processes=mp.cpu_count()) as pool:
+    pool.map(worker, param_combis)
+
 
 # Ende der Zeitmessung
 end_time = time.time()
