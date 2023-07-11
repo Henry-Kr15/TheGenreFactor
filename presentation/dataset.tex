@@ -1,19 +1,21 @@
 \begin{frame}{Description of the Data Set}
     \begin{alertblock}{Dataset from \href{https://www.kaggle.com/datasets/salvatorerastelli/spotify-and-youtube}{Kaggle}: Spotify and YouTube}
       \begin{itemize}
-        \item Contains statistics of songs on Spotify and YouTube
-        \item $\SI{20.7}{\kilo}$ entries by $\SI{2}{\kilo}$ artists
-        \item Does \alert{NOT} include the genre
+        \item Contains statistics of $\SI{20.7}{\kilo}$ songs on Spotify and YouTube
+        \item Does \alert{NOT} include genre information.
       \end{itemize}
     \end{alertblock}
     \begin{alertblock}{Wikidata Query for the Top-Genre of the Artist}
       \begin{itemize}
-       \item Query artist's Wikidata page for genre names
+       \item Query artist’s Wikidata page for genres
        \item Assign artists/album genre to song
       \end{itemize}
     \end{alertblock}
-    \begin{columns}[T]
-        \begin{column}{0.4\textwidth}
+    \vspace*{-0.5cm}
+    \begin{columns}[t]
+        \begin{column}{0.1\textwidth}
+        \end{column}
+        \begin{column}{0.3\textwidth}
             \begin{alertblock}{Selection}
                 \begin{itemize}
                     \item Groupe Subgenres into Overcategories
@@ -22,10 +24,10 @@
                 \end{itemize}
             \end{alertblock}
         \end{column}
-        \begin{column}{0.6\textwidth}
+        \begin{column}{0.8\textwidth}
             \begin{figure}
-                \hspace*{-1.7cm}
-                \includegraphics[width=1.1\textwidth]{../figures/genre_hist.pdf}
+%                \hspace*{-0.8cm}
+                \includegraphics[width=\textwidth]{../figures/genre_hist.pdf}
             \end{figure}
         \end{column}
     \end{columns}
