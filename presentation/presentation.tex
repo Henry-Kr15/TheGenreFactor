@@ -23,7 +23,8 @@
 % Latin Modern Fonts werden automatisch geladen
 
 % deutsche Spracheinstellungen
-\usepackage[ngerman]{babel}
+% \usepackage[ngerman]{babel}
+\usepackage[english]{babel}
 %BUG in Biblatex wird hiermit gefixt
 \providetoggle{blx@lang@captions@english}
 
@@ -46,7 +47,8 @@
 
 % Zahlen und Einheiten
 \usepackage[
-  locale=DE,                   % deutsche Einstellungen
+  % locale=DE,                   % deutsche Einstellungen
+  locale=US,
   separate-uncertainty=true,   % immer Fehler mit \pm
   per-mode=symbol-or-fraction, % / in inline math, fraction in display math
 ]{siunitx}
@@ -102,13 +104,20 @@
 
 \begin{frame}
 \frametitle{Introduction to the Problem}
-
-\begin{itemize}
-\item Genre classification of songs based on audio features
-\item Dataset: Thousands of songs with diverse genres
-\item Challenge: Developing an accurate classification model
-\end{itemize}
-
+  \begin{columns}
+  \column{0.5\textwidth}
+    \begin{itemize}
+      \item Genre classification of songs based on audio features
+      \item Dataset: Thousands of songs with diverse genres
+      \item Challenge: Developing an accurate classification model
+    \end{itemize}
+  \column{0.5\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[scale=0.3]{figures/Beispielsong.png}
+      \caption{Example of a song and its attributes.}
+    \end{figure}
+  \end{columns}
 \end{frame}
 
 \begin{frame}{Description of the Data Set}
@@ -171,46 +180,51 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Results}
-
-\begin{itemize}
-\item Accuracy and performance metrics on the test set
-\item Comparison with baseline or previous methods
-\item Visualization of classification results (e.g., confusion matrix)
-\end{itemize}
-% \begin{tabular}{|c|c|}
-% \hline
-% \textbf{Method} & \textbf{Accuracy (%)} \
-% \hline
-% Neural Network (NN) & 85.2 \
-% \hline
-% K-Nearest Neighbors (KNN) & 78.6 \
-% \hline
-% Support Vector Machine (SVM) & 81.3 \
-% \hline
-% \end{tabular}
+\frametitle{Results of our Neural Network}
+\begin{figure}<1>
+  \centering
+  \includegraphics[scale=0.32]{figures/confusion_matrix_NN.png}
+\end{figure}
+\begin{alertblock}{Accuracy and AUC-PR}<2->
+	\begin{itemize}
+   \item Results in an accuracy of $\SI{65.87}{\percent}$ on test data
+   \item As well as an AUC-PR score of $\num{0.738}$
+  \end{itemize}
+\end{alertblock}
 \end{frame}
 
 \begin{frame}
 \frametitle{Alternative Methods}
-
-\begin{itemize}
-\item K-nearest neighbors (KNN) approach
-\item Support Vector Machines (SVM) approach
-\item Brief description and performance comparison
-\end{itemize}
-
+  \begin{alertblock}{K-nearest-neighbors}
+    \begin{itemize}
+     \item We use $k=12$ as it achieves the highest performance
+     \item Results in an accuracy of $\SI{60.62}{\percent}$
+    \end{itemize}
+  \end{alertblock}
+  \begin{alertblock}{Support vector machines}
+    \begin{itemize}
+    \item{model that classifies data by finding the hyperplane that maximally separates different categories in a multidimensional space}
+    \item We use an One-vs-One approach to be able to do Multiclass-Classification:
+    \begin{itemize}
+      \item A separate model is trained for each pair of classes, and a given data point is classified by majority voting among the classifiers
+      \end{itemize}
+    \item The used kernel function is the radial basis function (RBF)
+    \item Results in an accuracy of $\SI{63.88}{\percent}$
+    \end{itemize}
+  \end{alertblock}
 \end{frame}
 
 \begin{frame}
 \frametitle{Conclusions}
-
-\begin{itemize}
-\item Summary of findings and key takeaways
-\item Comparison of the proposed method with alternative approaches
-\item Limitations and potential areas for improvement
-\end{itemize}
-
+  \begin{itemize}
+          \item NN achieves an accuracy of $\SI{65.87}{\percent}$ on test data.
+          \item Diminishing returns for more complex models, we are constrained by the dataset
+  \end{itemize}
+  \begin{figure}
+    \centering
+    \includegraphics[scale=0.15]{figures/performance-comparison.pdf}
+    % \caption{Comparison of the accuracy of different approaches.}
+  \end{figure}
 \end{frame}
 
 % Alle Quellen, die bisher nicht zitiert wurden

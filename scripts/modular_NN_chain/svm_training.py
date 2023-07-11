@@ -87,7 +87,7 @@ X_val = scaler.transform(X_val)
 X_test = scaler.transform(X_test)
 
 # SVM
-clf = svm.SVC()
+clf = svm.SVC(kernel="rbf")
 clf.fit(X_train, y_train)
 
 y_pred = clf.predict(X_test)

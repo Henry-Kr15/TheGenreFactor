@@ -43,6 +43,7 @@ plot_columns(df)
 print(df.head())
 print("---")
 print(df.describe())
+print(df.iloc[0])
 
 # Scatterplot
 print("create scatterplot")
@@ -59,7 +60,35 @@ for ax in scatter_matrix.ravel():
 plt.savefig("../figures/scatter.png")
 
 # Correlation
-print("creat correlation plot")
+print("create correlation plot")
 plt.figure(figsize=(20, 20))
 sns.heatmap(selected_columns.corr(), annot=True, square=True, cmap="coolwarm")
 plt.savefig("../figures/correlation.pdf")
+
+# Plots für die Präsentation
+print("create performance plot")
+plt.clf()
+models = ["Random guessing", "Naive Guessing", "Knn", "SVMs", "Neural Network"]
+accuracies = [16.67, 36.63, 60.62, 63.88, 65.87]
+
+data = sorted(zip(accuracies, models))  # Daten sortieren
+colors = sns.color_palette("Oranges", len(data))  # Farbpalette erstellen
+
+# Diagramm erstellen
+for i, (value, category) in enumerate(data):
+    plt.bar(category, value, color=colors[i])
+
+
+# Farbe festlegen
+orange = sns.color_palette("Oranges", 10)[5]
+
+# plt.bar(models, accuracies, color=orange)
+plt.xlabel("Models", fontsize=25)
+plt.ylabel("Achieved accuracy [%]", fontsize=25)
+plt.title("Performance Comparison", fontsize=25)
+# Ticks vergrößern
+plt.tick_params(axis='both', which='major', labelsize=25)
+# y-Achse Bereich festlegen
+plt.ylim(0, 100)
+plt.tight_layout()
+plt.savefig("../figures/performance-comparison.pdf")

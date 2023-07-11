@@ -82,7 +82,7 @@ X_test = scaler.transform(X_test)
 
 
 # KNNs klöppeln
-kn = KNeighborsClassifier(n_neighbors=6)
+kn = KNeighborsClassifier(n_neighbors=12)
 kn.fit(X_train, y_train)
 
 y_pred = kn.predict(X_test)
