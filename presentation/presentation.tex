@@ -107,7 +107,7 @@
   \begin{columns}
   \column{0.5\textwidth}
     \begin{itemize}
-      \item Genre classification of songs based on audio features
+      \item Genre classification of songs based on the tracks features
       \item Dataset: Thousands of songs with diverse genres
       \item Challenge: Developing an accurate classification model
     \end{itemize}
@@ -120,91 +120,170 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Description of the Data Set}
-  \begin{alertblock}{Dataset from \href{https://www.kaggle.com/datasets/salvatorerastelli/spotify-and-youtube}{Kaggle}: Spotify and YouTube}
-	\begin{itemize}
-      \item Contains statistics of songs on Spotify and YouTube
-      \item including streams on Spotify and number of views on YouTube
-      \item 20.7k entries by 2k artists
-      \item Does \alert{NOT} include the genre
-      \item Licensed under CC0: Public Domain
-    \end{itemize}
-  \end{alertblock}
-  \begin{alertblock}{Wikidata Query for the Top-Genre of the Artist}
-	\begin{itemize}
-     \item Query artist's Wikidata page for genre names
-     \item Choose a list of broader genres, so that the genres are not too specific
-     \item Match artist to one of the genres on the list, based on the query
-     \item Usage possible under CC-by-SA-3.0
-    \end{itemize}
-  \end{alertblock}
-  \begin{alertblock}{Target of the resulting Dataset}
-	\begin{itemize}
-     \item Target: genre
-    \end{itemize}
-  \end{alertblock}
-\end{frame}
-
-
 \begin{frame}
-\frametitle{Network Architecture}
-
-\begin{itemize}
-\item Neural network model for genre classification
-\item Layers, activation functions, and number of parameters
-\item Training process and optimization algorithm
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}
-\frametitle{Hyperparameter Optimization}
-
-\begin{itemize}
-\item Importance of hyperparameter tuning
-\item Methods used (e.g., grid search, random search)
-\item Results of optimization and best hyperparameters
-\end{itemize}
-
+  \frametitle{Description of the Data Set}
+    \begin{alertblock}{Dataset from \href{https://www.kaggle.com/datasets/salvatorerastelli/spotify-and-youtube}{Kaggle}: Spotify and YouTube}
+      \begin{itemize}
+        \item Contains statistics of $\SI{20.7}{\kilo}$ songs on Spotify and YouTube
+        \item Does \alert{NOT} include genre information.
+      \end{itemize}
+    \end{alertblock}
+    \begin{alertblock}{Wikidata Query for the Top-Genre of the Artist}
+      \begin{itemize}
+       \item Query artist’s Wikidata page for genres
+       \item Assign artists/album genre to song
+      \end{itemize}
+    \end{alertblock}
+    \vspace*{-0.5cm}
+    \begin{columns}[t]
+        \begin{column}{0.1\textwidth}
+        \end{column}
+        \begin{column}{0.3\textwidth}
+            \begin{alertblock}{Selection}
+                \begin{itemize}
+                    \item Group Subgenres into Supercategories
+                    \item Select sample of $\num{6}$ Genres
+                    \item Remaining Songs: $\num{6446}$
+                \end{itemize}
+            \end{alertblock}
+        \end{column}
+        \begin{column}{0.7\textwidth}
+            \begin{figure}
+%                \hspace*{-0.8cm}
+                \includegraphics[width=\textwidth]{figures/genre_hist.pdf}
+            \end{figure}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}
-\frametitle{Overtraining Checks}
+    \frametitle{Network Architecture}
+    \begin{columns}[T]
+        \begin{column}{0.7\textwidth}
+            \begin{alertblock}{Model}
+                \begin{itemize}
+                    \item $\num{4}$ Dense Layers with Dropout
+                    \item Trainable parameters: $\num{170246}$
+                    \item Loss function: categorical crossentropy
+                    \item Optimizer: adam
+                \end{itemize}
+            \end{alertblock}
+            \begin{alertblock}{Training}
+                \begin{itemize}
+                    \item Early stopping: Stops training when the validation loss function no longer improves
+                    \item Reduce learning rate: Decreases learning rate if validation loss function stagnates \\
+                    \to better convergence
+                    \item Train the model using the training data with the defined set of hyperparameters.
+                \end{itemize}
+            \end{alertblock}
+        \end{column}
+        \begin{column}{0.3\textwidth}
+            \begin{tikzpicture}[
+                scale=0.8, every node/.style={scale=0.8},
+                layer/.style={rectangle,draw=black,fill=blue!30,minimum size=1cm},
+                sum/.style={circle,draw=black,fill=yellow!30},
+            ]
 
-\begin{itemize}
-\item Preventing overfitting in the model
-\item Regularization techniques used (e.g., dropout, weight decay)
-\item Validation and test set performance
-\end{itemize}
+            % Define nodes
+            \node[layer] (L0) at (0,0) {Input};
+            \node[layer] (L1) at (0,-2) {\begin{tabular}{c} Dense (128) \\ Dropout (0.3) \end{tabular}};
+            \node[layer] (L2) at (0,-4) {\begin{tabular}{c} Dense (256) \\ Dropout (0.3) \end{tabular}};
+            \node[layer] (L3) at (0,-6) {\begin{tabular}{c} Dense (512) \\ Dropout (0.3) \end{tabular}};
+            \node[layer] (L4) at (0,-8) {Dense (6)};
 
+            % Draw connections
+            \draw[->] (L0) -- (L1);
+            \draw[->] (L1) -- (L2);
+            \draw[->] (L2) -- (L3);
+            \draw[->] (L3) -- (L4);
+
+            % Draw parameter counts
+            \draw (L0) -- (L1) node[midway,right] {2560 params};
+            \draw (L1) -- (L2) node[midway,right] {33024 params};
+            \draw (L2) -- (L3) node[midway,right] {131584 params};
+            \draw (L3) -- (L4) node[midway,right] {3078 params};
+
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Hyperparameter Optimization}
+    \begin{alertblock}{Method}
+        \begin{itemize}
+            \item Grid Search: Train models with all combinations of hyperparameters
+        \end{itemize}
+    \end{alertblock}
+    \begin{alertblock}{Validation}
+        \begin{itemize}
+            \item $k=\num{3}$ Cross Validation
+            \item Save train/validation Accuracy and Loss
+        \end{itemize}
+    \end{alertblock}
+    \begin{figure}
+        \includegraphics[scale=0.3]{figures/HPO_parameter.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Overtraining Checks}
+    \begin{alertblock}{Methods to prevent Overtraining}
+        \begin{itemize}
+            \item Dropout
+            \item Early stopping
+            \item Minimize (Training Acc. - Validation Acc.)
+            \alert{but} maximize Validation Acc.
+        \end{itemize}
+    Try different values and decide after Hyperparameter Optimization
+    \end{alertblock}
+    \begin{figure}
+        \includegraphics[scale=0.45]{figures/HPO_scatter.pdf}
+    \end{figure}
 \end{frame}
 
 \begin{frame}
 \frametitle{Results of our Neural Network}
-\begin{figure}<1>
-  \centering
-  \includegraphics[scale=0.32]{figures/confusion_matrix_NN.png}
-\end{figure}
-\begin{alertblock}{Accuracy and AUC-PR}<2->
+\only<1>{
+\begin{alertblock}{Accuracy and AUC-PR}
 	\begin{itemize}
-   \item Results in an accuracy of $\SI{65.87}{\percent}$ on test data
+   \item Results in an accuracy of $\SI{65.56}{\percent}$ on test data
    \item As well as an AUC-PR score of $\num{0.738}$
   \end{itemize}
 \end{alertblock}
+    \begin{figure}
+        \begin{minipage}[b]{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figures/PR_curve.pdf}
+        \end{minipage}
+        \hfill
+        \begin{minipage}[b]{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figures/PR_curve_genres.pdf}
+        \end{minipage}
+    \end{figure}
+}
+\only<2>{
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.32]{figures/confusion_matrix_NN.png}
+\end{figure}
+}
 \end{frame}
 
 \begin{frame}
 \frametitle{Alternative Methods}
   \begin{alertblock}{K-nearest-neighbors}
     \begin{itemize}
-     \item We use $k=12$ as it achieves the highest performance
+     \item Use $k=12$ as it achieves the highest performance
      \item Results in an accuracy of $\SI{60.62}{\percent}$
     \end{itemize}
   \end{alertblock}
   \begin{alertblock}{Support vector machines}
     \begin{itemize}
-    \item{model that classifies data by finding the hyperplane that maximally separates different categories in a multidimensional space}
-    \item We use an One-vs-One approach to be able to do Multiclass-Classification:
+    \item{Model that classifies data by finding the hyperplane that maximally separates different categories in a multidimensional space}
+    \item Use an One-vs-One approach to be able to do Multiclass-Classification:
     \begin{itemize}
       \item A separate model is trained for each pair of classes, and a given data point is classified by majority voting among the classifiers
       \end{itemize}
@@ -217,7 +296,7 @@
 \begin{frame}
 \frametitle{Conclusions}
   \begin{itemize}
-          \item NN achieves an accuracy of $\SI{65.87}{\percent}$ on test data.
+          \item NN achieves an accuracy of $\SI{65.56}{\percent}$ on test data.
           \item Diminishing returns for more complex models, we are constrained by the dataset
   \end{itemize}
   \begin{figure}
@@ -233,57 +312,38 @@
 \printbibliography
 
 \appendix
-\begin{frame}{Appendix: The features of our dataset}
-  \begin{alertblock}{Features}
-    \begin{columns}[t]
-      \begin{column}{0.5\textwidth}
-        \begin{itemize}
-          \item Track
-          \item Artist
-          \item Url\_Spotify 
-          \item Album 
-          \item Album\_type 
-          \item Uri 
-          \item Danceability
-          \item Energy 
-          \item Key 
-          \item Loudness 
-          \item Speechiness 
-          \item Acousticness 
-          \item Instrumentalness
-          \item Liveness 
-          \item Tempo 
-        \end{itemize}
-      \end{column}
-      \begin{column}{0.5\textwidth}
-        \begin{itemize}
-          \item Duration\_ms 
-          \item Stream 
-          \item Url\_youtube 
-          \item Title 
-          \item Channel
-          \item Views 
-          \item Likes 
-          \item Comments 
-          \item Description 
-          \item Licensed
-          \item official\_video
-        \end{itemize}
-      \end{column}
-    \end{columns}
-  \end{alertblock}
+\begin{frame}
+    \frametitle{Appendix: Accuracy and Loss}
+    \begin{figure}
+        \begin{minipage}[b]{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figures/Loss.pdf}
+        \end{minipage}
+        \hfill
+        \begin{minipage}[b]{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figures/Acc.pdf}
+        \end{minipage}
+    \end{figure}
 \end{frame}
-
-% \begin{frame}{Appendix: Das Synchrotron Burnoff Limit}
-
-% \end{frame}
-
-% \begin{frame}{Appendix: Detektion eines Gammablitzes: Methoden}
-
-% \end{frame}
-
-% \begin{frame}{Appendix: Detektion eines Gammablitzes: Schwierigkeiten}
-
-% \end{frame}
-
+\begin{frame}
+    \frametitle{Appendix: Precision-Recall Curve}
+    \begin{figure}
+        \begin{minipage}[b]{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figures/PR_curve.pdf}
+        \end{minipage}
+        \hfill
+        \begin{minipage}[b]{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{figures/PR_curve_genres.pdf}
+        \end{minipage}
+    \end{figure}
+\end{frame}
+\begin{frame}
+    \frametitle{Appendix: Substructure of Hip Hop}
+    \begin{figure}
+        \includegraphics[scale=0.3]{figures/pairplot_hip_v3.pdf}
+    \end{figure}
+\end{frame}
 \end{document}
