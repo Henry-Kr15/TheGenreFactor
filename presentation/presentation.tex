@@ -74,6 +74,12 @@
 % Für komplexere Captions
 \usepackage{caption}
 
+% Für URL-Formatierung
+\usepackage{url}
+
+% Für Tabellen
+\usepackage{booktabs}
+
 % Literaturverzeichnis
 \usepackage[
   backend=biber,
@@ -112,12 +118,42 @@
       \item Challenge: Developing an accurate classification model
     \end{itemize}
   \column{0.5\textwidth}
-    \begin{figure}
-      \centering
-      \includegraphics[scale=0.3]{figures/Beispielsong.png}
-      \caption{Example of a song and its attributes.}
-    \end{figure}
+  \tiny
+  \begin{tabular}{l l}
+    \toprule
+    $\text{Feature}$ & $\text{Value}$ \\
+    \midrule
+    Artist & Gorillaz \\
+    Url\_spotify & \url{https://open.spotify...} \\
+    Track & Feel Good Inc. \\
+    Album & Demon Days \\
+    Album\_type & album \\
+    Uri & spotify:track:0d28khcov6AiegS... \\
+    Danceability & 0.818 \\
+    Energy & 0.705 \\
+    Key & 6.0 \\
+    Loudness & -6.679 \\
+    Speechiness & 0.177 \\
+    Acousticness & 0.00836 \\
+    Instrumentalness & 0.00233 \\
+    Liveness & 0.613 \\
+    Valence & 0.772 \\
+    Tempo & 138.559 \\
+    Duration\_ms & 222640.0 \\
+    Url\_youtube & \url{https://www.youtube...} \\
+    Title & Gorillaz - Feel Good Inc. (Official... \\
+    Channel & Gorillaz \\
+    Views & 693555221.0 \\
+    Likes & 6220896.0 \\
+    Comments & 169907.0 \\
+    Description & Official HD Video for Gorillaz'... \\
+    Licensed & True \\
+    official\_video & True \\
+    Stream & 1040234854.0 \\
+    \bottomrule
+  \end{tabular}
   \end{columns}
+  \normalsize
 \end{frame}
 
 \begin{frame}
