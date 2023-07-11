@@ -331,6 +331,7 @@
 
 \begin{frame}
 \frametitle{Conclusions}
+\only<1>{
   \begin{itemize}
           \item NN achieves an accuracy of $\SI{65.56}{\percent}$ on test data.
           \item Diminishing returns for more complex models, we are constrained by the dataset
@@ -340,6 +341,21 @@
     \includegraphics[scale=0.15]{figures/performance-comparison.pdf}
     % \caption{Comparison of the accuracy of different approaches.}
   \end{figure}
+}
+\only<2>{
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[scale=0.2]{figures/meme1.jpeg}
+    \end{figure}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[scale=0.17]{figures/meme2.jpeg}
+    \end{figure}
+  \end{columns}
+}
 \end{frame}
 
 % Alle Quellen, die bisher nicht zitiert wurden
