@@ -96,14 +96,16 @@ print(f"Model accuracy on test set is {accuracy*100:.2f}%")
 
 # Pikachu ist VERWIRRT
 cm = confusion_matrix(y_test, y_pred, normalize="true")
-plt.figure(figsize=(20, 20))
+plt.figure(figsize=(16, 9))
 sns.heatmap(
     cm,
     annot=True,
     xticklabels=genre_encoder.classes_,
     yticklabels=genre_encoder.classes_,
 )
-plt.xlabel("Vorhergesagtes Genre")
-plt.ylabel("Tatsächliches Genre")
+plt.xlabel("Vorhergesagtes Genre", fontsize=15)
+plt.ylabel("Tatsächliches Genre", fontsize=15)
+plt.tick_params(axis="both", which="major", labelsize=15)
+plt.tight_layout()
 plt.savefig("../../figures/knn/confusion_matrix.png")
 plt.clf()
