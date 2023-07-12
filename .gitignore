@@ -11,7 +11,7 @@ htmlcov
 scripts/apicache-py3/
 scripts/throttle.ctrl
 
-figures/
+# figures/
 model_fold/
 presentation/*.log
 presentation/*.toc
