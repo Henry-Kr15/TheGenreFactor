@@ -100,7 +100,7 @@
   Christopher Breitfeld}
 \institute{Technische Universität Dortmund}
 \date{13.07.2023}
-\logo{\includegraphics[height=0.5cm]{figures/tu_logo_sw_klein.pdf}}
+\logo{\includegraphics[height=0.5cm]{figures/tu_logo_grün_klein.pdf}}
 
 \begin{document}
 
@@ -112,11 +112,13 @@
 \frametitle{Introduction to the Problem}
   \begin{columns}
   \column{0.5\textwidth}
+  \begin{alertblock}{Genre Classification}
     \begin{itemize}
-      \item Genre classification of songs based on the tracks features
+      \item Based on a variety of the tracks features
       \item Dataset: Thousands of songs with diverse genres
       \item Challenge: Developing an accurate classification model
     \end{itemize}
+  \end{alertblock}
   \column{0.5\textwidth}
   \tiny
   \begin{tabular}{l l}
@@ -156,6 +158,8 @@
   \normalsize
 \end{frame}
 
+\logo{}
+
 \begin{frame}
   \frametitle{Description of the Data Set}
     \begin{alertblock}{Dataset from \href{https://www.kaggle.com/datasets/salvatorerastelli/spotify-and-youtube}{Kaggle}: Spotify and YouTube}
@@ -172,7 +176,7 @@
     \end{alertblock}
     \vspace*{-0.5cm}
     \begin{columns}[t]
-        \begin{column}{0.1\textwidth}
+        \begin{column}{0.0\textwidth}
         \end{column}
         \begin{column}{0.3\textwidth}
             \begin{alertblock}{Selection}
@@ -192,6 +196,8 @@
     \end{columns}
 \end{frame}
 
+\logo{\includegraphics[height=0.5cm]{figures/tu_logo_grün_klein.pdf}}
+
 \begin{frame}
     \frametitle{Network Architecture}
     \begin{columns}[T]
@@ -201,11 +207,13 @@
                     \item $\num{4}$ Dense Layers with Dropout
                     \item Trainable parameters: $\num{170246}$
                     \item Loss function: categorical crossentropy
-                    \item Optimizer: adam
+                    \item Optimizer: \texttt{adam}
                 \end{itemize}
             \end{alertblock}
             \begin{alertblock}{Training}
                 \begin{itemize}
+                    \item Transform data to a normal distribution with \texttt{QuantileTransformer}
+                    \item Scaling on $[-1,1]$ with \texttt{MinMaxScaler}
                     \item Early stopping: Stops training when the validation loss function no longer improves
                     \item Reduce learning rate: Decreases learning rate if validation loss function stagnates \\
                     \to better convergence
@@ -313,7 +321,7 @@
   \begin{alertblock}{K-nearest-neighbors}
     \begin{itemize}
      \item Use $k=12$ as it achieves the highest performance
-     \item Results in an accuracy of $\SI{60.62}{\percent}$
+     \item Results in an \alert{accuracy} of $\SI{60.62}{\percent}$
     \end{itemize}
   \end{alertblock}
   \begin{alertblock}{Support vector machines}
@@ -324,7 +332,7 @@
       \item A separate model is trained for each pair of classes, and a given data point is classified by majority voting among the classifiers
       \end{itemize}
     \item The used kernel function is the radial basis function (RBF)
-    \item Results in an accuracy of $\SI{63.88}{\percent}$
+    \item Results in an \alert{accuracy} of $\SI{63.88}{\percent}$
     \end{itemize}
   \end{alertblock}
 \end{frame}
@@ -333,7 +341,7 @@
 \frametitle{Conclusions}
 \only<1>{
   \begin{itemize}
-          \item NN achieves an accuracy of $\SI{65.56}{\percent}$ on test data.
+          \item NN achieves an \alert{accuracy} of $\SI{65.56}{\percent}$ on test data.
           \item Diminishing returns for more complex models, we are constrained by the dataset
   \end{itemize}
   \begin{figure}
