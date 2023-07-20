@@ -1,77 +1,68 @@
 #!/usr/bin/env python3
-
-#!/usr/bin/env python3
+import numpy as np
 import pandas as pd
 import tensorflow as tf
-import matplotlib.pyplot as plt
-import itertools
-import time
 import seaborn as sns
-import multiprocessing as mp
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import QuantileTransformer, MinMaxScaler
+import matplotlib.pyplot as plt
+import time
+from sklearn.preprocessing import OneHotEncoder, MinMaxScaler
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.preprocessing import QuantileTransformer
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout
-import numpy as np
-from tensorflow.keras.callbacks import ModelCheckpoint
-from sklearn.model_selection import StratifiedKFold
-from tensorflow.keras.models import load_model
+from tensorflow.keras.layers import (
+    Dense,
+    Dropout,
+)
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+from tensorflow.keras.constraints import MaxNorm
+from keras.wrappers.scikit_learn import KerasClassifier
+from training_functions import plot_history
 from sklearn.metrics import confusion_matrix, precision_recall_curve, auc
+
 
 # Manuell auf CPU einschränken
 tf.config.set_visible_devices([], "GPU")
 
-# Daten laden
-csv_file = "../../data/data_selected_v1.csv"
-df = pd.read_csv(csv_file)
+df = pd.read_csv("../../data/data_selected_v1.csv", index_col=0)
 
 # Genres für das Training auswählen
 genres_to_keep = ["classic", "metal", "rock", "hip hop", "electronic", "pop"]
 df = df[df["Genre"].isin(genres_to_keep)]
 
-# Anzahl der Einträge pro Genre
-genre_counts = df["Genre"].value_counts()
+# Aufteilen
+X = df.drop("Genre", axis=1)
+y = df["Genre"]
 
-# Histogramm erstellen
-plt.figure(figsize=(10, 6))
-genre_counts.plot(kind="bar")
-plt.xlabel("Genre")
-plt.ylabel("Count")
-plt.savefig("../../figures/genre_hist.pdf")
-print(f"Anzahl an Songs: {df.shape[0]}")
+# Genre Kodieren
+genre_encoder = OneHotEncoder(sparse_output=False)
+# Muss leider erst in Numpy Array umgewandelt werden
+genres = y.to_numpy().reshape(-1, 1)
+one_hot_y = genre_encoder.fit_transform(genres)
+# Die codierten Daten zurück in ein DataFrame umwandeln
+y = pd.DataFrame(one_hot_y, columns=genre_encoder.get_feature_names_out(["Genre"]))
 
-# Designmatrix und Target erstellen
-features_drop = ["Genre", "Unnamed: 0"]
+# Datensatz aufteilen, mit shuffle und stratify
+# Trainingsatz:     64%
+# Testsatz:         20%
+# validierungssatz: 16%
 
-df = df.sample(frac=1, random_state=42)  # daten mischen
-
-X = df.drop(features_drop, axis=1)
-Y = df["Genre"]
-
-# One-Hot-Encoding durchführen
-Y = pd.get_dummies(Y)
-num_classes = len(Y.value_counts())
-
-# label um One-Hot-Encoding hinterher wieder zu übersetzen
-genre_mapping = Y.columns
-label = []
-for index, genre in enumerate(genre_mapping):
-    label.append(genre)
-    print("Genre", index, ":", genre)
-
-# Splitten
-X_train, X_test, Y_train, Y_test = train_test_split(
-    X, Y, test_size=0.3, stratify=Y, random_state=42
-)
-X_train, X_val, Y_train, Y_val = train_test_split(
-    X_train, Y_train, test_size=0.3, stratify=Y_train, random_state=42
+# Trainings- und Testsatz
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, stratify=y, random_state=42
 )
 
+# Validierungssatz für die Hyperparameteroptimierung
+X_train, X_val, y_train, y_val = train_test_split(
+    X_train, y_train, test_size=0.2, stratify=y_train, random_state=42
+)
+
+# Neuronale Netze "mögen" Wertebereiche mit mean=0, daher auf [-1,1] skalieren
+# Jede Verteilung sollte letztlich Gauß-änhlich sein?
+#
+# Erstmal Transformieren
 # Fit NUR auf train...
 transformer = QuantileTransformer(output_distribution="normal")
 transformer.fit(X_train)
-
 # ... dann transform auf alle
 X_train = transformer.transform(X_train)
 X_val = transformer.transform(X_val)
@@ -87,408 +78,145 @@ X_train = scaler.transform(X_train)
 X_val = scaler.transform(X_val)
 X_test = scaler.transform(X_test)
 
-# Das Modell
+# Dann wieder zurück zum Dataframe weil Sklearn dumm ist
+X_train = pd.DataFrame(X_train, columns=transformer.get_feature_names_out())
+X_val = pd.DataFrame(X_val, columns=transformer.get_feature_names_out())
+X_test = pd.DataFrame(X_test, columns=transformer.get_feature_names_out())
 
 
-def build_model_from_params(params):
-    num_hidden_layers = params["num_hidden_layers"]
-    activation_function = params["activation_function"]
-    dropout_rate = params["dropout_rate"]
-    units_per_layer = [
-        params["units_1"],
-        params["units_2"],
-        params["units_3"],
-        params["units_4"],
-    ]
+def create_model(
+    optimizer="adam",
+    activation="relu",
+    dropout_rate=0.3,
+    num_hidden_layers=2,
+    neurons_1=64,
+    neurons_2=128,
+    neurons_3=256,
+    neurons_4=512,
+    weight_constraint=1.0,
+):
+    neurons_per_layer = [neurons_1, neurons_2, neurons_3, neurons_4]
 
     model = Sequential()
     model.add(
         Dense(
-            units=units_per_layer[0],
-            activation=activation_function,
+            units=neurons_per_layer[0],
+            activation=activation,
             input_dim=X_train.shape[1],
+            kernel_constraint=MaxNorm(weight_constraint),
         )
     )
     model.add(Dropout(dropout_rate))
 
     for i in range(1, num_hidden_layers + 1):
-        if i < len(units_per_layer):
-            model.add(Dense(units=units_per_layer[i], activation=activation_function))
+        if i < len(neurons_per_layer):
+            model.add(Dense(units=neurons_per_layer[i], activation=activation))
             model.add(Dropout(dropout_rate))
 
-    model.add(Dense(units=num_classes, activation="softmax"))
+    model.add(Dense(units=6, activation="softmax"))  # Anzahl der versch. Genres = 6
 
     model.compile(
-        loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"]
+        loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"]
     )
 
     return model
 
 
-# Kombination aller Hyperparameter
-param_space = {
-    "num_hidden_layers": [2, 3],
-    "units_1": [64, 128],
-    "units_2": [128, 256],
-    "units_3": [256, 512],
-    "units_4": [512, 1024],
-    "dropout_rate": [0.3, 0.5],
-    "activation_function": ["LeakyReLU", "relu"],
-    "batch_size": [128, 256, 512, 1024],
-    "early_stopping_patience": [15, 20],
-    "reduce_lr_factor": [0.1, 0.5],
-    "reduce_lr_patience": [5, 7],
-    "reduce_lr_min_lr": [1e-7, 1e-5],
-}
+# Erstelle KerasClassifier-Objekt
+model = KerasClassifier(build_fn=create_model, verbose=0)
 
-# param_space = {
-#    'num_hidden_layers': [2, 3],
-#    'units_1': [64, 128, 256],
-#    'units_2': [128, 256, 512],
-#    'units_3': [256, 512, 1024],
-#    'units_4': [512, 1024],
-#    'dropout_rate': [0.3, 0.5, 0.7],
-#    'activation_function': ['relu', 'LeakyReLU'],
-#    'batch_size' : [128, 256, 512],
-#    'early_stopping_patience': [5, 10, 15],
-#    'reduce_lr_factor': [0.1, 0.5, 0.9],
-#    'reduce_lr_patience': [5, 10, 15],
-#    'reduce_lr_min_lr': [1e-7, 1e-5, 1e-3],
-# }
+# Alle möglichen Hyperparameter
+dropout_rate = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+weight_constraint = [1.0, 2.0, 3.0, 4.0, 5.0]
+optimizer = ["SGD", "RMSprop", "Adagrad", "Adadelta", "Adam", "Adamax", "Nadam"]
+activation = ["relu"]
+batch_size = [128, 256, 512, 1024]
+epochs = [10, 50, 100]
+num_hidden_layers = [2, 3]
+neurons_1 = [64, 128]
+neurons_2 = [128, 256]
+neurons_3 = [256, 512]
+neurons_4 = [512, 1024]
 
-# Speichere alle möglichen Kombinationen von Parametern
-value_combis = itertools.product(*[v for v in param_space.values()])
+# Laut ChatGPT zählen die folgenden Parametern nicht zur klassischen Hyperparameteroptimierung;
+# die sollten nach der eigentlichen HPO optimiert werden.
+early_stopping_patience = [15, 20]
+reduce_lr_factor = [0.1, 0.5]
+reduce_lr_patience = [5, 7]
+reduce_lr_min_lr = [1e-7, 1e-5]
+param_grid = dict(
+    dropout_rate=dropout_rate,
+    weight_constraint=weight_constraint,
+    optimizer=optimizer,
+    batch_size=batch_size,
+    epochs=epochs,
+    neurons_1=neurons_1,
+    neurons_2=neurons_2,
+    neurons_3=neurons_3,
+    neurons_4=neurons_4,
+    num_hidden_layers=num_hidden_layers,
+    # early_stopping_patience=early_stopping_patience,
+    # reduce_lr_factor=reduce_lr_factor,
+    # reduce_lr_patience=reduce_lr_patience,
+    # reduce_lr_min_lr=reduce_lr_min_lr,
+)
 
-# Erstelle Liste von Dictionarys dieser Parameterkombis
-param_combis = [
-    {key: value for key, value in zip(param_space.keys(), combi)}
-    for combi in value_combis
-]
-
-# Ordne jeder Kombi einen Index zu
-idx, params = enumerate(param_combis)
-
-print(f"We have a total of {len(param_combis)} combinations")
-print(type(param_combis))
-print(param_combis)
-
-
-# Funktion für das testen eines Modells
-def worker(idx, params, fold_idx, X_train, Y_train):
-    # Temporäre Werte
-    val_accuracies = []
-    val_losses = []
-    train_accuracies = []
-    train_losses = []
-
-    for fold_idx, (train_index, val_index) in enumerate(
-        skf.split(X_train, np.argmax(Y_train, axis=1))
-    ):
-        X_train_fold, X_val_fold = X_train[train_index], X_train[val_index]
-        Y_train_fold, Y_val_fold = (
-            Y_train.reset_index(drop=True).iloc[train_index],
-            Y_train.reset_index(drop=True).iloc[val_index],
-        )
-
-        filepath = f"../model_fold/model_fold_{idx+1}_fold_{fold_idx+1}.h5"
-        checkpoint = ModelCheckpoint(
-            filepath, monitor="val_accuracy", verbose=0, save_best_only=True, mode="max"
-        )
-
-        this_model = build_model_from_params(params)
-
-        batch_size = params["batch_size"]
-        nb_epoch = 60
-
-        early_stopping = EarlyStopping(
-            monitor="val_loss",
-            patience=params["early_stopping_patience"],
-            mode="min",
-            restore_best_weights=True,
-        )
-        reduce_lr = ReduceLROnPlateau(
-            monitor="val_loss",
-            factor=params["reduce_lr_factor"],
-            patience=params["reduce_lr_patience"],
-            mode="min",
-            min_lr=params["reduce_lr_min_lr"],
-        )
-        fit_results = this_model.fit(
-            X_train_fold,
-            Y_train_fold,
-            validation_data=(X_val_fold, Y_val_fold),
-            epochs=nb_epoch,
-            batch_size=batch_size,
-            callbacks=[checkpoint, early_stopping, reduce_lr],
-            verbose=0,
-        )
-
-        # Extract the best validation scores
-        best_val_epoch = np.argmax(fit_results.history["val_accuracy"])
-        val_accuracies.append(np.max(fit_results.history["val_accuracy"]))
-        val_losses.append(fit_results.history["val_loss"][best_val_epoch])
-
-        # Get training accuracy and loss
-        best_model = load_model(filepath)
-        train_loss, train_acc = best_model.evaluate(X_train_fold, Y_train_fold)
-        train_accuracies.append(train_acc)
-        train_losses.append(train_loss)
-
-        # Store results
-        search_results = {
-            "best_val_accuracy": np.mean(val_accuracies),
-            "val_accuracy_std": np.std(val_accuracies),
-            "best_val_loss": np.mean(val_losses),
-            "val_loss_std": np.std(val_losses),
-            "best_train_accuracy": np.mean(train_accuracies),
-            "train_accuracy_std": np.std(train_accuracies),
-            "best_train_loss": np.mean(train_losses),
-            "train_loss_std": np.std(train_losses),
-        }
-
-        return search_results
-
-
-# Hyperparameteroptimierung
-
-# Start der Zeitmessung
+# Führe GridSearch durch
 start_time = time.time()
-
-# Arrays für Ergebnisse
-search_results = []
-val_accuracies = []
-val_losses = []
-train_accuracies = []
-train_losses = []
-
-k_folds = 3
-skf = StratifiedKFold(n_splits=k_folds)
-
-with mp.Pool(processes=mp.cpu_count()) as pool:
-    pool.map(worker, param_combis)
-
-
-# Ende der Zeitmessung
+grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, cv=5)
+grid_result = grid.fit(X_train, y_train, return_train_score=True)
 end_time = time.time()
 
 # Berechnung der verstrichenen Zeit in Stunden
 elapsed_time_hours = (end_time - start_time) / 3600
 
-print(f"Die Ausführung dieser Zelle hat {elapsed_time_hours} Stunden gedauert.")
+# Drucken Sie die besten gefundenen Parameter
+print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_))
 
-resultsDF = pd.DataFrame(search_results)
-resultsDF["delta_acc"] = (
-    resultsDF["best_train_accuracy"] - resultsDF["best_val_accuracy"]
-) / resultsDF["best_val_accuracy"]
-resultsDF.to_csv("../../data/optimization_results_final_größer.csv", index=False)
-resultsDF = pd.read_csv("../../data/optimization_results_final_größer.csv")
+# Validieren Sie das Modell mit den besten gefundenen Parametern auf dem Validierungsset
+best_model = grid_result.best_estimator_
+validation_score = best_model.score(X_val, y_val)
 
-# Graphische Darstellung der Performance-Änderung
-# Mapping der activation_function auf numerische Werte
-activation_mapping = {"relu": 0, "LeakyReLU": 1}
-resultsDF["activation_numerical"] = resultsDF["activation_function"].map(
-    activation_mapping
+print("Validation Score: ", validation_score)
+
+# initialisiere das DataFrame
+model_df = pd.DataFrame(
+    columns=[
+        "params",
+        "mean_train_score",
+        "std_train_score",
+        "mean_test_score",
+        "std_test_score",
+        "delta_acc",
+    ]
 )
 
-x_vars = [
-    "num_hidden_layers",
-    "units_1",
-    "units_2",
-    "units_3",
-    "units_4",
-    "dropout_rate",
-    "activation_numerical",
-    "batch_size",
-    "early_stopping_patience",
-    "reduce_lr_factor",
-    "reduce_lr_patience",
-    "reduce_lr_min_lr",
-]
+# Schleife durch die Modelle in GridSearchCV
+for i in range(len(grid.cv_results_["params"])):
+    # extrahiere die Parameter
+    params = grid.cv_results_["params"][i]
+    # extrahiere die durchschnittliche Trainings-Genauigkeit (über die Cross-Validation-Folds)
+    mean_train_score = grid.cv_results_["mean_train_score"][i]
+    # extrahiere die Standardabweichung der Trainings-Genauigkeit (über die Cross-Validation-Folds)
+    std_train_score = grid.cv_results_["std_train_score"][i]
+    # extrahiere die durchschnittliche Validierungs-Genauigkeit (über die Cross-Validation-Folds)
+    mean_test_score = grid.cv_results_["mean_test_score"][i]
+    # extrahiere die Standardabweichung der Validierungs-Genauigkeit (über die Cross-Validation-Folds)
+    std_test_score = grid.cv_results_["std_test_score"][i]
+    # berechne die Differenz zwischen der Trainings- und Validierungs-Genauigkeit
+    delta_acc = mean_train_score - mean_test_score
+    # füge die Informationen zu diesem Modell in das DataFrame ein
+    model_df.loc[i] = [
+        params,
+        mean_train_score,
+        std_train_score,
+        mean_test_score,
+        std_test_score,
+        delta_acc,
+    ]
 
-y_vars = ["best_val_accuracy", "best_train_accuracy", "delta_acc"]
+# sortiere das DataFrame nach der Validierungs-Genauigkeit
+model_df = model_df.sort_values(by="mean_test_score", ascending=False)
 
-sns.pairplot(resultsDF, x_vars=x_vars, y_vars=y_vars, kind="reg", height=2)
-plt.savefig("../../figures/HPO_parameter.pdf", format="pdf")
-
-# Auswählen der besten Hyperparameter-Kombination
-
-
-def calculate_score(row):
-    # Bestmöglicher Score ist
-    best_score = 1.0
-
-    # Berechnung des Scores basierend auf Delta-Accuracy und Best Validation Accuracy
-    delta_acc_score = 1.0 - abs(
-        row["delta_acc"]
-    )  # Je kleiner das Delta, desto besser der Score
-    best_val_acc_score = row[
-        "best_val_accuracy"
-    ]  # Je größer die Best Validation Accuracy, desto besser der Score
-
-    # Gewichte
-    w1 = 0.5
-    w2 = 1
-
-    # Gesamtscore berechnen
-    score = (w1 * delta_acc_score + w2 * best_val_acc_score) / 2
-
-    # Normalisierung des Scores auf den Bereich [0, 1]
-    normalized_score = score / best_score
-
-    return normalized_score
-
-
-# Score-Spalte hinzufügen
-resultsDF["score"] = resultsDF.apply(calculate_score, axis=1)
-resultsDF = resultsDF.sort_values("score", ascending=False)
-best_params = resultsDF.head(1)
-
-# Scatterplot erstellen
-sns.scatterplot(data=resultsDF, x="best_val_accuracy", y="delta_acc", alpha=0.5)
-sns.scatterplot(data=best_params, x="best_val_accuracy", y="delta_acc", color="red")
-
-# Achsentitel hinzufügen
-plt.xlabel("best_val_accuracy")
-plt.ylabel("delta_acc")
-
-# Plot anzeigen
-plt.show()
-plt.savefig("../../figures/HPO_scatter.pdf")
-
-best_params = resultsDF.iloc[1]
-model = build_model_from_params(best_params)
-
-print(model.summary())
-
-# Das beste Modell
-batch_size = best_params["batch_size"]
-nb_epoch = 300
-
-# Definiere die Early Stopping-Bedingungen
-early_stopping = EarlyStopping(
-    monitor="val_loss",
-    patience=best_params["early_stopping_patience"],
-    mode="min",
-    restore_best_weights=True,
-)
-
-# Definiere die Reduzierung der Lernrate, falls die Verbesserung stagniert
-reduce_lr = ReduceLROnPlateau(
-    monitor="val_loss",
-    factor=best_params["reduce_lr_factor"],
-    best_patience=best_params["reduce_lr_patience"],
-    mode="min",
-    min_lr=best_params["reduce_lr_min_lr"],
-)
-
-hist = model.fit(
-    X_train,
-    Y_train,
-    validation_data=(X_val, Y_val),
-    epochs=nb_epoch,
-    batch_size=batch_size,
-    callbacks=[early_stopping, reduce_lr],
-    verbose=0,
-)
-
-Y_pred = model.predict(X_test)
-
-
-def plot_history(network_history):
-    plt.figure()
-    plt.xlabel("Epochs")
-    plt.ylabel("Loss")
-    plt.plot(network_history.history["loss"])
-    plt.plot(network_history.history["val_loss"])
-    plt.legend(["Training", "Validation"])
-
-    plt.figure()
-    plt.xlabel("Epochs")
-    plt.ylabel("Accuracy")
-    plt.plot(network_history.history["accuracy"])
-    plt.plot(network_history.history["val_accuracy"])
-    plt.legend(["Training", "Validation"], loc="lower right")
-    plt.show()
-
-
-plot_history(hist)
-Y_pred_classes = np.argmax(Y_pred, axis=1)
-Y_test_classes = np.argmax(Y_test, axis=1)
-
-cm = confusion_matrix(Y_test_classes, Y_pred_classes, normalize="true")
-plt.figure(figsize=(20, 20))
-sns.heatmap(cm, annot=True, xticklabels=label, yticklabels=label)
-plt.xlabel("Vorhergesagtes Genre")
-plt.ylabel("Tatsächliches Genre")
-plt.savefig("../../figures/confusion_matrix_NN.png")
-plt.show()
-
-if isinstance(Y_test, pd.DataFrame):
-    Y_test = Y_test.values
-if isinstance(Y_pred, pd.DataFrame):
-    Y_pred = Y_pred.values
-
-precision, recall, thresholds = precision_recall_curve(Y_test.ravel(), Y_pred.ravel())
-
-
-# Berechne Precision, Recall und Schwellenwerte
-precision, recall, thresholds = precision_recall_curve(Y_test.ravel(), Y_pred.ravel())
-
-# Berechne den AUC-PR
-auc_pr = auc(recall, precision)
-
-plt.plot(recall, precision, label=f"AUC-PR = {auc_pr:.3}")
-plt.xlabel("Recall")
-plt.ylabel("Precision")
-plt.legend()
-plt.title("Precision-Recall Curve")
-plt.show()
-
-# Precision Recall Curve für jede Klasse einzeln
-
-n_classes = Y_test.shape[1]
-
-if isinstance(Y_test, np.ndarray):
-    Y_test = pd.DataFrame(Y_test)
-if isinstance(Y_pred, np.ndarray):
-    Y_pred = pd.DataFrame(Y_pred)
-
-auc_pr_values = []
-
-# Für jede Klasse
-for i in range(n_classes):
-    precision, recall, _ = precision_recall_curve(Y_test.iloc[:, i], Y_pred.iloc[:, i])
-
-    # Berechne den AUC-PR
-    auc_pr = auc(recall, precision)
-    auc_pr_values.append((label[i], auc_pr))
-
-    plt.plot(
-        recall,
-        precision,
-        label=f"{label[i]}, AUC-PR = {auc_pr:.3}",
-    )
-
-plt.xlabel("Recall")
-plt.ylabel("Precision")
-plt.legend()
-plt.title("Precision-Recall Curve")
-
-# Genres nach AUC-PR-Wert sortieren
-auc_pr_values_sorted = sorted(auc_pr_values, key=lambda x: x[1], reverse=True)
-
-# Ausgabe der Genres und AUC-PR-Werte
-for genre, auc_pr in auc_pr_values_sorted:
-    print(f"{genre}: AUC-PR = {auc_pr:.3}")
-
-Y_pred = model.predict(X_test)
-
-# Konvertiere die Vorhersagen in diskrete Klassen
-Y_pred_classes = np.argmax(Y_pred, axis=1)
-
-# Konvertiere die Ground-Truth-Labels in diskrete Klassen
-Y_test_classes = np.argmax(Y_test, axis=1)
-
-# Berechne die Accuracy
-accuracy = np.mean(Y_pred_classes == Y_test_classes)
-print("Accuracy:", accuracy)
+# speichere das DataFrame
+model_df.to_csv("../../optimization_results_v2_test.csv", index=False)
