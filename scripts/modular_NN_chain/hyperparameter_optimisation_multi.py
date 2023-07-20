@@ -16,14 +16,14 @@ from tensorflow.keras.layers import (
 )
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.keras.constraints import MaxNorm
-from keras.wrappers.scikit_learn import KerasClassifier
+from scikeras.wrappers import KerasClassifier
 from training_functions import plot_history
 from sklearn.metrics import confusion_matrix, precision_recall_curve, auc
 
 
 # Manuell auf CPU einschränken
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-tf.config.set_visible_devices([], "GPU")
+# tf.config.set_visible_devices([], "GPU")
 
 
 df = pd.read_csv("../../data/data_selected_v1.csv", index_col=0)
@@ -88,15 +88,15 @@ X_test = pd.DataFrame(X_test, columns=transformer.get_feature_names_out())
 
 
 def create_model(
-    optimizer="adam",
-    activation="relu",
-    dropout_rate=0.3,
-    num_hidden_layers=2,
-    neurons_1=64,
-    neurons_2=128,
-    neurons_3=256,
-    neurons_4=512,
-    weight_constraint=1.0,
+    dropout_rate,
+    weight_constraint,
+    optimizer,
+    activation,
+    num_hidden_layers,
+    neurons_1,
+    neurons_2,
+    neurons_3,
+    neurons_4,
 ):
     neurons_per_layer = [neurons_1, neurons_2, neurons_3, neurons_4]
 
@@ -126,43 +126,41 @@ def create_model(
 
 
 # Erstelle KerasClassifier-Objekt
-model = KerasClassifier(build_fn=create_model, verbose=0)
+model = KerasClassifier(model=create_model)
 
 # Alle möglichen Hyperparameter
-dropout_rate = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
-weight_constraint = [1.0, 2.0, 3.0, 4.0, 5.0]
-optimizer = ["SGD", "RMSprop", "Adagrad", "Adadelta", "Adam", "Adamax", "Nadam"]
-activation = ["relu", "elu", "swish"]
+model__dropout_rate = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+model__weight_constraint = [1.0, 2.0, 3.0, 4.0, 5.0]
+model__optimizer = ["SGD", "RMSprop", "Adagrad", "Adadelta", "Adam", "Adamax", "Nadam"]
+model__activation = ["relu", "elu", "swish"]
 batch_size = [128, 256, 512, 1024]
 epochs = [10, 50, 100]
-num_hidden_layers = [2, 3]
-neurons_1 = [64, 128]
-neurons_2 = [128, 256]
-neurons_3 = [256, 512]
-neurons_4 = [512, 1024]
-
-# Laut ChatGPT zählen die folgenden Parametern nicht zur klassischen Hyperparameteroptimierung;
-# die sollten nach der eigentlichen HPO optimiert werden.
-early_stopping_patience = [15, 20]
-reduce_lr_factor = [0.1, 0.5]
-reduce_lr_patience = [5, 7]
-reduce_lr_min_lr = [1e-7, 1e-5]
+model__num_hidden_layers = [2, 3, 4]
+model__neurons_1 = [64, 128]
+model__neurons_2 = [128, 256]
+model__neurons_3 = [256, 512]
+model__neurons_4 = [512, 1024]
+# Die sind schwerer zu implementieren, erstmal den Rest
+model__early_stopping_patience = [15, 20]
+model__reduce_lr_factor = [0.1, 0.5]
+model__reduce_lr_patience = [5, 7]
+model__reduce_lr_min_lr = [1e-7, 1e-5]
 param_grid = dict(
-    dropout_rate=dropout_rate,
-    weight_constraint=weight_constraint,
-    optimizer=optimizer,
-    activation=activation,
+    model__dropout_rate=model__dropout_rate,
+    model__weight_constraint=model__weight_constraint,
+    model__optimizer=model__optimizer,
+    model__activation=model__activation,
+    model__num_hidden_layers=model__num_hidden_layers,
+    model__neurons_1=model__neurons_1,
+    model__neurons_2=model__neurons_2,
+    model__neurons_3=model__neurons_3,
+    model__neurons_4=model__neurons_4,
     batch_size=batch_size,
     epochs=epochs,
-    neurons_1=neurons_1,
-    neurons_2=neurons_2,
-    neurons_3=neurons_3,
-    neurons_4=neurons_4,
-    num_hidden_layers=num_hidden_layers,
-    # early_stopping_patience=early_stopping_patience,
-    # reduce_lr_factor=reduce_lr_factor,
-    # reduce_lr_patience=reduce_lr_patience,
-    # reduce_lr_min_lr=reduce_lr_min_lr,
+    # model__early_stopping_patience=model__early_stopping_patience,
+    # model__reduce_lr_factor=model__reduce_lr_factor,
+    # model__reduce_lr_patience=mdoel__reduce_lr_patience,
+    # model__reduce_lr_min_lr=model__reduce_lr_min_lr,
 )
 
 # Führe GridSearch durch
