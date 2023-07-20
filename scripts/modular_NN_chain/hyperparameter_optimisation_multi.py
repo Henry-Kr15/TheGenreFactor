@@ -5,6 +5,7 @@ import tensorflow as tf
 import seaborn as sns
 import matplotlib.pyplot as plt
 import time
+import os
 from sklearn.preprocessing import OneHotEncoder, MinMaxScaler
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import QuantileTransformer
@@ -21,7 +22,9 @@ from sklearn.metrics import confusion_matrix, precision_recall_curve, auc
 
 
 # Manuell auf CPU einschränken
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 tf.config.set_visible_devices([], "GPU")
+
 
 df = pd.read_csv("../../data/data_selected_v1.csv", index_col=0)
 
