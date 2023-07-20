@@ -129,7 +129,7 @@ model = KerasClassifier(build_fn=create_model, verbose=0)
 dropout_rate = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 weight_constraint = [1.0, 2.0, 3.0, 4.0, 5.0]
 optimizer = ["SGD", "RMSprop", "Adagrad", "Adadelta", "Adam", "Adamax", "Nadam"]
-activation = ["relu"]
+activation = ["relu", "elu", "swish"]
 batch_size = [128, 256, 512, 1024]
 epochs = [10, 50, 100]
 num_hidden_layers = [2, 3]
@@ -148,6 +148,7 @@ param_grid = dict(
     dropout_rate=dropout_rate,
     weight_constraint=weight_constraint,
     optimizer=optimizer,
+    activation=activation,
     batch_size=batch_size,
     epochs=epochs,
     neurons_1=neurons_1,
@@ -218,5 +219,83 @@ for i in range(len(grid.cv_results_["params"])):
 # sortiere das DataFrame nach der Validierungs-Genauigkeit
 model_df = model_df.sort_values(by="mean_test_score", ascending=False)
 
+# Graphische Darstellung der Performance-Änderung
+# Mapping der activation_function auf numerische Werte
+activation_mapping = {"relu": 0, "elu": 1, "swish": 2}
+model_df["activation_numerical"] = model_df["activation_function"].map(
+    activation_mapping
+)
+
+x_vars = [
+    "dropout_rate",
+    "weight_constraint",
+    "optimizer",
+    "activation_numerical",
+    "batch_size",
+    "epochs",
+    "neurons_1",
+    "neurons_2",
+    "neurons_3",
+    "neurons_4",
+    "num_hidden_layers",
+]
+
+y_vars = ["mean_train_score", "mean_test_score", "delta_acc"]
+
+sns.pairplot(model_df, x_vars=x_vars, y_vars=y_vars, kind="reg", height=2)
+plt.savefig("../../figures/HPO_parameter_v2_test.pdf", format="pdf")
+
 # speichere das DataFrame
-model_df.to_csv("../../optimization_results_v2_test.csv", index=False)
+model_df.to_csv("../../optimization_results_v2_test_by_val_acc.csv", index=False)
+
+
+# Jetzt noch die ein bisschen fishige Christopher-Score Berechnung
+def calculate_christopher_score(row):
+    # Bestmöglicher Score ist
+    best_score = 1.0
+
+    # Berechnung des Scores basierend auf Delta-Accuracy und Best Validation Accuracy
+    delta_acc_score = 1.0 - abs(
+        row["delta_acc"]
+    )  # Je kleiner das Delta, desto besser der Score
+    mean_test_acc_score = row[
+        "mean_test_accuracy"
+    ]  # Je größer die Validation Accuracy, desto besser der Score
+
+    # Gewichte
+    w1 = 0.5
+    w2 = 1
+
+    # Gesamtscore berechnen
+    score = (w1 * delta_acc_score + w2 * mean_test_acc_score) / 2
+
+    # Normalisierung des Scores auf den Bereich [0, 1]
+    normalized_christopher_score = score / best_score
+
+    return normalized_christopher_score
+
+
+# Speichere den Christopher-Score in dem Dataframe
+model_df["Christopher-Score"] = model_df.apply(calculate_christopher_score, axis=1)
+
+# Sortiere nach dem neuen Score
+model_df = model_df.sort_values("Christopher-Score", ascending=False)
+
+# speichere das DataFrame
+model_df.to_csv(
+    "../../optimization_results_v2_test_by_christopher_score.csv", index=False
+)
+
+# Das beste Modell nach dem Christopher-Score auswählen
+best_params = model_df.head(1)
+
+# Scatterplot erstellen
+sns.scatterplot(data=model_df, x="mean_test_accuracy", y="delta_acc", alpha=0.5)
+sns.scatterplot(data=best_params, x="mean_test_accuracy", y="delta_acc", color="red")
+
+# Achsentitel hinzufügen
+plt.xlabel("validation accuracy")
+plt.ylabel("delta accuracy")
+
+# Plot anzeigen
+plt.savefig("../../figures/HPO_scatter_v2_test.pdf")
