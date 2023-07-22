@@ -166,7 +166,7 @@ param_grid = dict(
 # Führe GridSearch durch
 start_time = time.time()
 grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, cv=5)
-grid_result = grid.fit(X_train, y_train, return_train_score=True)
+grid_result = grid.fit(X_train, y_train)
 end_time = time.time()
 
 # Berechnung der verstrichenen Zeit in Stunden
@@ -220,6 +220,9 @@ for i in range(len(grid.cv_results_["params"])):
 # sortiere das DataFrame nach der Validierungs-Genauigkeit
 model_df = model_df.sort_values(by="mean_test_score", ascending=False)
 
+# speichere das DataFrame
+model_df.to_csv("../../optimization_results_v2_test_by_val_acc.csv", index=False)
+
 # Graphische Darstellung der Performance-Änderung
 # Mapping der activation_function auf numerische Werte
 activation_mapping = {"relu": 0, "elu": 1, "swish": 2}
@@ -245,9 +248,6 @@ y_vars = ["mean_train_score", "mean_test_score", "delta_acc"]
 
 sns.pairplot(model_df, x_vars=x_vars, y_vars=y_vars, kind="reg", height=2)
 plt.savefig("../../figures/HPO_parameter_v2_test.pdf", format="pdf")
-
-# speichere das DataFrame
-model_df.to_csv("../../optimization_results_v2_test_by_val_acc.csv", index=False)
 
 
 # Jetzt noch die ein bisschen fishige Christopher-Score Berechnung
