@@ -129,16 +129,19 @@ def create_model(
 model = KerasClassifier(model=create_model)
 
 # Alle möglichen Hyperparameter
-model__dropout_rate = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
-model__weight_constraint = [1.0, 2.0, 3.0, 4.0, 5.0]
-model__optimizer = ["SGD", "RMSprop", "Adagrad", "Adadelta", "Adam", "Adamax", "Nadam"]
+# model__dropout_rate = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+model__dropout_rate = [0.0, 0.1, 0.3, 0.6]
+# model__weight_constraint = [1.0, 2.0, 3.0, 4.0, 5.0]
+model__weight_constraint = [1.0, 3.0, 5.0]
+# model__optimizer = ["SGD", "RMSprop", "Adagrad", "Adadelta", "Adam", "Adamax", "Nadam"]
+model__optimizer = ["SGD", "Adam", "Nadam"]
 model__activation = ["relu", "elu", "swish"]
-batch_size = [128, 256, 512, 1024]
+batch_size = [128, 512, 1024]
 epochs = [10, 50, 100]
 model__num_hidden_layers = [2, 3, 4]
-model__neurons_1 = [64, 128]
-model__neurons_2 = [128, 256]
-model__neurons_3 = [256, 512]
+model__neurons_1 = [128, 256]
+model__neurons_2 = [256, 512]
+model__neurons_3 = [512, 1024]
 model__neurons_4 = [512, 1024]
 # Die sind schwerer zu implementieren, erstmal den Rest
 model__early_stopping_patience = [15, 20]
@@ -165,7 +168,7 @@ param_grid = dict(
 
 # Führe GridSearch durch
 start_time = time.time()
-grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, cv=5)
+grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=28, cv=3, verbose=3)
 grid_result = grid.fit(X_train, y_train)
 end_time = time.time()
 
