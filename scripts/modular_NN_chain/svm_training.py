@@ -12,6 +12,7 @@ from sklearn.metrics import (
     auc,
 )
 from sklearn import svm
+from sklearn.preprocessing import label_binarize
 
 df = pd.read_csv("../../data/data_selected_v1.csv", index_col=0)
 
@@ -87,7 +88,7 @@ X_val = scaler.transform(X_val)
 X_test = scaler.transform(X_test)
 
 # SVM
-clf = svm.SVC(kernel="rbf")
+clf = svm.SVC(kernel="rbf", probability=True)
 clf.fit(X_train, y_train)
 
 y_pred = clf.predict(X_test)
@@ -115,33 +116,40 @@ plt.tight_layout()
 plt.savefig("../../figures/svm/confusion_matrix.png")
 plt.clf()
 
-# Berechne Precision, Recall und Schwellenwerte
-
-# Die Funktion braucht leider einen binären Wahrheitswert :/
-# Fake it till you make it
-# weiß nicht ob man das so machen kann oder ob das übel dumm ist
-# Spoiler alert
-# das ist übel dumm
-y_pred_binary = np.zeros_like(y_pred)
-y_test_binary = np.full_like(y_test, 1)
-
-for prediction in y_pred:
-    if y_pred[prediction] == y_test[prediction]:
-        y_pred_binary[prediction] = 1
-    else:
-        y_pred_binary[prediction] = 0
-
-precision, recall, thresholds = precision_recall_curve(y_test_binary, y_pred_binary)
-
-print(y_test_binary)
-print(y_pred_binary)
-
 # Berechne den AUC-PR
-auc_pr = auc(recall, precision)
 
-plt.plot(recall, precision, label=f"AUC-PR = {auc_pr:.3}")
+# Binarize y_test
+y_test_bin = label_binarize(y_test, classes=[0, 1, 2, 3, 4, 5])
+
+# Get probability predictions
+y_pred_proba = clf.predict_proba(X_test)
+
+# Initialize list for AUC-PR values
+auc_pr_values = []
+
+# Get genre labels from the encoder
+label = genre_encoder.classes_
+
+# For each class
+num_classes = 6
+for i in range(num_classes):
+    # Compute Precision-Recall curve
+    precision, recall, _ = precision_recall_curve(y_test_bin[:, i], y_pred_proba[:, i])
+
+    # Compute AUC-PR
+    auc_pr = auc(recall, precision)
+    
+    # Append AUC-PR value to the list
+    auc_pr_values.append((label[i], auc_pr))
+
+    # Plot Precision-Recall curve
+    plt.plot(recall, precision, label=f"{label[i]}, AUC-PR = {auc_pr:.3}")
+
+# Set labels and legend
 plt.xlabel("Recall")
 plt.ylabel("Precision")
 plt.legend()
-plt.title("Precision-Recall Curve")
-plt.savefig("../../figures/svm/auc.png")
+
+# Adjust layout and save the figure
+plt.tight_layout()
+plt.savefig("../../figures/svm/PR.png")

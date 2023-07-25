@@ -6,6 +6,10 @@ from sklearn.preprocessing import LabelEncoder, QuantileTransformer, MinMaxScale
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import precision_recall_curve, auc
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.preprocessing import label_binarize
 
 df = pd.read_csv("../../data/data_selected_v1.csv", index_col=0)
 
@@ -109,3 +113,39 @@ plt.tick_params(axis="both", which="major", labelsize=15)
 plt.tight_layout()
 plt.savefig("../../figures/knn/confusion_matrix.png")
 plt.clf()
+
+# Binarize y_test
+y_test_bin = label_binarize(y_test, classes=[0, 1, 2, 3, 4, 5])
+
+# Get probability predictions
+y_pred_proba = kn.predict_proba(X_test)
+
+# Initialize list for AUC-PR values
+auc_pr_values = []
+
+# Get genre labels from the encoder
+label = genre_encoder.classes_
+
+# For each class
+num_classes = 6
+for i in range(num_classes):
+    # Compute Precision-Recall curve
+    precision, recall, _ = precision_recall_curve(y_test_bin[:, i], y_pred_proba[:, i])
+
+    # Compute AUC-PR
+    auc_pr = auc(recall, precision)
+    
+    # Append AUC-PR value to the list
+    auc_pr_values.append((label[i], auc_pr))
+
+    # Plot Precision-Recall curve
+    plt.plot(recall, precision, label=f"{label[i]}, AUC-PR = {auc_pr:.3}")
+
+# Set labels and legend
+plt.xlabel("Recall")
+plt.ylabel("Precision")
+plt.legend()
+
+# Adjust layout and save the figure
+plt.tight_layout()
+plt.savefig("../../figures/knn/PR.png")
