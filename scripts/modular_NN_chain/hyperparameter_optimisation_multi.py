@@ -97,10 +97,6 @@ def create_model(
     neurons_2,
     neurons_3,
     neurons_4,
-    early_stopping_patience,
-    reduce_lr_factor,
-    reduce_lr_patience,
-    reduce_lr_min_lr,
 ):
     neurons_per_layer = [neurons_1, neurons_2, neurons_3, neurons_4]
 
@@ -121,23 +117,22 @@ def create_model(
             model.add(Dropout(dropout_rate))
 
     model.add(Dense(units=6, activation="softmax"))  # Anzahl der versch. Genres = 6
-
-    # Callbacks definieren
-    early_stopping = EarlyStopping(monitor='val_loss', patience=early_stopping_patience)
-    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=reduce_lr_factor,
-                                  patience=reduce_lr_patience, min_lr=reduce_lr_min_lr)
-
-    callbacks = [early_stopping, reduce_lr]
-
     model.compile(
-        loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"], callbacks=callbacks
-    )
+        loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
 
     return model
 
 
+# Callbacks definieren
+early_stopping = EarlyStopping(monitor='loss', patience=20)
+reduce_lr = ReduceLROnPlateau(monitor='loss', factor=0.1,
+                                patience=5, min_lr=1e-5)
+
+callbacks = [early_stopping, reduce_lr]
+
 # Erstelle KerasClassifier-Objekt
-model = KerasClassifier(model=create_model)
+model = KerasClassifier(model=create_model, callbacks=callbacks)
+# model = KerasClassifier(model=create_model)
 
 # Alle möglichen Hyperparameter
 model__dropout_rate = [0.0, 0.1, 0.3, 0.6]
@@ -155,6 +150,7 @@ model__early_stopping_patience = [15, 20]
 model__reduce_lr_factor = [0.1, 0.5]
 model__reduce_lr_patience = [5, 7]
 model__reduce_lr_min_lr = [1e-7, 1e-5]
+
 param_grid = dict(
     model__dropout_rate=model__dropout_rate,
     model__weight_constraint=model__weight_constraint,
@@ -167,10 +163,10 @@ param_grid = dict(
     model__neurons_4=model__neurons_4,
     batch_size=batch_size,
     epochs=epochs,
-    model__early_stopping_patience=model__early_stopping_patience,
-    model__reduce_lr_factor=model__reduce_lr_factor,
-    model__reduce_lr_patience=model__reduce_lr_patience,
-    model__reduce_lr_min_lr=model__reduce_lr_min_lr,
+    # model__early_stopping_patience=model__early_stopping_patience,
+    # model__reduce_lr_factor=model__reduce_lr_factor,
+    # model__reduce_lr_patience=model__reduce_lr_patience,
+    # model__reduce_lr_min_lr=model__reduce_lr_min_lr,
 )
 
 # Führe GridSearch durch
