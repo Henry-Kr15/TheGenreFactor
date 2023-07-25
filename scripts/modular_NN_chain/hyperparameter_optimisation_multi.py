@@ -97,6 +97,10 @@ def create_model(
     neurons_2,
     neurons_3,
     neurons_4,
+    early_stopping_patience,
+    reduce_lr_factor,
+    reduce_lr_patience,
+    reduce_lr_min_lr,
 ):
     neurons_per_layer = [neurons_1, neurons_2, neurons_3, neurons_4]
 
@@ -118,8 +122,15 @@ def create_model(
 
     model.add(Dense(units=6, activation="softmax"))  # Anzahl der versch. Genres = 6
 
+    # Callbacks definieren
+    early_stopping = EarlyStopping(monitor='val_loss', patience=early_stopping_patience)
+    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=reduce_lr_factor,
+                                  patience=reduce_lr_patience, min_lr=reduce_lr_min_lr)
+
+    callbacks = [early_stopping, reduce_lr]
+
     model.compile(
-        loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"]
+        loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"], callbacks=callbacks
     )
 
     return model
@@ -129,15 +140,12 @@ def create_model(
 model = KerasClassifier(model=create_model)
 
 # Alle möglichen Hyperparameter
-# model__dropout_rate = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 model__dropout_rate = [0.0, 0.1, 0.3, 0.6]
-# model__weight_constraint = [1.0, 2.0, 3.0, 4.0, 5.0]
-model__weight_constraint = [1.0, 3.0, 5.0]
-# model__optimizer = ["SGD", "RMSprop", "Adagrad", "Adadelta", "Adam", "Adamax", "Nadam"]
-model__optimizer = ["SGD", "Adam", "Nadam"]
-model__activation = ["relu", "elu", "swish"]
+model__weight_constraint = [2.0, 5.0]
+model__optimizer = ["Adam", "Nadam"]
+model__activation = ["relu", "swish"]
 batch_size = [128, 512, 1024]
-epochs = [10, 50, 100]
+epochs = [100]
 model__num_hidden_layers = [2, 3, 4]
 model__neurons_1 = [128, 256]
 model__neurons_2 = [256, 512]
@@ -160,20 +168,21 @@ param_grid = dict(
     model__neurons_4=model__neurons_4,
     batch_size=batch_size,
     epochs=epochs,
-    # model__early_stopping_patience=model__early_stopping_patience,
-    # model__reduce_lr_factor=model__reduce_lr_factor,
-    # model__reduce_lr_patience=mdoel__reduce_lr_patience,
-    # model__reduce_lr_min_lr=model__reduce_lr_min_lr,
+    model__early_stopping_patience=model__early_stopping_patience,
+    model__reduce_lr_factor=model__reduce_lr_factor,
+    model__reduce_lr_patience=model__reduce_lr_patience,
+    model__reduce_lr_min_lr=model__reduce_lr_min_lr,
 )
 
 # Führe GridSearch durch
 start_time = time.time()
-grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=28, cv=3, verbose=3)
+grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=20, cv=3, verbose=3, return_train_score=True)
 grid_result = grid.fit(X_train, y_train)
 end_time = time.time()
 
 # Berechnung der verstrichenen Zeit in Stunden
 elapsed_time_hours = (end_time - start_time) / 3600
+print(f"Das hat {elapsed_time_hours} gedauert")
 
 # Drucken Sie die besten gefundenen Parameter
 print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_))
@@ -184,41 +193,7 @@ validation_score = best_model.score(X_val, y_val)
 
 print("Validation Score: ", validation_score)
 
-# initialisiere das DataFrame
-model_df = pd.DataFrame(
-    columns=[
-        "params",
-        "mean_train_score",
-        "std_train_score",
-        "mean_test_score",
-        "std_test_score",
-        "delta_acc",
-    ]
-)
-
-# Schleife durch die Modelle in GridSearchCV
-for i in range(len(grid.cv_results_["params"])):
-    # extrahiere die Parameter
-    params = grid.cv_results_["params"][i]
-    # extrahiere die durchschnittliche Trainings-Genauigkeit (über die Cross-Validation-Folds)
-    mean_train_score = grid.cv_results_["mean_train_score"][i]
-    # extrahiere die Standardabweichung der Trainings-Genauigkeit (über die Cross-Validation-Folds)
-    std_train_score = grid.cv_results_["std_train_score"][i]
-    # extrahiere die durchschnittliche Validierungs-Genauigkeit (über die Cross-Validation-Folds)
-    mean_test_score = grid.cv_results_["mean_test_score"][i]
-    # extrahiere die Standardabweichung der Validierungs-Genauigkeit (über die Cross-Validation-Folds)
-    std_test_score = grid.cv_results_["std_test_score"][i]
-    # berechne die Differenz zwischen der Trainings- und Validierungs-Genauigkeit
-    delta_acc = mean_train_score - mean_test_score
-    # füge die Informationen zu diesem Modell in das DataFrame ein
-    model_df.loc[i] = [
-        params,
-        mean_train_score,
-        std_train_score,
-        mean_test_score,
-        std_test_score,
-        delta_acc,
-    ]
+model_df = pd.DataFrame.from_dict(grid.cv_results_)
 
 # sortiere das DataFrame nach der Validierungs-Genauigkeit
 model_df = model_df.sort_values(by="mean_test_score", ascending=False)
@@ -226,34 +201,62 @@ model_df = model_df.sort_values(by="mean_test_score", ascending=False)
 # speichere das DataFrame
 model_df.to_csv("../../optimization_results_v2_test_by_val_acc.csv", index=False)
 
+# Berechne Unterschied der Train/Test-Performance
+model_df["delta_acc"] = model_df["mean_train_score"] - model_df["mean_test_score"]
+
 # Graphische Darstellung der Performance-Änderung
 # Mapping der activation_function auf numerische Werte
-activation_mapping = {"relu": 0, "elu": 1, "swish": 2}
-model_df["activation_numerical"] = model_df["activation_function"].map(
+activation_mapping = {"relu": 0, "swish": 1}
+model_df["param_model__activation_numerical"] = model_df["param_model__activation"].map(
     activation_mapping
 )
+# Mapping des optimizers auf numerische Werte
+optimizer_mapping = {"Adam": 0, "Nadam": 1}
+model_df["param_model__optimizer_numerical"] = model_df["param_model__optimizer"].map(optimizer_mapping)
 
+# Alle Werte mit params_* sind standardmässig dtpye=object, ändern in float für plot
 x_vars = [
-    "dropout_rate",
-    "weight_constraint",
-    "optimizer",
-    "activation_numerical",
-    "batch_size",
-    "epochs",
-    "neurons_1",
-    "neurons_2",
-    "neurons_3",
-    "neurons_4",
-    "num_hidden_layers",
+    "param_model__dropout_rate",
+    "param_model__weight_constraint",
+    "param_model__optimizer_numerical",
+    "param_model__activation_numerical",
+    "param_batch_size",
+    "param_epochs",
+    "param_model__neurons_1",
+    "param_model__neurons_2",
+    "param_model__neurons_3",
+    "param_model__neurons_4",
+    "param_model__num_hidden_layers"
+    "param_model__early_stopping_patience",
+    "param_model__reduce_lr_factor",
+    "param_model__reduce_lr_patience",
+    "param_model__reduce_lr_min_lr"
 ]
 
-y_vars = ["mean_train_score", "mean_test_score", "delta_acc"]
+for col in x_vars:
+    model_df[col] = model_df[col].astype(float)
 
-sns.pairplot(model_df, x_vars=x_vars, y_vars=y_vars, kind="reg", height=2)
+# y_vars = ["mean_train_score", "mean_test_score", "delta_acc"]
+y_vars = ["mean_train_score"]
+
+g = sns.pairplot(model_df, x_vars=x_vars, y_vars=y_vars, kind="reg", height=2)
+
+# Drehen und Anpassen der Schriftgröße der Achsentitel
+for i in range(len(g.axes)):
+    for j in range(len(g.axes[i])):
+        ax = g.axes[i, j]
+        if ax.get_xlabel():
+            ax.set_xlabel(ax.get_xlabel(), rotation=0, fontsize=4)
+        if ax.get_ylabel():
+            ax.set_ylabel(ax.get_ylabel(), rotation=0, fontsize=4)
+
+# Anpassen des Layouts um Überlappungen zu vermeiden
+plt.tight_layout()
 plt.savefig("../../figures/HPO_parameter_v2_test.pdf", format="pdf")
+plt.clf()
 
 
-# Jetzt noch die ein bisschen fishige Christopher-Score Berechnung
+# # Jetzt noch die ein bisschen fishige Christopher-Score Berechnung
 def calculate_christopher_score(row):
     # Bestmöglicher Score ist
     best_score = 1.0
@@ -263,7 +266,7 @@ def calculate_christopher_score(row):
         row["delta_acc"]
     )  # Je kleiner das Delta, desto besser der Score
     mean_test_acc_score = row[
-        "mean_test_accuracy"
+        "mean_test_score"
     ]  # Je größer die Validation Accuracy, desto besser der Score
 
     # Gewichte
@@ -279,7 +282,7 @@ def calculate_christopher_score(row):
     return normalized_christopher_score
 
 
-# Speichere den Christopher-Score in dem Dataframe
+# # Speichere den Christopher-Score in dem Dataframe
 model_df["Christopher-Score"] = model_df.apply(calculate_christopher_score, axis=1)
 
 # Sortiere nach dem neuen Score
@@ -294,8 +297,8 @@ model_df.to_csv(
 best_params = model_df.head(1)
 
 # Scatterplot erstellen
-sns.scatterplot(data=model_df, x="mean_test_accuracy", y="delta_acc", alpha=0.5)
-sns.scatterplot(data=best_params, x="mean_test_accuracy", y="delta_acc", color="red")
+sns.scatterplot(data=model_df, x="mean_test_score", y="delta_acc", alpha=0.5)
+sns.scatterplot(data=best_params, x="mean_test_score", y="delta_acc", color="red")
 
 # Achsentitel hinzufügen
 plt.xlabel("validation accuracy")
