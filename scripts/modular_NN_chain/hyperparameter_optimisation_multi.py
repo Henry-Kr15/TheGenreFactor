@@ -151,7 +151,6 @@ model__neurons_1 = [128, 256]
 model__neurons_2 = [256, 512]
 model__neurons_3 = [512, 1024]
 model__neurons_4 = [512, 1024]
-# Die sind schwerer zu implementieren, erstmal den Rest
 model__early_stopping_patience = [15, 20]
 model__reduce_lr_factor = [0.1, 0.5]
 model__reduce_lr_patience = [5, 7]
@@ -176,7 +175,7 @@ param_grid = dict(
 
 # Führe GridSearch durch
 start_time = time.time()
-grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=20, cv=3, verbose=3, return_train_score=True)
+grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, cv=3, verbose=3, return_train_score=True)
 grid_result = grid.fit(X_train, y_train)
 end_time = time.time()
 
