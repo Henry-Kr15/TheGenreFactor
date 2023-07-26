@@ -117,7 +117,7 @@ plt.savefig("../../figures/svm/confusion_matrix.png")
 plt.clf()
 
 # Berechne den AUC-PR
-
+plt.figure()
 # Binarize y_test
 y_test_bin = label_binarize(y_test, classes=[0, 1, 2, 3, 4, 5])
 
@@ -152,4 +152,4 @@ plt.legend()
 
 # Adjust layout and save the figure
 plt.tight_layout()
-plt.savefig("../../figures/svm/PR.png")
+plt.savefig("../../figures/svm/PR_SVM.pdf")

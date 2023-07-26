@@ -114,6 +114,8 @@ plt.tight_layout()
 plt.savefig("../../figures/knn/confusion_matrix.png")
 plt.clf()
 
+
+plt.figure()
 # Binarize y_test
 y_test_bin = label_binarize(y_test, classes=[0, 1, 2, 3, 4, 5])
 
@@ -148,4 +150,4 @@ plt.legend()
 
 # Adjust layout and save the figure
 plt.tight_layout()
-plt.savefig("../../figures/knn/PR.png")
+plt.savefig("../../figures/knn/PR_KNN.pdf")
