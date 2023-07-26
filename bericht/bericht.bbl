@@ -1,0 +1,203 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global}
+    \entry{Übersicht2011}{article}{}
+      \name{author}{4}{}{%
+        {{hash=9ef856b4677e8c8aa25d7971bd00abc0}{%
+           family={Fu},
+           familyi={F\bibinitperiod},
+           given={Zhouyu},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=ef5bf6f57a4a3c5fa9c475ed128f0ffb}{%
+           family={Lu},
+           familyi={L\bibinitperiod},
+           given={Guojun},
+           giveni={G\bibinitperiod}}}%
+        {{hash=e8455b94a47fd778e008643c7402f0ab}{%
+           family={Ting},
+           familyi={T\bibinitperiod},
+           given={Kai},
+           giveni={K\bibinitperiod}}}%
+        {{hash=0be83c37639f6a1d7df5886befaa8871}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Dengsheng},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {English}%
+      }
+      \list{publisher}{2}{%
+        {IEEE, Institute of Electrical}%
+        {Electronics Engineers}%
+      }
+      \strng{namehash}{f9e1981a50375ff5c6c8ce057d75bdac}
+      \strng{fullhash}{98eb2f3a2a2cc3cadc28a25dbf3d8c37}
+      \strng{bibnamehash}{f9e1981a50375ff5c6c8ce057d75bdac}
+      \strng{authorbibnamehash}{f9e1981a50375ff5c6c8ce057d75bdac}
+      \strng{authornamehash}{f9e1981a50375ff5c6c8ce057d75bdac}
+      \strng{authorfullhash}{98eb2f3a2a2cc3cadc28a25dbf3d8c37}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1520-9210}
+      \field{journaltitle}{IEEE Transactions on Multimedia}
+      \field{number}{2}
+      \field{title}{A survey of audio-based music classification and annotation}
+      \field{volume}{13}
+      \field{year}{2011}
+      \field{pages}{303\bibrangedash 319}
+      \range{pages}{17}
+      \verb{doi}
+      \verb 10.1109/TMM.2010.2098858
+      \endverb
+    \endentry
+    \entry{Kaggle}{online}{}
+      \name{author}{1}{}{%
+        {{hash=5c6a1bebc2a08b2c1299f410c0ec9490}{%
+           family={Sculley},
+           familyi={S\bibinitperiod},
+           given={D.},
+           giveni={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{5c6a1bebc2a08b2c1299f410c0ec9490}
+      \strng{fullhash}{5c6a1bebc2a08b2c1299f410c0ec9490}
+      \strng{bibnamehash}{5c6a1bebc2a08b2c1299f410c0ec9490}
+      \strng{authorbibnamehash}{5c6a1bebc2a08b2c1299f410c0ec9490}
+      \strng{authornamehash}{5c6a1bebc2a08b2c1299f410c0ec9490}
+      \strng{authorfullhash}{5c6a1bebc2a08b2c1299f410c0ec9490}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Kaggle: Level up with the largest AI and ML community}
+      \field{urlday}{26}
+      \field{urlmonth}{7}
+      \field{urlyear}{2023}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.kaggle.com/
+      \endverb
+      \verb{url}
+      \verb https://www.kaggle.com/
+      \endverb
+    \endentry
+    \entry{Youtube}{online}{}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labeltitlesource}{title}
+      \field{title}{YouTube}
+      \field{urlday}{26}
+      \field{urlmonth}{7}
+      \field{urlyear}{2023}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.youtube.com/
+      \endverb
+      \verb{url}
+      \verb https://www.youtube.com/
+      \endverb
+    \endentry
+    \entry{Spotify}{online}{}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labeltitlesource}{title}
+      \field{title}{Spotify}
+      \field{urlday}{26}
+      \field{urlmonth}{7}
+      \field{urlyear}{2023}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://open.spotify.com/
+      \endverb
+      \verb{url}
+      \verb https://open.spotify.com/
+      \endverb
+    \endentry
+    \entry{SupportVector}{article}{}
+      \name{author}{2}{}{%
+        {{hash=17acda211a651e90e228f1776ee07818}{%
+           family={Cortes},
+           familyi={C\bibinitperiod},
+           given={Corinna},
+           giveni={C\bibinitperiod}}}%
+        {{hash=6755575824e883d922886349815645ff}{%
+           family={Vapnik},
+           familyi={V\bibinitperiod},
+           given={Vladimir\bibnamedelima Naumovich},
+           giveni={V\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
+      }
+      \strng{namehash}{b5fada5a8d631a9011e355e68879f8ad}
+      \strng{fullhash}{b5fada5a8d631a9011e355e68879f8ad}
+      \strng{bibnamehash}{b5fada5a8d631a9011e355e68879f8ad}
+      \strng{authorbibnamehash}{b5fada5a8d631a9011e355e68879f8ad}
+      \strng{authornamehash}{b5fada5a8d631a9011e355e68879f8ad}
+      \strng{authorfullhash}{b5fada5a8d631a9011e355e68879f8ad}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Machine Learning}
+      \field{title}{Support-Vector Networks}
+      \field{volume}{20}
+      \field{year}{1995}
+      \field{pages}{273\bibrangedash 297}
+      \range{pages}{25}
+    \endentry
+    \entry{NearestNeighbours}{article}{}
+      \name{author}{2}{}{%
+        {{hash=e05a925b2cfe910a6897d43f9ba39978}{%
+           family={Cover},
+           familyi={C\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod}}}%
+        {{hash=9a57c30a474f492865fd485f0f8748f5}{%
+           family={Hart},
+           familyi={H\bibinitperiod},
+           given={P.},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{79f254d94cf7ed6ac9aed53475e87a36}
+      \strng{fullhash}{79f254d94cf7ed6ac9aed53475e87a36}
+      \strng{bibnamehash}{79f254d94cf7ed6ac9aed53475e87a36}
+      \strng{authorbibnamehash}{79f254d94cf7ed6ac9aed53475e87a36}
+      \strng{authornamehash}{79f254d94cf7ed6ac9aed53475e87a36}
+      \strng{authorfullhash}{79f254d94cf7ed6ac9aed53475e87a36}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Information Theory}
+      \field{number}{1}
+      \field{title}{Nearest neighbor pattern classification}
+      \field{volume}{13}
+      \field{year}{1967}
+      \field{pages}{21\bibrangedash 27}
+      \range{pages}{7}
+      \verb{doi}
+      \verb 10.1109/TIT.1967.1053964
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

@@ -7,7 +7,7 @@
                      '(("rerunfilecheck" "aux") ("geometry" "a4paper" "left=2.5cm" "right=2.5cm" "top=3.5cm" "bottom=3.5cm") ("babel" "english") ("unicode-math" "math-style=ISO" "bold-style=ISO" "sans-style=italic" "nabla=upright" "partial=upright" "warnings-off={           % ┐
     mathtools-colon,       % │ unnötige Warnungen ausschalten
     mathtools-overbracket, % │
-  }" "") ("siunitx" "locale=US" "separate-uncertainty=true" "per-mode=symbol-or-fraction" "") ("mhchem" "version=4" "math-greek=default" "text-greek=default" "") ("csquotes" "autostyle") ("placeins" "section" "below" "") ("caption" "labelfont=bf" "font=small" "width=0.9\\textwidth" "") ("biblatex" "backend=biber" "") ("hyperref" "german" "unicode" "pdfusetitle" "pdfcreator={}" "pdfproducer={}" "") ("extdash" "shortcuts")))
+  }" "") ("siunitx" "locale=US" "separate-uncertainty=true" "per-mode=symbol-or-fraction" "") ("mhchem" "version=4" "math-greek=default" "text-greek=default" "") ("csquotes" "autostyle") ("placeins" "section" "below" "") ("caption" "labelfont=bf" "font=small" "width=0.9\\textwidth" "") ("biblatex" "backend=biber" "sorting=none" "") ("hyperref" "german" "unicode" "pdfusetitle" "pdfcreator={}" "pdfproducer={}" "") ("extdash" "shortcuts")))
    (TeX-run-style-hooks
     "latex2e"
     "scrartcl"

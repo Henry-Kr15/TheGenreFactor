@@ -27,9 +27,9 @@
 % Alternativ zum Beispiel:
 %\setromanfont{Libertinus Serif}
 %\setsansfont{Libertinus Sans}
-%\setmonofont{Libertinus Mono}
+\setmonofont{Libertinus Mono}
 \setmainfont{Times New Roman}
-\addtokomafont{disposition}{\rmfamily} % Anpassen aller Überschriften
+% \addtokomafont{disposition}{\rmfamily} % Anpassen aller Überschriften
 
 % Paket für Zeilenabstände
 \usepackage{setspace}
@@ -137,7 +137,8 @@
 
 % Literaturverzeichnis
 \usepackage[
-  backend=biber,
+backend=biber,
+sorting=none,
 ]{biblatex}
 % Quellendatenbank
 \addbibresource{lit.bib}
@@ -175,29 +176,56 @@
 \pagenumbering{arabic}
 
 \section{Introduction}
-a. Hintergrund: Warum ist Genre-Klassifizierung wichtig?
-b. Ziel der Studie: Was ist das Hauptziel deines Projekts?
-c. Überblick über die Methoden: Kurze Vorstellung der drei Methoden, die du angewendet hast.
+% a. Hintergrund: Warum ist Genre-Klassifizierung wichtig?
+% b. Ziel der Studie: Was ist das Hauptziel deines Projekts?
+% c. Überblick über die Methoden: Kurze Vorstellung der drei Methoden, die du angewendet hast.
+The task of classifying the genre of a song is common in the digital music industry. Most services
+offering music listening present some information about each song, which often includes the genre.
+Some services might even use the information to suggest other songs to listen to, which requires
+accurate information about the genre (or the genres) that a song belongs to. Retrieving this
+information is not easy, since there are no clear definitions of a genres attributes. Additionally,
+most songs do not belong to only one genre. The genre itself might change over time as well, which
+further complicates the problem. While the classification task might be technically solvable by humans,
+it remains a non-trivial endeavor due to its inherent complexity. Given the immense size of most
+music libraries, a manual approach to classification becomes highly impractical, necessitating alternative,
+more efficient solutions. \\
+\\
+\noindent
+With these factors in mind, the task is evidently predisposed to a solution via a machine learning approach.
+As such, this strategy has become prevalent in addressing this problem, with a plethora of diverse methods having been explored to date
+(see, for example~\cite{Übersicht2011}).
+In this study, we attempt to classify music genres using a dense neural network. For this, we use a dataset sourced
+from the website Kaggle~\cite{Kaggle} containing songs and their attributes taken from the services YouTube~\cite{Youtube}
+and Spotify~\cite{Spotify}. We compare the neural network with two other, less sophisticated machine learning techniques,
+namely support vector machines~\cite{SupportVector} and the $k$-nearest-neighbours-approach~\cite{NearestNeighbours},
+to establish a baseline. We aim to find out whether employing more complex and labour-intensive techniques result in an
+improvement in the face of the limited information contained in the dataset. \\
+\\
+\noindent
+The report is structured as follows; first, the utilized dataset and the applied preprocessing is described in detail.
+Subsequently, the architecture of the dense neural network is laid out and the results are presented. These findings are then
+compared to the results of the alternative approaches. Finally, we draw a conclusion based on our analysis.
 
 \section{The Utilized Dataset}
-a. Datensatz: Beschreibung des Datensatzes und wie er gesammelt wurde.
-b. Vorverarbeitung: Wie hast du die Daten für die Modelle vorbereitet?
-c. Modell-Details: Wie wurden die Modelle implementiert und optimiert?
+% a. Datensatz: Beschreibung des Datensatzes und wie er gesammelt wurde.
+% b. Vorverarbeitung: Wie hast du die Daten für die Modelle vorbereitet?
+% c. Modell-Details: Wie wurden die Modelle implementiert und optimiert?
+The dataset used in this project is..
 
 \section{Implementation and Results of a Dense Neural Network}
-a. Implementierung: Beschreibung der Implementierung des neuronalen Netzwerks.
-b. Ergebnisse: Wie hat das neuronale Netzwerk im Vergleich zu den anderen Methoden abgeschnitten?
-c. Diskussion: Warum hat das neuronale Netzwerk besser oder schlechter abgeschnitten?
+% a. Implementierung: Beschreibung der Implementierung des neuronalen Netzwerks.
+% b. Ergebnisse: Wie hat das neuronale Netzwerk im Vergleich zu den anderen Methoden abgeschnitten?
+% c. Diskussion: Warum hat das neuronale Netzwerk besser oder schlechter abgeschnitten?
 
 \section{Alternative Approaches to the Problem}
-a. Leistung von Knn: Wie hat das Knn-Modell abgeschnitten?
-b. Leistung von SVM: Wie hat das SVM-Modell abgeschnitten?
-c. Diskussion: Vergleich der beiden Modelle auf der Grundlage ihrer Ergebnisse.
+% a. Leistung von Knn: Wie hat das Knn-Modell abgeschnitten?
+% b. Leistung von SVM: Wie hat das SVM-Modell abgeschnitten?
+% c. Diskussion: Vergleich der beiden Modelle auf der Grundlage ihrer Ergebnisse.
 
 \section{Discussion and Insights}
-a. Allgemeine Diskussion: Zusammenfassung der Erkenntnisse aus dem Projekt.
-b. Schlussfolgerungen: Was sind die endgültigen Schlussfolgerungen aus dem Projekt?
-c. Zukünftige Arbeiten: Gibt es Bereiche, in denen weitere Arbeit durchgeführt werden könnte?
+% a. Allgemeine Diskussion: Zusammenfassung der Erkenntnisse aus dem Projekt.
+% b. Schlussfolgerungen: Was sind die endgültigen Schlussfolgerungen aus dem Projekt?
+% c. Zukünftige Arbeiten: Gibt es Bereiche, in denen weitere Arbeit durchgeführt werden könnte?
 
 \printbibliography
 
