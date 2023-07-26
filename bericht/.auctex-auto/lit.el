@@ -7,6 +7,7 @@
     "Spotify"
     "Übersicht2011"
     "NearestNeighbours"
-    "SupportVector"))
+    "SupportVector"
+    "Datensatz"))
  '(or :bibtex :latex))
 

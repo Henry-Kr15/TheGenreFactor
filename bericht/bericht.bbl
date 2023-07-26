@@ -197,6 +197,46 @@
       \verb 10.1109/TIT.1967.1053964
       \endverb
     \endentry
+    \entry{Datensatz}{online}{}
+      \name{author}{3}{}{%
+        {{hash=99f88d77de8e107b19c71cf93e826030}{%
+           family={Rastelli},
+           familyi={R\bibinitperiod},
+           given={Salvatore},
+           giveni={S\bibinitperiod}}}%
+        {{hash=d65635bd6292ffda7054e7a917479fff}{%
+           family={Guarisco},
+           familyi={G\bibinitperiod},
+           given={Marco},
+           giveni={M\bibinitperiod}}}%
+        {{hash=b664feb469d7d719af9bbf458fa3b138}{%
+           family={Sallustio},
+           familyi={S\bibinitperiod},
+           given={Marco},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{0f85fdb118bfcee4dceb2000e457f602}
+      \strng{fullhash}{0f85fdb118bfcee4dceb2000e457f602}
+      \strng{bibnamehash}{0f85fdb118bfcee4dceb2000e457f602}
+      \strng{authorbibnamehash}{0f85fdb118bfcee4dceb2000e457f602}
+      \strng{authornamehash}{0f85fdb118bfcee4dceb2000e457f602}
+      \strng{authorfullhash}{0f85fdb118bfcee4dceb2000e457f602}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Spotify and Youtube: Statistics for the Top 10 songs of various spotify artists and their youtube-video.}
+      \field{urlday}{26}
+      \field{urlmonth}{7}
+      \field{urlyear}{2023}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://www.kaggle.com/datasets/salvatorerastelli/spotify-and-youtube
+      \endverb
+      \verb{url}
+      \verb https://www.kaggle.com/datasets/salvatorerastelli/spotify-and-youtube
+      \endverb
+    \endentry
   \enddatalist
 \endrefsection
 \endinput
