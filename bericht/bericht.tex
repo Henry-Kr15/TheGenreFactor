@@ -27,9 +27,10 @@
 % Alternativ zum Beispiel:
 %\setromanfont{Libertinus Serif}
 %\setsansfont{Libertinus Sans}
-\setmonofont{Libertinus Mono}
-\setmainfont{Times New Roman}
-% \addtokomafont{disposition}{\rmfamily} % Anpassen aller Überschriften
+% \setmonofont{Libertinus Mono}
+% \setmainfont{Times New Roman}
+\setmainfont{TeX Gyre Termes}
+\addtokomafont{disposition}{\rmfamily} % Anpassen aller Überschriften
 
 % Paket für Zeilenabstände
 \usepackage{setspace}
@@ -215,53 +216,58 @@ compared to the results of the alternative approaches. Finally, we draw a conclu
 % c. Modell-Details: Wie wurden die Modelle implementiert und optimiert?
 The dataset used in this project~\cite{Datensatz} contains $26$ attributes about $18862$ songs from $2079$ unique artists.
 However, the genre of the song is not included in the dataset; we query Wikidata for the corresponding genre of each song,
-using the python package \texttt{pywikibot}~\cite{pywikibot}. Afterwards, the dataset is cleaned; missing or erroneous values
-are replaced by a value calculated by a $k$-nearest-neighbours-approach. We implement this by using the \texttt{SimpleImputer}
-from the \texttt{Scikit-Learn} package~\cite{scikit-learn}.
-The query results in ??? different genres, which we then group into $26$ less general, more specific genres.
-
-\begin{wraptable}{R}{0.5\textwidth}
+using the python package \texttt{pywikibot}~\cite{pywikibot}. An example entry of the resulting dataset is shown in table \ref{tab:attributes}.
+Afterwards, the dataset is cleaned; missing or erroneous values
+in cardinal or ordinal features are replaced by a value calculated by a $k$-nearest-neighbours-approach. We implement this
+by using the \texttt{SimpleImputer} from the \texttt{Scikit-Learn} package~\cite{scikit-learn}. The architecture of our
+neural network does not feature text embedding, therefore attributes like \texttt{artist} or \texttt{album} are dropped.
+\begin{table}[H]
   \centering
-  \tiny
-  \begin{tabular}{l l}
+  \footnotesize
+  \begin{tabular}{l l l l}
     \toprule
-    $\text{Feature}$ & $\text{Value}$ \\
+    $\text{Feature}$ & $\text{Example}$ & $\text{Type}$ & $\text{Preprocessing strategy}$  \\
     \midrule
-    Artist & Gorillaz \\
-    Url\_spotify & \url{https://open.spotify...} \\
-    Track & Feel Good Inc. \\
-    Album & Demon Days \\
-    Album\_type & album \\
-    Uri & spotify:track:0d28khcov6AiegS... \\
-    Danceability & 0.818 \\
-    Energy & 0.705 \\
-    Key & 6.0 \\
-    Loudness & -6.679 \\
-    Speechiness & 0.177 \\
-    Acousticness & 0.00836 \\
-    Instrumentalness & 0.00233 \\
-    Liveness & 0.613 \\
-    Valence & 0.772 \\
-    Tempo & 138.559 \\
-    Duration\_ms & 222640.0 \\
-    Url\_youtube & \url{https://www.youtube...} \\
-    Title & Gorillaz - Feel Good Inc. (Official... \\
-    Channel & Gorillaz \\
-    Views & 693555221.0 \\
-    Likes & 6220896.0 \\
-    Comments & 169907.0 \\
-    Description & Official HD Video for Gorillaz'... \\
-    Licensed & True \\
-    official\_video & True \\
-    Stream & 1040234854.0 \\
+    Artist &  Gorillaz & nominal & Use Label Encoder \\
+    Url\_spotify & \url{https://open.spotify...} & nominal & Dropped \\
+    Track & Feel Good Inc. & nominal & Dropped\\
+    Album & Demon Days & nominal & Dropped \\
+    Album\_type & album & nominal & Use Label Encoder\\
+    Uri & spotify:track:0d28khcov6AiegS... & nominal & Dropped \\
+    Danceability & 0.818  & cardinal & Scale and Transform \\
+    Energy & 0.705 & cardinal & Scale and Transform\\
+    Key & 6.0 & cardinal &  Scale and Transform\\
+    Loudness & -6.679 & cardinal &  Scale and Transform\\
+    Speechiness & 0.177 & cardinal &  Scale and Transform\\
+    Acousticness & 0.00836 & cardinal &  Scale and Transform\\
+    Instrumentalness & 0.00233 & cardinal &  Scale and Transform\\
+    Liveness & 0.613 & cardinal &  Scale and Transform\\
+    Valence & 0.772 & cardinal &  Scale and Transform\\
+    Tempo & 138.559 & cardinal &  Scale and Transform\\
+    Duration\_ms & 222640.0 & cardinal &  Scale and Transform\\
+    Url\_youtube & \url{https://www.youtube...} & nominal & Dropped\\
+    Title & Gorillaz - Feel Good Inc. (Official... & nominal & Dropped\\
+    Channel & Gorillaz & nominal & Dropped\\
+    Views & 693555221.0 & cardinal &  Scale and Transform\\
+    Likes & 6220896.0 & cardinal &  Scale and Transform\\
+    Comments & 169907.0 & cardinal &  Scale and Transform\\
+    Description & Official HD Video for Gorillaz'... & nominal & Dropped \\
+    Licensed & True & nominal & Use Label Encoder \\
+    official\_video & True & nominal & Use Label Encoder \\
+    Stream & 1040234854.0 & cardinal &  Scale and Transform\\
+    Genre & Hip Hop & nominal & Target \\
     \bottomrule
   \end{tabular}
   \normalsize
-  \caption{The attributes contained in the dataset.}
+  \caption{The attributes contained in the dataset, shown for an example song.}
   \label{tab:attributes}
-\end{wraptable}
-Testtext
-
+\end{table}
+\noindent
+The cardinal features are the scaled to a range of $[-1,1]$ and transformed to follow a normal distribution.
+The query results in ??? different genres. As these are higly specific, these categories are consolidated into $26$ broader genres to
+achieve a more streamlined dataset with more samples per class. For example, the genre 'latin' contains 'salsa', 'bossa nova', 'samba' among others.
+Given the constraints of our datasets size, we only keep the top $6$ genres with the most songs to ensure a sufficient sample
+size. The remaining genres are hip hop, rock, pop, electronic, metal and classic. The datasets class imbalance can be seen in figure \ref{}.
 \section{Implementation and Results of a Dense Neural Network}
 % a. Implementierung: Beschreibung der Implementierung des neuronalen Netzwerks.
 % b. Ergebnisse: Wie hat das neuronale Netzwerk im Vergleich zu den anderen Methoden abgeschnitten?

@@ -1,15 +1,15 @@
-[0] Config.pm:307> INFO - This is Biber 2.17
+[0] Config.pm:307> INFO - This is Biber 2.19
 [0] Config.pm:310> INFO - Logfile is 'bericht.blg'
-[91] biber-darwin:340> INFO - === Mi Jul 26, 2023, 22:07:20
-[115] Biber.pm:418> INFO - Reading 'bericht.bcf'
-[191] Biber.pm:972> INFO - Found 8 citekeys in bib section 0
-[204] Biber.pm:4383> INFO - Processing section 0
-[216] Biber.pm:4574> INFO - Looking for bibtex file 'lit.bib' for section 0
-[218] bibtex.pm:1713> INFO - LaTeX decoding ...
-[226] bibtex.pm:1518> INFO - Found BibTeX data source 'lit.bib'
-[296] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[296] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[296] Biber.pm:4203> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'en-US'
-[296] Biber.pm:4209> INFO - No sort tailoring available for locale 'en-US'
-[308] bbl.pm:654> INFO - Writing 'bericht.bbl' with encoding 'UTF-8'
-[312] bbl.pm:757> INFO - Output to bericht.bbl
+[37] biber:340> INFO - === Mi Jul 26, 2023, 22:54:06
+[44] Biber.pm:419> INFO - Reading 'bericht.bcf'
+[82] Biber.pm:979> INFO - Found 9 citekeys in bib section 0
+[89] Biber.pm:4419> INFO - Processing section 0
+[95] Biber.pm:4610> INFO - Looking for bibtex file 'lit.bib' for section 0
+[95] bibtex.pm:1713> INFO - LaTeX decoding ...
+[100] bibtex.pm:1519> INFO - Found BibTeX data source 'lit.bib'
+[145] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[145] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[145] Biber.pm:4239> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'en-US'
+[145] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[150] bbl.pm:660> INFO - Writing 'bericht.bbl' with encoding 'UTF-8'
+[153] bbl.pm:763> INFO - Output to bericht.bbl
