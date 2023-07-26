@@ -42,7 +42,10 @@
     "biblatex"
     "hyperref"
     "bookmark"
-    "extdash")
+    "extdash"
+    "wrapfig")
+   (LaTeX-add-labels
+    "tab:attributes")
    (LaTeX-add-bibliographies
     "lit"))
  :latex)

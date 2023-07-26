@@ -2351,13 +2351,15 @@
     <bcf:citekey order="5">SupportVector</bcf:citekey>
     <bcf:citekey order="6">NearestNeighbours</bcf:citekey>
     <bcf:citekey order="7">Datensatz</bcf:citekey>
-    <bcf:citekey order="8">Übersicht2011</bcf:citekey>
-    <bcf:citekey order="9">Kaggle</bcf:citekey>
-    <bcf:citekey order="10">Youtube</bcf:citekey>
-    <bcf:citekey order="11">Spotify</bcf:citekey>
-    <bcf:citekey order="12">SupportVector</bcf:citekey>
-    <bcf:citekey order="13">NearestNeighbours</bcf:citekey>
-    <bcf:citekey order="14">Datensatz</bcf:citekey>
+    <bcf:citekey order="8">pywikibot</bcf:citekey>
+    <bcf:citekey order="9">Übersicht2011</bcf:citekey>
+    <bcf:citekey order="10">Kaggle</bcf:citekey>
+    <bcf:citekey order="11">Youtube</bcf:citekey>
+    <bcf:citekey order="12">Spotify</bcf:citekey>
+    <bcf:citekey order="13">SupportVector</bcf:citekey>
+    <bcf:citekey order="14">NearestNeighbours</bcf:citekey>
+    <bcf:citekey order="15">Datensatz</bcf:citekey>
+    <bcf:citekey order="16">pywikibot</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="none">

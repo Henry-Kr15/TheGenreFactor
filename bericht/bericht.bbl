@@ -237,6 +237,22 @@
       \verb https://www.kaggle.com/datasets/salvatorerastelli/spotify-and-youtube
       \endverb
     \endentry
+    \entry{pywikibot}{online}{}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labeltitlesource}{title}
+      \field{title}{Pywikibot: Python MediaWiki Bot Framework}
+      \field{urlday}{26}
+      \field{urlmonth}{7}
+      \field{urlyear}{2023}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://pypi.org/project/pywikibot/
+      \endverb
+      \verb{url}
+      \verb https://pypi.org/project/pywikibot/
+      \endverb
+    \endentry
   \enddatalist
 \endrefsection
 \endinput

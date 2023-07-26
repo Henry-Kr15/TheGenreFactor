@@ -87,8 +87,11 @@ plt.xlabel("Models", fontsize=25)
 plt.ylabel("Achieved accuracy [%]", fontsize=25)
 plt.title("Performance Comparison", fontsize=25)
 # Ticks vergrößern
-plt.tick_params(axis='both', which='major', labelsize=25)
+plt.tick_params(axis="both", which="major", labelsize=25)
 # y-Achse Bereich festlegen
 plt.ylim(0, 100)
 plt.tight_layout()
 plt.savefig("../figures/performance-comparison.pdf")
+
+df = pd.read_csv("../data/data_selected_v1.csv")
+print(df["Genre"].unique())

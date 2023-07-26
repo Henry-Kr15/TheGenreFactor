@@ -158,6 +158,9 @@ sorting=none,
 % Trennung von Wörtern mit Strichen
 \usepackage[shortcuts]{extdash}
 
+% Tabellen und Text mögen sich jetzt
+\usepackage{wrapfig}
+
 \author{%
   Henry Krämerkämper\\%
   \href{mailto:henry.kraemerkaemper@tu-dortmund.de}{henry.kraemerkaemper@tu-dortmund.de}%
@@ -210,7 +213,54 @@ compared to the results of the alternative approaches. Finally, we draw a conclu
 % a. Datensatz: Beschreibung des Datensatzes und wie er gesammelt wurde.
 % b. Vorverarbeitung: Wie hast du die Daten für die Modelle vorbereitet?
 % c. Modell-Details: Wie wurden die Modelle implementiert und optimiert?
-The dataset used in this project~\cite{Datensatz} contains $26$ attributes about $18862$ songs.
+The dataset used in this project~\cite{Datensatz} contains $26$ attributes about $18862$ songs from $2079$ unique artists.
+However, the genre of the song is not included in the dataset; we query Wikidata for the corresponding genre of each song,
+using the python package \texttt{pywikibot}~\cite{pywikibot}. Afterwards, the dataset is cleaned; missing or erroneous values
+are replaced by a value calculated by a $k$-nearest-neighbours-approach. We implement this by using the \texttt{SimpleImputer}
+from the \texttt{Scikit-Learn} package~\cite{scikit-learn}.
+The query results in ??? different genres, which we then group into $26$ less general, more specific genres.
+
+\begin{wraptable}{R}{0.5\textwidth}
+  \centering
+  \tiny
+  \begin{tabular}{l l}
+    \toprule
+    $\text{Feature}$ & $\text{Value}$ \\
+    \midrule
+    Artist & Gorillaz \\
+    Url\_spotify & \url{https://open.spotify...} \\
+    Track & Feel Good Inc. \\
+    Album & Demon Days \\
+    Album\_type & album \\
+    Uri & spotify:track:0d28khcov6AiegS... \\
+    Danceability & 0.818 \\
+    Energy & 0.705 \\
+    Key & 6.0 \\
+    Loudness & -6.679 \\
+    Speechiness & 0.177 \\
+    Acousticness & 0.00836 \\
+    Instrumentalness & 0.00233 \\
+    Liveness & 0.613 \\
+    Valence & 0.772 \\
+    Tempo & 138.559 \\
+    Duration\_ms & 222640.0 \\
+    Url\_youtube & \url{https://www.youtube...} \\
+    Title & Gorillaz - Feel Good Inc. (Official... \\
+    Channel & Gorillaz \\
+    Views & 693555221.0 \\
+    Likes & 6220896.0 \\
+    Comments & 169907.0 \\
+    Description & Official HD Video for Gorillaz'... \\
+    Licensed & True \\
+    official\_video & True \\
+    Stream & 1040234854.0 \\
+    \bottomrule
+  \end{tabular}
+  \normalsize
+  \caption{The attributes contained in the dataset.}
+  \label{tab:attributes}
+\end{wraptable}
+Testtext
 
 \section{Implementation and Results of a Dense Neural Network}
 % a. Implementierung: Beschreibung der Implementierung des neuronalen Netzwerks.

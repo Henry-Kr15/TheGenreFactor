@@ -8,6 +8,8 @@
     "Übersicht2011"
     "NearestNeighbours"
     "SupportVector"
-    "Datensatz"))
+    "Datensatz"
+    "pywikibot"
+    "scikit-learn"))
  '(or :bibtex :latex))
 
