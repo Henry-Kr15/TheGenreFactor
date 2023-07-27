@@ -135,17 +135,17 @@ model = KerasClassifier(model=create_model, callbacks=callbacks)
 # model = KerasClassifier(model=create_model)
 
 # Alle möglichen Hyperparameter
-model__dropout_rate = [0.0, 0.1, 0.3, 0.6]
-model__weight_constraint = [2.0, 5.0]
-model__optimizer = ["Adam", "Nadam"]
-model__activation = ["relu", "swish"]
-batch_size = [128, 512, 1024]
+model__dropout_rate = [0.1, 0.3]
+model__weight_constraint = [1.0, 2.0, 3.0, 5.0, 6.0, 7.0]
+model__optimizer = ["Adam"]
+model__activation = ["relu"]
+batch_size = [512]
 epochs = [100]
-model__num_hidden_layers = [2, 3, 4]
-model__neurons_1 = [128, 256]
-model__neurons_2 = [256, 512]
-model__neurons_3 = [512, 1024]
-model__neurons_4 = [512, 1024]
+model__num_hidden_layers = [4]
+model__neurons_1 = [256]
+model__neurons_2 = [512, 1024]
+model__neurons_3 = [1024, 2048]
+model__neurons_4 = [1024]
 model__early_stopping_patience = [15, 20]
 model__reduce_lr_factor = [0.1, 0.5]
 model__reduce_lr_patience = [5, 7]
@@ -171,7 +171,7 @@ param_grid = dict(
 
 # Führe GridSearch durch
 start_time = time.time()
-grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, cv=3, verbose=3, return_train_score=True)
+grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=12, cv=3, verbose=3, return_train_score=True)
 grid_result = grid.fit(X_train, y_train)
 end_time = time.time()
 
@@ -213,19 +213,19 @@ model_df["param_model__optimizer_numerical"] = model_df["param_model__optimizer"
 x_vars = [
     "param_model__dropout_rate",
     "param_model__weight_constraint",
-    "param_model__optimizer_numerical",
-    "param_model__activation_numerical",
-    "param_batch_size",
-    "param_epochs",
-    "param_model__neurons_1",
+    # "param_model__optimizer_numerical",
+    # "param_model__activation_numerical",
+    # "param_batch_size",
+    # "param_epochs",
+    # "param_model__neurons_1",
     "param_model__neurons_2",
     "param_model__neurons_3",
-    "param_model__neurons_4",
-    "param_model__num_hidden_layers"
-    "param_model__early_stopping_patience",
-    "param_model__reduce_lr_factor",
-    "param_model__reduce_lr_patience",
-    "param_model__reduce_lr_min_lr"
+    # "param_model__neurons_4",
+    # "param_model__num_hidden_layers"
+    # "param_model__early_stopping_patience",
+    # "param_model__reduce_lr_factor",
+    # "param_model__reduce_lr_patience",
+    # "param_model__reduce_lr_min_lr"
 ]
 
 for col in x_vars:
