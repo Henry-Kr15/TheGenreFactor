@@ -5,6 +5,8 @@ from selection_functions import grouping, clean_data, show_results
 # Rohdaten einlesen
 df = pd.read_csv("../../data/data.csv")
 
+print(len(df["Genre"].unique()))
+
 df = grouping(df)
 df = clean_data(df, 50, 5)
 

@@ -127,29 +127,28 @@ def create_model(
 early_stopping = EarlyStopping(monitor='loss', patience=20)
 reduce_lr = ReduceLROnPlateau(monitor='loss', factor=0.1,
                                 patience=5, min_lr=1e-5)
-
 callbacks = [early_stopping, reduce_lr]
 
 # Erstelle KerasClassifier-Objekt
 model = KerasClassifier(model=create_model, callbacks=callbacks)
-# model = KerasClassifier(model=create_model)
 
 # Alle möglichen Hyperparameter
-model__dropout_rate = [0.1, 0.3]
-model__weight_constraint = [1.0, 2.0, 3.0, 5.0, 6.0, 7.0]
+model__dropout_rate = [0.1, 0.3, 0.5]
+model__weight_constraint = [10]
 model__optimizer = ["Adam"]
 model__activation = ["relu"]
-batch_size = [512]
+# model__activation = [tf.keras.layers.ReLU(), tf.keras.layers.LeakyReLU(alpha=0.3)]
+batch_size = [512, 1024]
 epochs = [100]
-model__num_hidden_layers = [4]
+model__num_hidden_layers = [3,4]
 model__neurons_1 = [256]
 model__neurons_2 = [512, 1024]
 model__neurons_3 = [1024, 2048]
-model__neurons_4 = [1024]
-model__early_stopping_patience = [15, 20]
-model__reduce_lr_factor = [0.1, 0.5]
-model__reduce_lr_patience = [5, 7]
-model__reduce_lr_min_lr = [1e-7, 1e-5]
+model__neurons_4 = [1024, 2048]
+# model__early_stopping_patience = [15, 20]
+# model__reduce_lr_factor = [0.1, 0.5]
+# model__reduce_lr_patience = [5, 7]
+# model__reduce_lr_min_lr = [1e-7, 1e-5]
 
 param_grid = dict(
     model__dropout_rate=model__dropout_rate,
@@ -212,16 +211,16 @@ model_df["param_model__optimizer_numerical"] = model_df["param_model__optimizer"
 # Alle Werte mit params_* sind standardmässig dtpye=object, ändern in float für plot
 x_vars = [
     "param_model__dropout_rate",
-    "param_model__weight_constraint",
+    # "param_model__weight_constraint",
     # "param_model__optimizer_numerical",
     # "param_model__activation_numerical",
-    # "param_batch_size",
+    "param_batch_size",
     # "param_epochs",
     # "param_model__neurons_1",
     "param_model__neurons_2",
     "param_model__neurons_3",
-    # "param_model__neurons_4",
-    # "param_model__num_hidden_layers"
+    "param_model__neurons_4",
+    "param_model__num_hidden_layers"
     # "param_model__early_stopping_patience",
     # "param_model__reduce_lr_factor",
     # "param_model__reduce_lr_patience",
@@ -231,8 +230,8 @@ x_vars = [
 for col in x_vars:
     model_df[col] = model_df[col].astype(float)
 
-# y_vars = ["mean_train_score", "mean_test_score", "delta_acc"]
-y_vars = ["mean_train_score"]
+y_vars = ["mean_train_score", "mean_test_score", "delta_acc"]
+# y_vars = ["mean_train_score"]
 
 g = sns.pairplot(model_df, x_vars=x_vars, y_vars=y_vars, kind="reg", height=2)
 
