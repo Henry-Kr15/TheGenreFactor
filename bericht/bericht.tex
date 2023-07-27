@@ -95,7 +95,7 @@
 % Floats innerhalb einer Section halten
 \usepackage[
   section, % Floats innerhalb der Section halten
-  below,   % unterhalb der Section aber auf der selben Seite ist ok
+  % below,   % unterhalb der Section aber auf der selben Seite ist ok
 ]{placeins}
 
 % Seite drehen für breite Tabellen: landscape Umgebung
@@ -209,69 +209,73 @@ improvement in the face of the limited information contained in the dataset. \\
 The report is structured as follows; first, the utilized dataset and the applied preprocessing is described in detail.
 Subsequently, the architecture of the dense neural network is laid out and the results are presented. These findings are then
 compared to the results of the alternative approaches. Finally, we draw a conclusion based on our analysis.
-
 \section{The Utilized Dataset}
 % a. Datensatz: Beschreibung des Datensatzes und wie er gesammelt wurde.
 % b. Vorverarbeitung: Wie hast du die Daten für die Modelle vorbereitet?
 % c. Modell-Details: Wie wurden die Modelle implementiert und optimiert?
+\subsection{Sourcing the Data}
 The dataset used in this project~\cite{Datensatz} contains $26$ attributes about $18862$ songs from $2079$ unique artists.
 However, the genre of the song is not included in the dataset; we query Wikidata for the corresponding genre of each song,
-using the python package \texttt{pywikibot}~\cite{pywikibot}. An example entry of the resulting dataset is shown in table \ref{tab:attributes}.
-Afterwards, the dataset is cleaned; missing or erroneous values
-in cardinal or ordinal features are replaced by a value calculated by a $k$-nearest-neighbours-approach. We implement this
-by using the \texttt{SimpleImputer} from the \texttt{Scikit-Learn} package~\cite{scikit-learn}. The architecture of our
-neural network does not feature text embedding, therefore attributes like \texttt{artist} or \texttt{album} are dropped.
+using the python package \texttt{pywikibot}~\cite{pywikibot}. An example entry of the resulting dataset at this stage
+is shown in table \ref{tab:attributes}. We do not keep all of these attributes; since the architecture of our
+neural network does not feature text embedding, the attributes \texttt{Track}, \texttt{Album}, \texttt{Title}, \texttt{Channel} and
+\texttt{Description} are dropped. The features \texttt{Uri} and \texttt{Url\_youtube} are most likely random and do not contain
+useful information for our models to learn, therefore these are not used as well.
+\FloatBarrier
 \begin{table}[H]
-  \centering
+  % \centering
   \footnotesize
   \begin{tabular}{l l l l}
     \toprule
-    $\text{Feature}$ & $\text{Example}$ & $\text{Type}$ & $\text{Preprocessing strategy}$  \\
+    $\text{Feature}$ & $\text{Example}$ & $\text{Feature}$ & $\text{Example}$ \\
     \midrule
-    Artist &  Gorillaz & nominal & Use Label Encoder \\
-    Url\_spotify & \url{https://open.spotify...} & nominal & Dropped \\
-    Track & Feel Good Inc. & nominal & Dropped\\
-    Album & Demon Days & nominal & Dropped \\
-    Album\_type & album & nominal & Use Label Encoder\\
-    Uri & spotify:track:0d28khcov6AiegS... & nominal & Dropped \\
-    Danceability & 0.818  & cardinal & Scale and Transform \\
-    Energy & 0.705 & cardinal & Scale and Transform\\
-    Key & 6.0 & cardinal &  Scale and Transform\\
-    Loudness & -6.679 & cardinal &  Scale and Transform\\
-    Speechiness & 0.177 & cardinal &  Scale and Transform\\
-    Acousticness & 0.00836 & cardinal &  Scale and Transform\\
-    Instrumentalness & 0.00233 & cardinal &  Scale and Transform\\
-    Liveness & 0.613 & cardinal &  Scale and Transform\\
-    Valence & 0.772 & cardinal &  Scale and Transform\\
-    Tempo & 138.559 & cardinal &  Scale and Transform\\
-    Duration\_ms & 222640.0 & cardinal &  Scale and Transform\\
-    Url\_youtube & \url{https://www.youtube...} & nominal & Dropped\\
-    Title & Gorillaz - Feel Good Inc. (Official... & nominal & Dropped\\
-    Channel & Gorillaz & nominal & Dropped\\
-    Views & 693555221.0 & cardinal &  Scale and Transform\\
-    Likes & 6220896.0 & cardinal &  Scale and Transform\\
-    Comments & 169907.0 & cardinal &  Scale and Transform\\
-    Description & Official HD Video for Gorillaz'... & nominal & Dropped \\
-    Licensed & True & nominal & Use Label Encoder \\
-    official\_video & True & nominal & Use Label Encoder \\
-    Stream & 1040234854.0 & cardinal &  Scale and Transform\\
-    Genre & Hip Hop & nominal & Target \\
+    Artist &  Gorillaz &                                  Valence & 0.772 \\
+    Url\_spotify & \url{https://open.spotify...} &        Tempo & 138.559 \\
+    Track & Feel Good Inc. &                              Duration\_ms & 222640.0 \\
+    Album & Demon Days   &                                Url\_youtube & \url{https://www.youtube...} \\
+    Album\_type & album  &                                Title & Gorillaz - Feel Good Inc. (Official... \\
+    Uri & spotify:track:0d28khcov6AiegS...  &             Channel & Gorillaz \\
+    Danceability & 0.818 &                                Views & 693555221.0 \\
+    Energy & 0.705 &                                      Likes & 6220896.0 \\
+    Key & 6.0 &                                           Comments & 169907.0 \\
+    Loudness & -6.679  &                                  Description & Official HD Video for Gorillaz'... \\
+    Speechiness & 0.177  &                                Licensed & True \\
+    Acousticness & 0.00836  &                             official\_video & True \\
+    Instrumentalness & 0.00233 &                          Stream & 1040234854.0 \\
+    Liveness & 0.613  &                                   Genre & Hip Hop \\
     \bottomrule
   \end{tabular}
   \normalsize
   \caption{The attributes contained in the dataset, shown for an example song.}
   \label{tab:attributes}
 \end{table}
-\noindent
-The cardinal features are the scaled to a range of $[-1,1]$ and transformed to follow a normal distribution.
-The query results in $397$ different genres. As these are higly specific, these categories are consolidated into $26$ broader genres to
+\FloatBarrier
+\subsection{Preprocessing}
+Subsequently, the dataset is cleaned; missing or erroneous values
+in cardinal or ordinal features are substituted by a value derived by a $k$-nearest-neighbours-approach. We implement this
+by using the \texttt{SimpleImputer} from the \texttt{Scikit-Learn} package~\cite{scikit-learn}.
+The cardinal features are the scaled to a range of $[-1,1]$ and transformed to follow a normal distribution to improve numerical stability
+and the convergence speed as well as preventing the 'Exploding/Vaishing-Gradient' problem.
+The aforementioned wikidata query results in $397$ different genres. As these are higly specific, these categories are consolidated into $26$ broader genres to
 achieve a more streamlined dataset with more samples per class. For example, the genre 'latin' contains 'salsa', 'bossa nova', 'samba' among others.
 Given the constraints of our datasets size, we only keep the top $6$ genres with the most songs to ensure a sufficient sample
-size. The remaining genres are hip hop, rock, pop, electronic, metal and classic. The datasets class imbalance can be seen in figure \ref{}.
-\section{Implementation and Results of a Dense Neural Network}
+size. The remaining genres are hip hop, rock, pop, electronic, metal and classic. The datasets class imbalance can be seen in figure \ref{fig:class-imbalance}.
+\FloatBarrier
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.5]{figures/genre_hist_orange.pdf}
+  \caption{Class imbalance of the resulting dataset.}
+  \label{fig:class-imbalance}
+\end{figure}
+\FloatBarrier
+Upon application of the preprocessing steps, the dataset is reduced to $6446$ entries.
+\section{The dense Neural Network Model}
 % a. Implementierung: Beschreibung der Implementierung des neuronalen Netzwerks.
 % b. Ergebnisse: Wie hat das neuronale Netzwerk im Vergleich zu den anderen Methoden abgeschnitten?
 % c. Diskussion: Warum hat das neuronale Netzwerk besser oder schlechter abgeschnitten?
+\subsection{Architecture and Implementation}
+The neural network used to solve this task conssits of...
+\subsection{Performance and Results}
 
 \section{Alternative Approaches to the Problem}
 % a. Leistung von Knn: Wie hat das Knn-Modell abgeschnitten?

@@ -78,6 +78,8 @@ colors = sns.color_palette("Oranges", len(data))  # Farbpalette erstellen
 for i, (value, category) in enumerate(data):
     plt.bar(category, value, color=colors[i])
 
+# Setze den Stil auf "darkgrid"
+sns.set_style("darkgrid")
 
 # Farbe festlegen
 orange = sns.color_palette("Oranges", 10)[5]
@@ -92,6 +94,23 @@ plt.tick_params(axis="both", which="major", labelsize=25)
 plt.ylim(0, 100)
 plt.tight_layout()
 plt.savefig("../figures/performance-comparison.pdf")
+plt.clf()
 
 df = pd.read_csv("../data/data_selected_v1.csv")
 print(df["Genre"].unique())
+
+# Genres für das Training auswählen
+genres_to_keep = ["classic", "metal", "rock", "hip hop", "electronic", "pop"]
+df = df[df["Genre"].isin(genres_to_keep)]
+
+# Anzahl der Einträge pro Genre
+genre_counts = df['Genre'].value_counts()
+print(genre_counts)
+# Histogramm erstellen
+plt.figure(figsize=(10, 6))
+genre_counts.plot(kind='bar', color=orange)
+plt.xlabel('Genre')
+plt.ylabel('Count')
+# plt.title('bar chart of class imbalance')
+plt.tight_layout()
+plt.savefig('../figures/genre_hist_orange.pdf')

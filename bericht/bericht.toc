@@ -1,8 +1,12 @@
 \babel@toc {english}{}\relax 
 \contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
 \contentsline {section}{\numberline {2}The Utilized Dataset}{1}{section.2}%
-\contentsline {section}{\numberline {3}Implementation and Results of a Dense Neural Network}{3}{section.3}%
+\contentsline {subsection}{\numberline {2.1}Sourcing the Data}{1}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Preprocessing}{2}{subsection.2.2}%
+\contentsline {section}{\numberline {3}The dense Neural Network Model}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Architecture and Implementation}{3}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Performance and Results}{3}{subsection.3.2}%
 \contentsline {section}{\numberline {4}Alternative Approaches to the Problem}{3}{section.4}%
 \contentsline {section}{\numberline {5}Discussion and Insights}{3}{section.5}%
-\contentsline {section}{\nonumberline References}{3}{section*.4}%
+\contentsline {section}{\nonumberline References}{3}{section*.5}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
