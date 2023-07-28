@@ -156,3 +156,6 @@ plt.legend()
 # Adjust layout and save the figure
 plt.tight_layout()
 plt.savefig("../../figures/svm/PR_SVM.pdf")
+
+from sklearn.metrics import classification_report
+print(classification_report(y_test, y_pred))
