@@ -21,3 +21,10 @@ presentation/*.run.xml
 presentation/*.out
 presentation/*.aux
 presentation/*.bcf
+
+bericht/.auctex-auto/
+bericht/bericht.aux
+bericht/bericht.bbl
+bericht/bericht.bcf
+bericht/bericht.toc
+bericht/bericht.blg

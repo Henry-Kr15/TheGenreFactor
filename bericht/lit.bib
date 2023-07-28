@@ -67,3 +67,44 @@
     pages={2825--2830},
     year={2011}
 }
+@book{geron,
+    author = {Géron, Aurélien},
+    title = {Hands-On Machine Learning with Scikit-Learn, Keras and Tensorflow},
+    publisher = {O'Reilly Media, Inc.},
+    year = {2022},
+    edition = {Third Edition},
+}
+@software{keras,
+    title={Keras},
+    author={Chollet, François and others},
+    year={2015},
+    howpublished={\url{https://keras.io}},
+}
+@software{tensorflow,
+    title={TensorFlow: Large-Scale Machine Learning on Heterogeneous Systems},
+    url={https://www.tensorflow.org/},
+    note={Software available from tensorflow.org},
+    author={Martín Abadi and Ashish Agarwal and Paul Barham and Eugene Brevdo and Zhifeng Chen and Craig Citro and Greg S. Corrado and Andy Davis and Jeffrey Dean and Matthieu Devin and Sanjay Ghemawat and Ian Goodfellow and Andrew Harp and Geoffrey Irving and Michael Isard and Yangqing Jia and Rafal Jozefowicz and Lukasz Kaiser and Manjunath Kudlur and Josh Levenberg and Dandelion Mané and Rajat Monga and Sherry Moore and Derek Murray and Chris Olah and Mike Schuster and Jonathon Shlens and Benoit Steiner and Ilya Sutskever and Kunal Talwar and Paul Tucker and Vincent Vanhoucke and Vijay Vasudevan and Fernanda Viégas and Oriol Vinyals and Pete Warden and Martin Wattenberg and Martin Wicke and Yuan Yu and Xiaoqiang Zheng},
+    year={2015},
+}
+@software{scikeras,
+    title = {Scikeras: Scikit-Learn compatible wrappers for Keras Models},
+    url = {https://github.com/adriangb/scikeras},
+    author = {Garcia Badaracco, Adrian},
+}
+@article{gridsearch,
+    author = {Bergstra, James and Bengio, Yoshua},
+    title = {Random Search for Hyper-Parameter Optimization},
+    year = {2012},
+    issue_date = {3/1/2012},
+    publisher = {JMLR.org},
+    volume = {13},
+    number = {null},
+    issn = {1532-4435},
+    abstract = {Grid search and manual search are the most widely used strategies for hyper-parameter optimization. This paper shows empirically and theoretically that randomly chosen trials are more efficient for hyper-parameter optimization than trials on a grid. Empirical evidence comes from a comparison with a large previous study that used grid search and manual search to configure neural networks and deep belief networks. Compared with neural networks configured by a pure grid search, we find that random search over the same domain is able to find models that are as good or better within a small fraction of the computation time. Granting random search the same computational budget, random search finds better models by effectively searching a larger, less promising configuration space. Compared with deep belief networks configured by a thoughtful combination of manual search and grid search, purely random search over the same 32-dimensional configuration space found statistically equal performance on four of seven data sets, and superior performance on one of seven. A Gaussian process analysis of the function from hyper-parameters to validation set performance reveals that for most data sets only a few of the hyper-parameters really matter, but that different hyper-parameters are important on different data sets. This phenomenon makes grid search a poor choice for configuring algorithms for new data sets. Our analysis casts some light on why recent "High Throughput" methods achieve surprising success--they appear to search through a large number of hyper-parameters because most hyper-parameters do not matter much. We anticipate that growing interest in large hierarchical models will place an increasing burden on techniques for hyper-parameter optimization; this work shows that random search is a natural baseline against which to judge progress in the development of adaptive (sequential) hyper-parameter optimization algorithms.},
+    journal = {J. Mach. Learn. Res.},
+    month = {feb},
+    pages = {281–305},
+    numpages = {25},
+    keywords = {neural networks, response surface modeling, model selection, global optimization, deep learning}
+}
