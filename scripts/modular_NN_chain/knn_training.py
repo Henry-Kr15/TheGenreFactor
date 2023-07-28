@@ -10,6 +10,7 @@ from sklearn.metrics import precision_recall_curve, auc
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.preprocessing import label_binarize
+import seaborn as sns
 
 df = pd.read_csv("../../data/data_selected_v1.csv", index_col=0)
 
@@ -111,10 +112,10 @@ plt.xlabel("Vorhergesagtes Genre", fontsize=15)
 plt.ylabel("Tatsächliches Genre", fontsize=15)
 plt.tick_params(axis="both", which="major", labelsize=15)
 plt.tight_layout()
-plt.savefig("../../figures/knn/confusion_matrix.png")
+plt.savefig("../../figures/knn/confusion_matrix_knn.png")
 plt.clf()
 
-
+plt.style.use('ggplot')
 plt.figure()
 # Binarize y_test
 y_test_bin = label_binarize(y_test, classes=[0, 1, 2, 3, 4, 5])
