@@ -45,9 +45,9 @@ one_hot_y = genre_encoder.fit_transform(genres)
 y = pd.DataFrame(one_hot_y, columns=genre_encoder.get_feature_names_out(["Genre"]))
 
 # Datensatz aufteilen, mit shuffle und stratify
-# Trainingsatz:     64%
-# Testsatz:         20%
-# validierungssatz: 16%
+# Trainingsatz:     80%
+# Testsatz:         16%
+# validierungssatz: 4%
 
 # Trainings- und Testsatz
 X_train, X_test, y_train, y_test = train_test_split(
@@ -135,7 +135,7 @@ model = KerasClassifier(model=create_model, callbacks=callbacks)
 # Alle möglichen Hyperparameter
 model__dropout_rate = [0.1, 0.3, 0.5]
 model__weight_constraint = [10]
-model__optimizer = ["Adam"]
+model__optimizer = ["Adam", "Nadam"]
 model__activation = ["relu"]
 # model__activation = [tf.keras.layers.ReLU(), tf.keras.layers.LeakyReLU(alpha=0.3)]
 batch_size = [512, 1024]
@@ -212,7 +212,7 @@ model_df["param_model__optimizer_numerical"] = model_df["param_model__optimizer"
 x_vars = [
     "param_model__dropout_rate",
     # "param_model__weight_constraint",
-    # "param_model__optimizer_numerical",
+    "param_model__optimizer_numerical",
     # "param_model__activation_numerical",
     "param_batch_size",
     # "param_epochs",

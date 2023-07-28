@@ -103,12 +103,23 @@ print(df["Genre"].unique())
 genres_to_keep = ["classic", "metal", "rock", "hip hop", "electronic", "pop"]
 df = df[df["Genre"].isin(genres_to_keep)]
 
+# Farben für den nächsten Plot
+colors = sns.color_palette("Oranges", len(genres_to_keep))
+
 # Anzahl der Einträge pro Genre
 genre_counts = df['Genre'].value_counts()
 print(genre_counts)
+
+# Sortiere die Farben nach der Größe der Werte
+sorted_colors = [color for _, color in sorted(zip(genre_counts.values, colors), reverse=True)]
+
+
 # Histogramm erstellen
 plt.figure(figsize=(10, 6))
-genre_counts.plot(kind='bar', color=orange)
+
+for i, genre in enumerate(genre_counts.index):
+    plt.bar(genre, genre_counts[genre], color=sorted_colors[-(i+1)])
+
 plt.xlabel('Genre')
 plt.ylabel('Count')
 # plt.title('bar chart of class imbalance')
