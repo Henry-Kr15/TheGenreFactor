@@ -29,18 +29,18 @@ genre_encoder = LabelEncoder()
 one_hot_y = genre_encoder.fit_transform(y)
 
 # Datensatz aufteilen, mit shuffle und stratify
-# Trainingsatz:     64%
-# Testsatz:         20%
-# validierungssatz: 16%
+# Trainingsatz:     80%
+# Testsatz:         16%
+# validierungssatz:  4%
 
 # Trainings- und Testsatz
 X_train, X_test, y_train, y_test = train_test_split(
-    X, one_hot_y, test_size=0.3, stratify=one_hot_y, random_state=42
+    X, one_hot_y, test_size=0.2, stratify=one_hot_y, random_state=42
 )
 
 # Validierungssatz
 X_train, X_val, y_train, y_val = train_test_split(
-    X_train, y_train, test_size=0.3, stratify=y_train, random_state=42
+    X_train, y_train, test_size=0.2, stratify=y_train, random_state=42
 )
 
 features_to_use = [

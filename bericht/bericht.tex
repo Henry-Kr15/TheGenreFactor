@@ -264,7 +264,7 @@ size. The remaining genres are hip hop, rock, pop, electronic, metal and classic
 \FloatBarrier
 \begin{figure}[h]
   \centering
-  \includegraphics[scale=0.5]{figures/genre_hist_oranges.pdf}
+  \includegraphics[scale=0.6]{figures/genre_hist_oranges.pdf}
   \caption{Class imbalance of the resulting dataset.}
   \label{fig:class-imbalance}
 \end{figure}
@@ -274,8 +274,9 @@ Upon application of the preprocessing steps, the dataset is reduced to $6446$ en
 Given the high class imbalance in our dataset, the use of weights could potentially help mitigate this imbalance. However, in our specific case, we found that weighting did not improve model performance. Therefore, we decided not to use weighting in our final modelling approach.
 To enhance the sample size for the under-represented classes, synthesizing new entries could be a potential strategy for future work.
 After this step, the dataset is divided into a training-, test- and validation-set, with each containing $\SI{80}{\percent}$, $\SI{16}{\percent}$ and $\SI{4}{\percent}$
-of the data respectively.
-\section{The dense Neural Network Model}
+of the data respectively. In this process, we use stratified sampling to ensure that the distribution of classes in each subset mirror the distribution in the original
+set.
+\section{The Neural Network Model}
 % a. Implementierung: Beschreibung der Implementierung des neuronalen Netzwerks.
 % b. Ergebnisse: Wie hat das neuronale Netzwerk im Vergleich zu den anderen Methoden abgeschnitten?
 % c. Diskussion: Warum hat das neuronale Netzwerk besser oder schlechter abgeschnitten?
@@ -290,7 +291,7 @@ The network architecture and the output shape of each layer can be seen in figur
     \centering
     \begin{minipage}{0.49\textwidth}
         \centering
-        \footnotesize
+        \small
         \begin{tabular}{l c}
             \toprule
             Parameter & Value \\
@@ -340,53 +341,56 @@ size of the validation set (as it comprises of only $\SI{4}{\percent}$ of the da
 this trade-off to achieve higher generalisation than otherwise possible. For this, we combine the validation accuracy and training accuracy into a new metric which we call
 delta accuracy by taking the difference of the two. Then we calculate a score based on the delta and validation accuracy as follows:
 \begin{equation}
-	\text{score} = \frac{1}{2} \cdot (w_{1} \cdot (1 - \text{acc}_{\text{delta}}) + w_{2} \cdot \text{acc}_{\text{test}}).
+	\text{score} = \frac{1}{2} \cdot (w_{1} \cdot (1 - \text{acc}_{\text{delta}}) + w_{2} \cdot \text{acc}_{\text{val}}).
   \label{eqn:score}
 \end{equation}
-The score minimizes $\text{acc}_{\text{delta}}$ whilst maximizing $\text{acc}_{\text{test}}$. Using the weights $w_{1}$ and $w_{2}$, the importance of each value can be specified.
+The score minimizes $\text{acc}_{\text{delta}}$ whilst maximizing $\text{acc}_{\text{val}}$. Using the weights $w_{1}$ and $w_{2}$, the importance of each value can be specified.
 All models can be seen in figure~\ref{fig:HPO_scatter}. With $w_{1}=0.5$ and $w_{2}=1$ the model marked red has the best score.
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.56]{figures/NN/HPO_scatter.pdf}
+  \includegraphics[scale=0.70]{figures/NN/HPO_scatter.pdf}
   \caption{Comparison of training and delta accuracy for all models.}
   \label{fig:HPO_scatter}
 \end{figure}
 \subsection{Performance and Results}
 The model achieves $\SI{64.43}{\percent}$ accuracy on the test data set. Accuracy and loss are shown in figure~\ref{fig:nn_acc} and figure~\ref{fig:nn_loss} respectively.
+\FloatBarrier
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.56]{figures/NN/Acc.pdf}
+  \includegraphics[scale=0.7]{figures/NN/Acc.pdf}
   \caption{Plot of the accuracy of the neural network on the training and validation dataset.}
   \label{fig:nn_acc}
 \end{figure}
 \begin{figure}[ht]
   \centering
-  \includegraphics[scale=0.56]{figures/NN/Loss.pdf}
+  \includegraphics[scale=0.7]{figures/NN/Loss.pdf}
   \caption{Plot of the loss curve of the neural network on the training and validation dataset.}
   \label{fig:nn_loss}
 \end{figure}
+\FloatBarrier
 \noindent
 The accuracy curve shows a satisfactory trend, indicating that the model is performing well on both the training and validation datasets. The loss curve however
 shows a slight indication of overfitting after approximately $40$ epochs.
 The confusion matrix can be seen in figure~\ref{fig:nn_confusion}.
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.4]{figures/NN/confusion_matrix_nn.png}
+  \includegraphics[scale=0.33]{figures/NN/confusion_matrix_nn.png}
   \caption{Confusion matrix of the neural network on the test dataset.}
   \label{fig:nn_confusion}
 \end{figure}
 \noindent
 The confusion matrix shows, that although the models performance is for the most part adequate, problems arise for genres which consist of a broader spectrum with less clear
-defined characteristics, such as pop or electronic. Differentiating rock from metal and pop seems to be more difficult as well; this conforms to the areas where humans would
-also struggle. Astonishingly, the neural network performs the best for classic, which had the lowest sample size of any genre.
+defined characteristics, such as pop or electronic.
 The precision-recall curve, depicted in figure~\ref{fig:pr_curve_nn}, shows a comparable result.
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.56]{figures/NN/PR_curve_genres.pdf}
+  \includegraphics[scale=0.7]{figures/NN/PR_curve_genres.pdf}
   \caption{Precision-recall curve for each genre on the test dataset.}
   \label{fig:pr_curve_nn}
 \end{figure}
 \noindent
+Differentiating rock from metal and pop seems to be more difficult as well; this conforms to the areas where humans would
+also struggle. Astonishingly, the neural network performs well for classic, which has the lowest sample size of any genre in the dataset.
 Classic and hip hop seem to get differentiated well, while pop and electronic show suboptimal performance.
 
 \section{Alternative Approaches to the Problem}
@@ -396,13 +400,60 @@ Classic and hip hop seem to get differentiated well, while pop and electronic sh
 \subsection{Exploration of alternative Methods: K-Nearest Neighbours}
 In addition to the neural network, we also explored other machine learning methods for comparison. One such method is the K-Nearest Neighbors (KNN) algorithm, a simpler
 method which can be used for classification as well. This section provides an overview of our implementation and evaluation of the KNN approach.
+The \texttt{Scikit-Learn}-package~\cite{scikit-learn} provides an implementation of a Knn algorithm, the \texttt{KNeighborsClassifier}.
+We use the $12$ nearest neighbours for the classification, as this results in the highest performance. The model achieves an accuracy of $\SI{60.62}{\percent}$ on the test
+dataset.
+The resulting precision-recall curves for each genre are depicted in figure~\ref{fig:pr_knn}.
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.7]{figures/knn/PR_KNN.pdf}
+  \caption{Precison-Recall curves of the Knn-algorithm for all genres.}
+  \label{fig:pr_knn}
+\end{figure}
+\noindent
+The precision-recall curves show the limitations of the Knn-algorithm regarding more complex problems as the curves are significantly worse than the ones
+from the neural network. Although the accuracy is not far behind compared to the neural network (as they are in $\num{10}$ percentage points range of each other) the
+differences in handling complexity between the models become apparent.
+The confusion matrix, depicted in figure~\ref{fig:conf_knn}, further highlights these differences.
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.33]{figures/knn/confusion_matrix_knn.png}
+  \caption{Confusion matrix of the Knn-algorithm on the test dataset.}
+  \label{fig:conf_knn}
+\end{figure}
+\noindent
+The values on the diagonal show adequate performance, but the spread is substantially higher compared to the neural network.
+
 \subsection{Exploration of alternative Methods: Support Vector Machines}
-Another alternative method we investigated is the Support Vector Machine (SVM) approach. Through combining multiple SVMs, using them for classification tasks is possible.
+Another alternative method we investigated is the Support Vector Machine (SVM) approach. Through combining multiple SVMs, using them for classification tasks with multiple
+classes is possible.
 This section discusses our implementation and performance of the SVM method in the context of our project.
+In standard form, support vector machines can only be used for binary classification. Here, we use an 'One-vs-One' approach: for every pair of genres, one support vector
+machine is trained. The multiclass classification is then performed by majority vote of the SVMs. The \texttt{Skicit-Learn}-package~\cite{scikit-learn} provides the \texttt{svm.SVC} method,
+which we use with the radial basis function as a kernel function. This model achieves an accuracy of $\SI{63.88}{\percent}$ on the test dataset. The resulting
+precision-recall curves for each class are depicted in figure~\ref{fig:svm_pr}.
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.7]{figures/svm/PR_SVM.pdf}
+  \caption{Precision-recall curves for all classes of the SVMs on the test dataset.}
+  \label{fig:svm_pr}
+\end{figure}
+\noindent
+The precision-recall curves display a better performance than the Knn-algorithm but are inferior to the neural network, which is also resembled in their differences
+in their accuracy score. The confusion matrix is depicted in figure~\ref{fig:conf_svm}.
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.33]{figures/svm/confusion_matrix_svm.png}
+  \caption{Confusion matrix of the SVMs on the test dataset.}
+  \label{fig:conf_svm}
+\end{figure}
+\noindent
+
 \section{Discussion and Insights}
 % a. Allgemeine Diskussion: Zusammenfassung der Erkenntnisse aus dem Projekt.
 % b. Schlussfolgerungen: Was sind die endgültigen Schlussfolgerungen aus dem Projekt?
 % c. Zukünftige Arbeiten: Gibt es Bereiche, in denen weitere Arbeit durchgeführt werden könnte?
+\newpage
 \printbibliography
 
 \end{document}
