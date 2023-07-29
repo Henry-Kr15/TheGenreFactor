@@ -66,20 +66,27 @@ sns.heatmap(selected_columns.corr(), annot=True, square=True, cmap="coolwarm")
 plt.savefig("../figures/correlation.pdf")
 
 # Plots für die Präsentation
+# Setze den Stil auf "darkgrid"
+sns.set_style("darkgrid")
 print("create performance plot")
 plt.clf()
-models = ["Random guessing", "Naive Guessing", "Knn", "SVMs", "Neural Network"]
-accuracies = [16.67, 36.63, 60.62, 63.88, 65.87]
+# models = ["Random guessing", "Naive Guessing", "Knn", "SVMs", "Neural Network"]
+# accuracies = [16.67, 36.63, 58.48, 62.25, 64.43]
+models = ["Neural Network", "SVMs", "Knn", "naive Guessing", "Random Guessing"]
+accuracies = [64.43, 62.25, 58.48, 36.63, 16.67]
 
-data = sorted(zip(accuracies, models))  # Daten sortieren
-colors = sns.color_palette("Oranges", len(data))  # Farbpalette erstellen
+# Farbpalette erstellen
+colors = sns.color_palette("Oranges", len(models))
+
+# Sortiere die Farben nach der Größe der Werte
+sorted_colors = [color for _, color in sorted(zip(accuracies, colors), reverse=True)]
+# Daten sortieren
+data = sorted(zip(accuracies, models))[::-1]
 
 # Diagramm erstellen
 for i, (value, category) in enumerate(data):
-    plt.bar(category, value, color=colors[i])
+    plt.bar(category, value, color=sorted_colors[-(i+1)])
 
-# Setze den Stil auf "darkgrid"
-sns.set_style("darkgrid")
 
 # Farbe festlegen
 orange = sns.color_palette("Oranges", 10)[5]
@@ -87,7 +94,7 @@ orange = sns.color_palette("Oranges", 10)[5]
 # plt.bar(models, accuracies, color=orange)
 plt.xlabel("Models", fontsize=25)
 plt.ylabel("Achieved accuracy [%]", fontsize=25)
-plt.title("Performance Comparison", fontsize=25)
+# plt.title("Performance Comparison", fontsize=25)
 # Ticks vergrößern
 plt.tick_params(axis="both", which="major", labelsize=25)
 # y-Achse Bereich festlegen
