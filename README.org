@@ -4,22 +4,22 @@
 * Instructions to run the complete project
 
 1. Schleife über Wikidata (Achtung, lange Laufzeit)
-    [[./scripts/run_add_to_data.sh][scripts/run_add_to_data.sh]]
+   + [[./scripts/run_add_to_data.sh][scripts/run_add_to_data.sh]]
 
 2. Kombiniert Daten aus script/run_add_to_data
-    [[./scripts/merge_data.py][scripts/merge_data.py]]
+   + [[./scripts/merge_data.py][scripts/merge_data.py]]
 
 3. Selektion der Daten
-    [[./scripts/modular_NN_chain/selection_v1.py][scripts/modular_NN_chain/selection_v1.py]]
+   + [[./scripts/modular_NN_chain/selection_v1.py][scripts/modular_NN_chain/selection_v1.py]]
 
 4. HPO für das NN (Achtung, lange Laufzeit)
-    [[./scripts/modular_NN_chain/hyperparameter_optimisation_multi.py][scripts/modular_NN_chain/hyperparameter_optimization_multi.py]]
+   + [[./scripts/modular_NN_chain/hyperparameter_optimisation_multi.py][scripts/modular_NN_chain/hyperparameter_optimization_multi.py]]
 
 5. Zusammenfügen der Hyperparameter aus unterschiedlichen Suchen in eine csv Datei
-    [[./scripts/combine_HP.ipynb][scripts/combine_HP.ipynb]]
+   + [[./scripts/combine_HP.ipynb][scripts/combine_HP.ipynb]]
 
 6. Training und Auswertung von NN, SVM, kNN
-    [[./scripts/classifiers.ipynb][scripts/classifiers.ipynb]]
+   + [[./scripts/classifiers.ipynb][scripts/classifiers.ipynb]]
 
 *** Package Prerequisites
 
