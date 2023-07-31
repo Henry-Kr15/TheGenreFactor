@@ -234,26 +234,6 @@ def clean_data(df: pd.DataFrame, n: int, k: int):
 
     # 5.
     df_clean["Genre"] = df_clean["Genre"].apply(group_genres)
-    # Ich glaube das wäre ganz schlau das nicht hierdrin zu machen. Eigentlich importiert man die Funktion hier
-    # ja nur in andere Skripte und ist dann erstmal recht lange verwundert, was denn mit dem Datensatz los ist :D
-    # Am besten würde ich sagen macht man sowas dann direkt in dem Skript, also einfach ein neues selection_vX.py
-    # anlegen und den Datensatz auch unter data_vX.csv speichern sonst geht hier alles drunter und drüber
-    # df_clean = df_clean.loc[~df_clean["Genre"].isin(["bullshit"])] # manche Genres sinds einfach nicht
-    # df_clean = df_clean.loc[~df_clean["Genre"].isin(["christian"])] # manche Genres sinds einfach nicht
-    # df_clean = df_clean.loc[~df_clean["Genre"].isin(["blues"])] # manche Genres sinds einfach nicht
-    # df_clean = df_clean.loc[~df_clean["Genre"].isin(["R&B"])] # manche Genres sinds einfach nicht
-    # df_clean = df_clean.loc[~df_clean["Genre"].isin(["disco"])] # manche Genres sinds einfach nicht
-    # df_clean = df_clean.loc[~df_clean["Genre"].isin(["jazz"])] # manche Genres sinds einfach nicht
-    # df_clean = df_clean.loc[~df_clean["Genre"].isin(["soul"])] # manche Genres sinds einfach nicht
-    # df_clean = df_clean.loc[~df_clean["Genre"].isin(["folk"])] # manche Genres sinds einfach nicht
-    # df_clean = df_clean.loc[~df_clean["Genre"].isin(["country"])] # manche Genres sinds einfach nicht
-    # df_clean = df_clean.loc[~df_clean["Genre"].isin(["mexican"])] # manche Genres sinds einfach nicht
-    # df_clean = df_clean.loc[~df_clean["Genre"].isin(["reggaeton"])] # manche Genres sinds einfach nicht
-    # df_clean = df_clean.loc[~df_clean["Genre"].isin(["metal"])] # manche Genres sinds einfach nicht
-    # df_clean = df_clean.loc[~df_clean["Genre"].isin(["reggae"])] # manche Genres sinds einfach nicht
-    # df_clean = df_clean.loc[~df_clean["Genre"].isin(["indie"])] # manche Genres sinds einfach nicht
-    # df_clean = df_clean.loc[~df_clean["Genre"].isin(["pop"])] # manche Genres sinds einfach nicht
-
 
     df_clean = df_clean.loc[~df_clean["Genre"].isin(["Not Found", "Error"])]
 

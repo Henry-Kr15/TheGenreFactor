@@ -185,25 +185,25 @@ sorting=none,
 
 \section{Introduction}
 The task of classifying the genre of a song is common in the digital music industry. Most services
-offering music listening present some information about each song, which often includes the genre.
+that offer music listening provide information about each song, which often includes the genre.
 Some services might even use the information to suggest other songs to listen to, which requires
 accurate information about the genre (or the genres) that a song belongs to. Retrieving this
 information is not easy, since there are no clear definitions of a genres attributes. Additionally,
 most songs do not belong to only one genre. The genre itself might change over time as well, which
 further complicates the problem. While the classification task might be technically solvable by humans,
-it remains a non-trivial endeavour due to its inherent complexity. Given the immense size of most
-music libraries, a manual approach to classification becomes highly impractical, necessitating alternative,
+it remains a non-trivial endeavour due to its complexity. Given the immense size of most
+music libraries, a manual classification approach becomes highly impractical, necessitating alternative,
 more efficient solutions. \\
 \\
 \noindent
 With these factors in mind, the task is evidently predisposed to a solution via a machine learning approach.
-As such, this strategy has become prevalent in addressing this problem, with a plethora of diverse methods having been explored to date
+As such, this strategy has become prevalent in addressing this problem, with a plethora of diverse methods and algorithms having been explored to date
 (see, for example~\cite{Übersicht2011}).
-In this study, we attempt to classify music genres using a dense neural network. For this, we use a dataset sourced
-from the website Kaggle~\cite{Kaggle} containing songs and their attributes taken from the services YouTube~\cite{Youtube}
-and Spotify~\cite{Spotify}. We compare the neural network with two other, less sophisticated machine learning techniques,
-namely support vector machines~\cite{SupportVector} and the $k$-nearest-neighbours-approach~\cite{NearestNeighbours},
-to establish a baseline. We aim to find out whether employing more complex and labour-intensive techniques result in an
+In this study, we attempt to classify music genres using a dense neural network. For this purpose, we use a dataset sourced
+from the website Kaggle~\cite{Kaggle} containing songs and their attributes from the services YouTube~\cite{Youtube}
+and Spotify~\cite{Spotify}. To establish a baseline, we compare the neural network with two other, less sophisticated machine learning techniques,
+namely support vector machines~\cite{SupportVector} and the $k$-nearest-neighbours-approach~\cite{NearestNeighbours}.
+We aim to find out whether employing more complex and labour-intensive techniques result in an
 improvement in the face of the limited information contained in the dataset. \\
 \\
 \noindent
@@ -252,10 +252,13 @@ useful information for our models to learn, therefore these are not used as well
 Subsequently, the dataset is cleaned; missing or erroneous values
 in numerical features are substituted by a value derived by a $k$-nearest-neighbours-approach. We implement this
 by using the \texttt{SimpleImputer} from the \texttt{Scikit-Learn} package~\cite{scikit-learn}.
-The cardinal features are then scaled to a range of $[-1,1]$ and transformed to follow a normal distribution to improve numerical stability
-and the convergence speed as well as preventing the 'Exploding/Vanishing-Gradient' problem~\cite{geron}. These steps are implemented using \texttt{QuantileTransformer} and
+The numerical features are then scaled to a range of $[-1,1]$ and transformed to follow a normal distribution to improve numerical stability
+and the convergence speed as well as preventing the 'Exploding/Vanishing-Gradient' problem~\cite{geron}. These steps are applied using \texttt{QuantileTransformer} and
 \texttt{MinMaxScaler} from \texttt{Scikit-Learn}~\cite{scikit-learn} as these result in the best performance for all three tested models.
-The aforementioned wikidata query results in $397$ different genres. As these are highly specific, these categories are consolidated into $26$ broader genres to
+The attributes \texttt{artist}, \texttt{Album\_type}, \texttt{Licensed} and \texttt{official\_video} are encoded into integers via the \texttt{LabelEncoder},
+which enables the machine learning algorithms utilized in this project to take advantage of them. This could potentially pose a problem if the model treats the attributes as
+cardinal; however, the use of label-encoded attributes improved the performance of the models in our case.
+The wikidata query mentioned above results in $397$ different genres. As these are highly specific, these categories are consolidated into $26$ broader genres to
 achieve a more streamlined dataset and increase the sample size per class. For example, the genre 'latin' contains 'salsa', 'bossa nova', 'samba' among others.
 Given the constraints of our datasets size, we only keep $6$ genres to further increase the sample
 size. The remaining genres are hip hop, rock, pop, electronic, metal and classic. The datasets class imbalance can be seen in figure \ref{fig:class-imbalance}.
@@ -339,7 +342,7 @@ delta accuracy by taking the difference of the two. Then we calculate a score ba
   \label{eqn:score}
 \end{equation}
 The score minimizes $\text{acc}_{\text{delta}}$ whilst maximizing $\text{acc}_{\text{val}}$. Using the weights $w_{1}$ and $w_{2}$, the importance of each value can be specified.
-All models can be seen in figure~\ref{fig:HPO_scatter}. With $w_{1}=0.5$ and $w_{2}=1$ the model marked red posses the best score.
+All models can be seen in figure~\ref{fig:HPO_scatter}. With $w_{1}=0.5$ and $w_{2}=1$ the model marked red possesses the best score.
 \begin{figure}[H]
   \centering
   \includegraphics[scale=0.70]{figures/NN/HPO_scatter.pdf}
@@ -353,13 +356,13 @@ values, with lower loss indicating better performance.
 \FloatBarrier
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.7]{figures/NN/Acc.pdf}
+  \includegraphics[scale=0.6]{figures/NN/Acc.pdf}
   \caption{Plot of the accuracy of the neural network on the training and validation dataset.}
   \label{fig:nn_acc}
 \end{figure}
 \begin{figure}[ht]
   \centering
-  \includegraphics[scale=0.7]{figures/NN/Loss.pdf}
+  \includegraphics[scale=0.6]{figures/NN/Loss.pdf}
   \caption{Plot of the loss curve of the neural network on the training and validation dataset.}
   \label{fig:nn_loss}
 \end{figure}
@@ -370,7 +373,7 @@ shows a slight indication of overfitting after approximately $40$ epochs.
 The confusion matrix~\cite{geron} can be seen in figure~\ref{fig:nn_confusion}.
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.33]{figures/NN/confusion_matrix_nn.png}
+  \includegraphics[scale=0.3]{figures/NN/confusion_matrix_nn.png}
   \caption{Confusion matrix of the neural network on the test dataset.}
   \label{fig:nn_confusion}
 \end{figure}
@@ -380,7 +383,7 @@ defined characteristics, such as pop or electronic.
 The precision-recall curve~\cite{geron}, depicted in figure~\ref{fig:pr_curve_nn}, shows a comparable result.
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.7]{figures/NN/PR_curve_genres.pdf}
+  \includegraphics[scale=0.6]{figures/NN/PR_curve_genres.pdf}
   \caption{Precision-recall curve for each genre on the test dataset.}
   \label{fig:pr_curve_nn}
 \end{figure}
@@ -393,26 +396,27 @@ Classic and hip hop seem to get differentiated well, while pop and electronic sh
 
 \section{Alternative Approaches to the Problem}
 \subsection{Exploration of alternative Methods: K-Nearest Neighbours}
-In addition to the neural network, we also explored other machine learning methods for comparison. One such method is the K-Nearest Neighbours (KNN) algorithm, a simpler
-method which can be used for classification as well. This section provides an overview of our implementation and evaluation of the KNN approach.
-The \texttt{Scikit-Learn}-package~\cite{scikit-learn} provides an implementation of a Knn algorithm, the \texttt{KNeighborsClassifier}.
-We use the $12$ nearest neighbours and the euclidean metric for the classification, as this results in the highest performance. The model achieves an accuracy of $\SI{58.48}{\percent}$ on the test
-dataset.
+In addition to the neural network, we also explored other machine learning methods for comparison. One such method is the K-Nearest Neighbours ($k$-nn) algorithm. $k$-nn is a
+simple and powerful machine learning algorithm that is used for both classification and regression. It works by assigning a new data point to the class that has the most
+nearby members, hence the term 'nearest neighbours'. This section provides an overview of our implementation and evaluation of the $k$-nn approach.
+The \texttt{Scikit-Learn}-package~\cite{scikit-learn} provides an implementation of a $k$-nn algorithm, the \texttt{KNeighborsClassifier}.
+We use the $12$ nearest neighbours and the euclidean metric for the classification, as this configuration results in the highest performance. The model achieves an accuracy
+of $\SI{58.48}{\percent}$ on the test dataset.
 The resulting precision-recall curves for each genre are depicted in figure~\ref{fig:pr_knn}.
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.7]{figures/knn/PR_KNN.pdf}
+  \includegraphics[scale=0.6]{figures/knn/PR_KNN.pdf}
   \caption{Precision-Recall curves of the Knn-algorithm for all genres.}
   \label{fig:pr_knn}
 \end{figure}
 \noindent
-The precision-recall curves show the limitations of the Knn-algorithm regarding more complex problems as the curves are significantly worse than the ones
+The precision-recall curves show the limitations of the $k$-nn-algorithm regarding more complex problems as the curves are significantly worse than the ones
 from the neural network. Although the accuracy is not far behind compared to the neural network (as they are in $\num{10}$ percentage points range of each other) the
 differences in handling complexity between the models become apparent.
 The confusion matrix, depicted in figure~\ref{fig:conf_knn}, further highlights these differences.
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.33]{figures/knn/confusion_matrix_knn.png}
+  \includegraphics[scale=0.3]{figures/knn/confusion_matrix_knn.png}
   \caption{Confusion matrix of the Knn-algorithm on the test dataset.}
   \label{fig:conf_knn}
 \end{figure}
@@ -421,46 +425,41 @@ The values on the diagonal show adequate performance, but the spread is substant
 
 \subsection{Exploration of alternative Methods: Support Vector Machines}
 Another alternative method we investigated is the Support Vector Machine (SVM) approach.
-
-% ???
-% A Support Vector Machine (SVM) is a robust and versatile machine learning model capable of performing both linear and non-linear classifications, regression, and even outlier detection. At its core, SVM constructs a hyperplane or set of hyperplanes in a high-dimensional space to segregate different classes of data. The model optimizes by finding the hyperplane that maximizes the margin, that is, the distance between the data points and the hyperplane itself.
-
-% When we apply the Radial Basis Function (RBF) as the kernel function of the SVM, it augments the model's capability to handle non-linear data. The RBF kernel transforms the input data into a higher-dimensional space, allowing the SVM to find complex, non-linear decision boundaries. This transformation effectively "bends" the feature space, enabling the SVM to create more intricate decision boundaries and thus better fit the data when a linear boundary would be insufficient.
-% ???
-
-Through combining multiple SVMs, using them for classification tasks with multiple
-classes is possible.
+A Support Vector Machine (SVM) is a robust and versatile machine learning model capable of performing both linear and non-linear classifications, regression, and outlier
+detection. At its core, SVM constructs a set of hyperplanes in a high-dimensional space to segregate different classes of data. The model optimizes by finding
+the hyperplane that maximizes the margin, that is, the distance between the data points and the hyperplane itself.
+Through combining multiple SVMs, using them for classification tasks with multiple classes is possible.
 This section discusses our implementation and performance of the SVM method in the context of our project.
 In standard form, support vector machines can only be used for binary classification. Here, we use an 'One-vs-One' approach: for every pair of genres, one support vector
-machine is trained. The multiclass classification is then performed by majority vote of the SVMs. The \texttt{Skicit-Learn}-package~\cite{scikit-learn} provides the \texttt{svm.SVC} method,
-which we use with the radial basis function (RBF) as kernel. This model achieves an accuracy of $\SI{62.25}{\percent}$ on the test dataset. The resulting
+machine is trained. The multiclass classification is then performed by majority vote of the SVMs.
+The \texttt{Skicit-Learn}-package~\cite{scikit-learn} provides the \texttt{svm.SVC} method,
+which we use with the radial basis function (RBF) as kernel. The RBF kernel transforms the input data into a higher-dimensional space, allowing the SVM to find complex, non-linear decision boundaries. This model achieves an accuracy of $\SI{62.25}{\percent}$ on the test dataset. The resulting
 precision-recall curves for each class are depicted in figure~\ref{fig:svm_pr}.
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.7]{figures/svm/PR_SVM.pdf}
+  \includegraphics[scale=0.6]{figures/svm/PR_SVM.pdf}
   \caption{Precision-recall curves for all classes of the SVMs on the test dataset.}
   \label{fig:svm_pr}
 \end{figure}
 \noindent
-The precision-recall curves display a better performance than the Knn-algorithm but are inferior to the neural network, which is also resembled in their differences
+The precision-recall curves display a better performance than the $k$-nn algorithm but are inferior to the neural network, which is also resembled in their differences
 in their accuracy score. The confusion matrix is depicted in figure~\ref{fig:conf_svm}.
+The performance is only marginally inferior to that of the neural network, a surprising outcome considering the significantly shorter time required to implement and optimize
+the support vector machines compared to the neural network.
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.33]{figures/svm/confusion_matrix_svm.png}
+  \includegraphics[scale=0.29]{figures/svm/confusion_matrix_svm.png}
   \caption{Confusion matrix of the SVMs on the test dataset.}
   \label{fig:conf_svm}
 \end{figure}
 \noindent
-The performance is only marginally inferior to that of the neural network, a surprising outcome considering the significantly shorter time required to implement and optimize
-the support vector machines compared to the neural network.
-
 \section{Discussion and Insights}
 Regarding the task of classifying a songs genre, all strategies implemented in this project display only adequate performance. Figure~\ref{fig:performance_comp}
 summarizes the accuracies of the three tested methods and compares them to completely random guessing and the strategy of always guessing the most frequently occurring
 genre.
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.25]{figures/performance-comparison.pdf}
+  \includegraphics[scale=0.18]{figures/performance-comparison.pdf}
   \caption{Comparison of the accuracy of different approaches.}
   \label{fig:performance_comp}
 \end{figure}
@@ -472,21 +471,23 @@ These limitations could also be influenced by several factors in the preprocessi
 beyond checking random samples.
 The grouping of sub-genres into larger, more general genres may also dilute the datasets informational value, as genre differentiation becomes less distinct.
 Furthermore, since genres are not clearly defined to begin with, this ambiguity could pose a fundamental challenge.
-The class imbalace may also contribute to difficulties with the classification of smaller genres.
+The class imbalance may also contribute to difficulties with the classification of smaller genres.
 To enhance the sample size for the under-represented classes, synthesizing new entries could be a potential strategy for future work.
 The attributes used by the model such as \texttt{Speechiness}, \texttt{Danceability} and others may also be too abstract as they represent high level descriptions
 of the actual songs. An architecture that accepts complete sound files as input and utilizes lower level attributes could possibly improve the classification
-performance significantly~\cite{Übersicht2011}. This hypothesis is supported by the fact that music genres like classic and hip hop, which possess distinct
+performance significantly (see e.g. \cite{Übersicht2011}). This hypothesis is supported by the fact that music genres like classic and hip hop, which possess distinct
 characteristics that might be reflected in high-level attributes, perform better across all three models.
-The limited size of the dataset used might negatively impact the models capabilities as well. This constraint also necessitated our approach to selecting the best model while
+The process of creating these more abstract features is not transparent to us, and as such, we cannot validate them. This lack of transparency and validation makes their use
+less appealing as well.
+The limited size of the dataset used might negatively impact the models capabilities further. This constraint also necessitated our approach to selecting the best model while
 mitigating overfitting by using an arbitrarily weighted score. It is important to note that this approach introduces a degree of subjectivity and uncertainty. The choice of
 weights can significantly influence the final score, and different weight assignments might lead to different conclusions. Therefore, the results obtained using this weighted
 score should be interpreted with caution and further validated with more robust methods.
 However, most of these challenges should be negligible for a music service provider, given their access to large datasets and sufficient resources to produce accurate and
-validated truth values. In such a scenario, a neural network should be capable of learning enough information to significantly improve the classification accuracy. From a
-runtime and resource usage perspective, the computationally more demanding process of training and optimizing a neural network becomes viable when compared to the simpler
-machine learning methods explored in this project.
-
+validated truth values. In such a scenario, a neural network should be capable of learning enough information to significantly improve the classification accuracy. In this
+case, from a runtime and resource usage perspective, the computationally more demanding process of training and optimizing a neural network becomes viable when compared to
+the simpler machine learning methods explored in this project.
+\footnote{All material, code and the dataset can be found in the github repository \url{https://github.com/Henry-Kr15/TheGenreFactor/blob/main/}.}
 \newpage
 \printbibliography
 
