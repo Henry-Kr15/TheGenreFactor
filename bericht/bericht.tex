@@ -212,7 +212,7 @@ Subsequently, the architecture of the dense neural network is laid out and the r
 compared to the results of the alternative approaches. Finally, we draw a conclusion based on our analysis.
 \section{The Utilized Dataset}
 \subsection{Sourcing the Data}
-The dataset used in this project contains $26$ attributes about $18862$ songs from $2079$ unique artists~\cite{Datensatz}.
+The dataset used in this project contains $26$ attributes about $20718$ songs from $2079$ unique artists~\cite{Datensatz}.
 However, the genre of the song is not included in the dataset; we query wikidata for the corresponding genre of each song,
 using the python package \texttt{pywikibot}~\cite{pywikibot}. An example entry of the resulting dataset at this stage
 is shown in table \ref{tab:attributes}. We do not keep all of these attributes; since the architecture of our
@@ -254,7 +254,7 @@ in numerical features are substituted by a value derived by a $k$-nearest-neighb
 by using the \texttt{SimpleImputer} from the \texttt{Scikit-Learn} package~\cite{scikit-learn}.
 The cardinal features are then scaled to a range of $[-1,1]$ and transformed to follow a normal distribution to improve numerical stability
 and the convergence speed as well as preventing the 'Exploding/Vanishing-Gradient' problem~\cite{geron}. These steps are implemented using \texttt{QuantileTransformer} and
-\texttt{MinMaxScaler} from \texttt{Scikit-Learn}~\cite{scikit-learn}.
+\texttt{MinMaxScaler} from \texttt{Scikit-Learn}~\cite{scikit-learn} as these result in the best performance for all three tested models.
 The aforementioned wikidata query results in $397$ different genres. As these are highly specific, these categories are consolidated into $26$ broader genres to
 achieve a more streamlined dataset and increase the sample size per class. For example, the genre 'latin' contains 'salsa', 'bossa nova', 'samba' among others.
 Given the constraints of our datasets size, we only keep $6$ genres to further increase the sample
@@ -269,7 +269,7 @@ size. The remaining genres are hip hop, rock, pop, electronic, metal and classic
 \FloatBarrier
 \noindent
 Upon application of the preprocessing steps, the dataset is reduced to $6446$ entries.
-Given the high class imbalance in our dataset, the use of weights could potentially help mitigate this imbalance. However, in our specific case, we found that weighting did not improve model performance. Therefore, we decided not to use weighting in our final modelling approach.
+Given the high class imbalance in our dataset, the use of weights could potentially help mitigate this imbalance. However, in our specific case, we found that weighting did not improve model performance. Therefore, we decided not to use weighting in our final modelling approach. We use one-hot-encoding on the genre attribute, meaning that each genre is represented as a binary vector where all elements are zero, except for one which corresponds to the specific genre and is marked as one.
 After this step, the dataset is divided into a training-, test- and validation-set, with each containing $\SI{49}{\percent}$, $\SI{30}{\percent}$ and $\SI{21}{\percent}$
 of the data respectively. In this process, we use stratified sampling to ensure that the distribution of classes in each subset mirror the distribution in the original
 set.
@@ -420,7 +420,15 @@ The confusion matrix, depicted in figure~\ref{fig:conf_knn}, further highlights 
 The values on the diagonal show adequate performance, but the spread is substantially higher compared to the neural network.
 
 \subsection{Exploration of alternative Methods: Support Vector Machines}
-Another alternative method we investigated is the Support Vector Machine (SVM) approach. Through combining multiple SVMs, using them for classification tasks with multiple
+Another alternative method we investigated is the Support Vector Machine (SVM) approach.
+
+% ???
+% A Support Vector Machine (SVM) is a robust and versatile machine learning model capable of performing both linear and non-linear classifications, regression, and even outlier detection. At its core, SVM constructs a hyperplane or set of hyperplanes in a high-dimensional space to segregate different classes of data. The model optimizes by finding the hyperplane that maximizes the margin, that is, the distance between the data points and the hyperplane itself.
+
+% When we apply the Radial Basis Function (RBF) as the kernel function of the SVM, it augments the model's capability to handle non-linear data. The RBF kernel transforms the input data into a higher-dimensional space, allowing the SVM to find complex, non-linear decision boundaries. This transformation effectively "bends" the feature space, enabling the SVM to create more intricate decision boundaries and thus better fit the data when a linear boundary would be insufficient.
+% ???
+
+Through combining multiple SVMs, using them for classification tasks with multiple
 classes is possible.
 This section discusses our implementation and performance of the SVM method in the context of our project.
 In standard form, support vector machines can only be used for binary classification. Here, we use an 'One-vs-One' approach: for every pair of genres, one support vector

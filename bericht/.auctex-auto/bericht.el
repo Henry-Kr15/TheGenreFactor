@@ -8,13 +8,12 @@
     mathtools-colon,       % │ unnötige Warnungen ausschalten
     mathtools-overbracket, % │
   }" "") ("siunitx" "locale=US" "separate-uncertainty=true" "per-mode=symbol-or-fraction" "") ("mhchem" "version=4" "math-greek=default" "text-greek=default" "") ("csquotes" "autostyle") ("placeins" "section" "") ("caption" "labelfont=bf" "font=small" "width=0.9\\textwidth" "") ("biblatex" "backend=biber" "sorting=none" "") ("hyperref" "german" "unicode" "pdfusetitle" "pdfcreator={}" "pdfproducer={}" "") ("extdash" "shortcuts")))
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "path")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "url")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "nolinkurl")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperbaseurl")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperimage")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperref")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "href")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperimage")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperbaseurl")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "nolinkurl")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "url")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "path")
    (add-to-list 'LaTeX-verbatim-macros-with-delims-local "path")
    (TeX-run-style-hooks
     "latex2e"
@@ -54,7 +53,20 @@
     "wrapfig")
    (LaTeX-add-labels
     "tab:attributes"
-    "fig:class-imbalance")
+    "fig:class-imbalance"
+    "tab:my_label_for_table"
+    "fig:nn_layers"
+    "eqn:score"
+    "fig:HPO_scatter"
+    "fig:nn_acc"
+    "fig:nn_loss"
+    "fig:nn_confusion"
+    "fig:pr_curve_nn"
+    "fig:pr_knn"
+    "fig:conf_knn"
+    "fig:svm_pr"
+    "fig:conf_svm"
+    "fig:performance_comp")
    (LaTeX-add-bibliographies
     "lit"))
  :latex)
