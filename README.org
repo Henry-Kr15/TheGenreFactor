@@ -1,15 +1,27 @@
 #+title: The Genre Factor
 #+author: Henry Krämerkämper
 
-ausführen wie folgt:
--script/run_add_to_data.sh # Schleife über Wikidata (Achtung, lange Laufzeit)
--script/merge_data.py # kombiniert Daten aus script/run_add_to_data
--script/modular_NN_chain/selection_v1.py # Selektion der Daten 
--script/modular_NN_chain/hyperparameter_optimazation.py # HPO für das NN (Achtung, lange Laufzeit)
--script/combine_HP.ipynb # fügt Hyperparameter aus unterschiedlichen Suchen in eine csv Datei
--script/classifiers.ipynb # Training und Auswertung von NN, SVM, kNN
+* Instructions to run the complete project
 
-*** Prerequisites
+1. Schleife über Wikidata (Achtung, lange Laufzeit)
+    [[./scripts/run_add_to_data.sh][scripts/run_add_to_data.sh]]
+
+2. Kombiniert Daten aus script/run_add_to_data
+    [[./scripts/merge_data.py][scripts/merge_data.py]]
+
+3. Selektion der Daten
+    [[./scripts/modular_NN_chain/selection_v1.py][scripts/modular_NN_chain/selection_v1.py]]
+
+4. HPO für das NN (Achtung, lange Laufzeit)
+    [[./scripts/modular_NN_chain/hyperparameter_optimisation_multi.py][scripts/modular_NN_chain/hyperparameter_optimization_multi.py]]
+
+5. Zusammenfügen der Hyperparameter aus unterschiedlichen Suchen in eine csv Datei
+    [[./scripts/combine_HP.ipynb][scripts/combine_HP.ipynb]]
+
+6. Training und Auswertung von NN, SVM, kNN
+    [[./scripts/classifiers.ipynb][scripts/classifiers.ipynb]]
+
+*** Package Prerequisites
 
 **** Poetry
 
@@ -49,16 +61,6 @@ To activate command completion in the terminal you have to run
 #+begin_src bash
 poetry completions bash >> ~/.bash_completion
 #+end_src
-
-*** Structure
-
-So far, we have the project has two (very broad) main folders; one for scripts and one for
-tests.
-
-Also, there is a folder for the raw datasets (data) and graphics output should be saved in
-a folder called figures.
-
-There is a small [[./Todo.org][Todo-File]], which can be used for planning/scheduling/assigning tasks.
 
 *** Running scripts
 
