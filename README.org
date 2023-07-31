@@ -1,6 +1,14 @@
 #+title: The Genre Factor
 #+author: Henry Krämerkämper
 
+ausführen wie folgt:
+-script/run_add_to_data.sh # Schleife über Wikidata (Achtung, lange Laufzeit)
+-script/merge_data.py # kombiniert Daten aus script/run_add_to_data
+-script/modular_NN_chain/selection_v1.py # Selektion der Daten 
+-script/modular_NN_chain/hyperparameter_optimazation.py # HPO für das NN (Achtung, lange Laufzeit)
+-script/combine_HP.ipynb # fügt Hyperparameter aus unterschiedlichen Suchen in eine csv Datei
+-script/classifiers.ipynb # Training und Auswertung von NN, SVM, kNN
+
 *** Prerequisites
 
 **** Poetry
